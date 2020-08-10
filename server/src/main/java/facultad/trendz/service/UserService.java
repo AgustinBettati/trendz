@@ -7,6 +7,8 @@ import facultad.trendz.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -23,6 +25,10 @@ public class UserService {
 
         return user;
     }
+
+  public List<User> getAll() {
+    return userRepository.findAll();
+  }
 
     public User saveUser(UserCreateDTO userCreateDTO) {
         final User user = new User(userCreateDTO.getName(), userCreateDTO.getEmail());

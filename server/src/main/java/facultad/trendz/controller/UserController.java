@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @Controller
 public class UserController {
     private final UserService userService;
@@ -27,6 +29,14 @@ public class UserController {
         final HttpStatus status = HttpStatus.OK;
 
         return new ResponseEntity<>(body, status);
+    }
+
+    @GetMapping(value = "/user")
+    public ResponseEntity<List<User>> getAll() {
+      final List<User> result = userService.getAll();
+      final HttpStatus status = HttpStatus.OK;
+
+      return new ResponseEntity<>(result, status);
     }
 
     @PostMapping(value = "/user")
