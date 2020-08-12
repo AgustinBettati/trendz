@@ -5,6 +5,6 @@
 ### Server side - Spring boot + H2
  - `./mvnw spring-boot:run`
 
-### Client side - Angular 9 + ng-bootstrap
+### Client side - React
  - `npm install`
  - `npm start`
