@@ -31,7 +31,7 @@ public class UserService {
   }
 
     public User saveUser(UserCreateDTO userCreateDTO) {
-        final User user = new User(userCreateDTO.getName(), userCreateDTO.getEmail());
+        final User user = new User(userCreateDTO.getEmail(), userCreateDTO.getName(), userCreateDTO.getSurname());
         return userRepository.save(user);
     }
 }

@@ -2,6 +2,7 @@ package facultad.trendz.dto;
 
 public class UserCreateDTO {
     private String name;
+    private String surname ;
     private String email;
 
     public String getName() {
@@ -18,5 +19,13 @@ public class UserCreateDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 }
