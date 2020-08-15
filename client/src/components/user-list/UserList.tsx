@@ -24,7 +24,7 @@ export class UserList extends Component<Props,State> {
   }
 
   render() {
-    const { users } = this.props
+    const { users } = this.props;
     const { hidden } = this.state;
     const usersItems = users && users.map(user => {
       return (
@@ -33,33 +33,21 @@ export class UserList extends Component<Props,State> {
           <span>{user.surname}</span>
         </li>
       )
-    })
+    });
 
-    const toggle =
-    <div>
-      <h3>Mostrar lista de usuarios </h3>
-      <label className="switch">
-        <input type="checkbox" onChange={() => this.handleChange()} checked={!this.state.hidden}/>
-        <span className="slider round"/>
-      </label>
-    </div>;
-
-
-    if (hidden) {
-        return (
-            toggle
-        )
-      }
-
-      return (
-      <div>
-        {toggle}
-        <div className="user_container">
-          <h2>Lista de usuarios</h2>
-          <ul className="list-group user-list">
-            {usersItems}
-          </ul>
-        </div>
+    return (
+        <div>
+          <h3>Mostrar lista de usuarios </h3>
+          <label className="switch">
+            <input type="checkbox" onChange={() => this.handleChange()} checked={!this.state.hidden}/>
+            <span className="slider round"/>
+          </label>
+      {!hidden && <div className="container">
+        <h2>Lista de usuarios</h2>
+        <ul className="list-group user-list">
+          {usersItems}
+        </ul>
+      </div>}
       </div>
     )
   }
