@@ -16,12 +16,15 @@ public class User {
 
     private String name;
 
+    private String surname;
+
     public User() {
     }
 
-    public User(String email, String name) {
+    public User(String email, String name, String surname) {
         this.email = email;
         this.name = name;
+        this.surname=surname;
     }
 
     public Long getId() {
@@ -46,5 +49,13 @@ public class User {
 
     public void setName(String isbn) {
         this.name = isbn;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 }

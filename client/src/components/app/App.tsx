@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import { User } from '../types/types'
-import { getAllUsers } from '../../api/UserApi'
+import {addUser, getAllUsers} from '../../api/UserApi'
 import LoadingIndicator from '../common/LoadingIndicator'
 import AppHeader from '../common/AppHeader'
 import { Switch, Route } from 'react-router-dom'
@@ -28,6 +28,7 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
+
     getAllUsers().then(users => {
       this.setState({users: users, loading: false})
     })

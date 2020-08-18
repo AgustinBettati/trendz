@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { User } from '../types/types'
 import "./UserList.css"
-import {getAllUsers} from "../../api/UserApi";
+import {addUser, getAllUsers} from "../../api/UserApi";
 
 export type Props = {
   users?: User[],
@@ -20,6 +20,7 @@ export class UserList extends Component<Props, State>{
     this.state = {
         showList:true
     }
+        addUser("Sofia", "Sidanez", "sofia.sidanez@ing.austral.edu.ar").then(r => console.log(r))
 
 }
 
@@ -29,9 +30,6 @@ export class UserList extends Component<Props, State>{
   render() {
       const {showList} = this.state
       const{users}=this.props
-
-
-
 
           const usersItems = users && users.map(user => {
               return (
