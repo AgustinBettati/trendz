@@ -7,6 +7,7 @@ import AppHeader from '../common/AppHeader'
 import { Switch, Route } from 'react-router-dom'
 import UserList from '../user-list/UserList'
 import Alert from 'react-s-alert'
+import Profile from "../Profile/Profile";
 
 
 export type Props = {}
@@ -49,6 +50,7 @@ class App extends Component<Props, State> {
         <div className="app-body">
           <Switch>
             <Route exact={true} path="/" render={(props) => <UserList {...props} users={users}/>}/>
+            <Route exact={true} path="/profile" render={(props) => <Profile {...props} user={users[0]}/>}/>
           </Switch>
         </div>
         <Alert stack={{ limit: 3 }}
