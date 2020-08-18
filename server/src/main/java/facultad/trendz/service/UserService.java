@@ -1,10 +1,17 @@
 package facultad.trendz.service;
 
 import facultad.trendz.dto.UserCreateDTO;
+import facultad.trendz.dto.UserResponseDTO;
+import facultad.trendz.exception.EmailExistsException;
+import facultad.trendz.exception.UsernameExistsException;
+import facultad.trendz.model.ERole;
+import facultad.trendz.model.Role;
 import facultad.trendz.model.User;
 import facultad.trendz.exception.UserNotFoundException;
+import facultad.trendz.repository.RoleRepository;
 import facultad.trendz.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +19,14 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User getUserByEmail(String email) {
@@ -26,12 +37,27 @@ public class UserService {
         return user;
     }
 
-  public List<User> getAll() {
-    return userRepository.findAll();
-  }
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
 
-    public User saveUser(UserCreateDTO userCreateDTO) {
-        final User user = new User(userCreateDTO.getName(), userCreateDTO.getEmail());
-        return userRepository.save(user);
+    public UserResponseDTO saveUser(UserCreateDTO userCreateDTO) {
+        ERole eRole = (userCreateDTO.getRole() == null || userCreateDTO.getRole().equals("user")) ? ERole.ROLE_USER : ERole.ROLE_ADMIN;
+        Role role = roleRepository.getByRole(eRole);
+
+        String encryptedPassword = passwordEncoder.encode(userCreateDTO.getPassword());
+
+        final User user = new User(userCreateDTO.getEmail(), userCreateDTO.getUsername(), encryptedPassword, role);
+
+        userRepository.save(user);
+        return new UserResponseDTO(user.getEmail(), user.getUsername(), user.getRole());
+    }
+
+    public void validateUsernameAndEmail(UserCreateDTO user) throws UsernameExistsException {
+        if (userRepository.existsByUsername(user.getUsername()))
+            throw new UsernameExistsException("Username " + user.getUsername() + " already taken");
+
+        if (userRepository.existsByEmail(user.getEmail()))
+            throw new EmailExistsException("Email " + user.getEmail() + " already taken");
     }
 }
