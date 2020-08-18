@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import { User } from '../types/types'
-import "./UserList.css"
-import {addUser, getAllUsers} from "../../api/UserApi";
+import { TrendzButton} from "../common/TrendzButton/TrendzButton";
+import {TrendzInput} from "../common/TrendzInput/TrendzInput";
+import { Redirect } from 'react-router-dom';
 
 
 export type Props = {
-    user: User,
+    users?: User[],
 
 }
 
 type State = {
     EditOn: boolean
-    NewName: string
-    NewEmail: string
+
 
 }
 
@@ -22,18 +22,17 @@ class Profile extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.state = {
-            EditOn: false,
-            NewName:'',
-            NewEmail:''
+        this.state ={
+            EditOn:false
+
         }
-        this.handleChangeUserName = this.handleChangeUserName.bind(this);
+
+
         this.handleSubmit = this.handleSubmit.bind(this);
     };
 
-    handleChangeUserName(event: { target: { value: any; }; }) {
-        this.setState({NewName: event.target.value});
-    }
+
+
 
 
 
@@ -49,23 +48,27 @@ class Profile extends Component<Props, State> {
 
 
 render() { return (
+
+    <div>
+        {this.state.EditOn ?
+            <Redirect to="/edit" push/> :
+            <article >
             <form onSubmit={this.handleSubmit}>
                 <h2>
                     Profile:
                 </h2>
-                <label>
-                    UserName:
-                    <input type="text" value={this.state.NewName} onChange={this.handleChangeUserName} />
-                </label>
-                <label>
-                    Email:
-                    <input type="text" value={this.state.NewEmail } />
-                </label>
-                <input type="submit" value="Submit" />
-                <button onClick= {()=>this.setState( {EditOn: !this.state.EditOn})}>
-                    Edit
-                </button>
+
+                <TrendzInput value={"Sofia"} disabled={true} label={"Username"}></TrendzInput>
+
+                <TrendzInput value={"sofiasdz@ing.austral.edu.ar"} disabled={true} label={"Email"}></TrendzInput>
+                <ul></ul>
+
+                <TrendzButton title={'Edit'} onClick={() => this.setState({EditOn: !this.state.EditOn})}></TrendzButton>
+
             </form>
+                </article>
+        }</div>
+
         );
     }
 

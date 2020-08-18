@@ -8,6 +8,7 @@ import { Switch, Route } from 'react-router-dom'
 import UserList from '../user-list/UserList'
 import Alert from 'react-s-alert'
 import Profile from "../Profile/Profile";
+import ProfileEditor from "../ProfileEditor/ProfileEditor";
 
 
 export type Props = {}
@@ -50,7 +51,8 @@ class App extends Component<Props, State> {
         <div className="app-body">
           <Switch>
             <Route exact={true} path="/" render={(props) => <UserList {...props} users={users}/>}/>
-            <Route exact={true} path="/profile" render={(props) => <Profile {...props} user={users[0]}/>}/>
+            <Route exact={true} path="/profile" render={(props) => <Profile {...props} users={users}/>}/>
+            <Route exact={true} path="/edit" render={(props) => <ProfileEditor {...props} users={users}/>}/>
           </Switch>
         </div>
         <Alert stack={{ limit: 3 }}
