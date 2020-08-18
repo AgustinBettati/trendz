@@ -1,9 +1,6 @@
 package facultad.trendz.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
@@ -14,14 +11,21 @@ public class User {
 
     private String email;
 
-    private String name;
+    private String username;
+
+    private String password;
+
+    @ManyToOne
+    private Role role;
 
     public User() {
     }
 
-    public User(String email, String name) {
+    public User(String email, String username, String password, Role role) {
         this.email = email;
-        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
 
     public Long getId() {
@@ -36,15 +40,31 @@ public class User {
         return email;
     }
 
-    public void setEmail(String title) {
-        this.email = title;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String isbn) {
-        this.name = isbn;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
