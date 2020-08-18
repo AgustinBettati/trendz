@@ -1,3 +1,27 @@
 .user-list {
     width: 500px;
 }
+
+.header-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+button {
+    margin-left: 5px;
+}
+
+.list-group-item{
+    background-color: #0B755D;
+    padding: 5px;
+    color: white;
+    margin: 5px 0;
+    width: 100%;
+    transition: 300ms;
+}
+
+.list-group-item:hover{
+    background-color: #24C29E;
+    width: 95%;
+}

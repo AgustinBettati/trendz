@@ -13,3 +13,16 @@ export function getAllUsers(): Promise<User[]> {
     method: 'GET'
   });
 }
+
+export function createUser(email: String, name: String, surname: String): Promise<User> {
+  const body = {
+    email: email,
+    name: name,
+    surname: surname
+  }
+  return request({
+    url: API_BASE_URL + '/user',
+    method: 'POST',
+    body: JSON.stringify(body)
+  })
+}
