@@ -1,6 +1,8 @@
 package facultad.trendz.controller;
 
 import facultad.trendz.dto.UserCreateDTO;
+import facultad.trendz.dto.UserResponseDTO;
+import facultad.trendz.exception.UsernameExistsException;
 import facultad.trendz.model.User;
 import facultad.trendz.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ public class UserController {
         this.userService = userService;
     }
 
+
     @GetMapping(value = "/user/{email}")
     public ResponseEntity<User> getUser(@PathVariable("email") String email) {
         final User body = userService.getUserByEmail(email);
@@ -40,8 +43,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/user")
-    public ResponseEntity<User> createUser(@RequestBody UserCreateDTO user) {
-        final User body = userService.saveUser(user);
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserCreateDTO user) throws UsernameExistsException {
+        userService.validateEmail(user.getEmail());
+        userService.validateUsername(user.getUsername());
+        final UserResponseDTO body = userService.saveUser(user);
         final HttpStatus status = HttpStatus.CREATED;
 
         return new ResponseEntity<>(body, status);

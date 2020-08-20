@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
 import './App.css'
 import { User } from '../types/types'
-import {addUser, getAllUsers} from '../../api/UserApi'
+import { getAllUsers } from '../../api/UserApi'
 import LoadingIndicator from '../common/LoadingIndicator'
-import AppHeader from '../common/AppHeader'
+import AppHeader from '../common/AppHeader/AppHeader'
 import { Switch, Route } from 'react-router-dom'
 import UserList from '../user-list/UserList'
-import Alert from 'react-s-alert'
 import Profile from "../Profile/Profile";
 import ProfileEditor from "../ProfileEditor/ProfileEditor";
+import Register from "../Register/Register";
 
+export type Props = {
 
-export type Props = {}
+}
 
 type State = {
   users?: User[]
@@ -30,10 +31,13 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-
     getAllUsers().then(users => {
       this.setState({users: users, loading: false})
     })
+  }
+
+  handleLogout() {
+    //TODO
   }
 
   render() {
@@ -53,18 +57,11 @@ class App extends Component<Props, State> {
             <Route exact={true} path="/" render={(props) => <UserList {...props} users={users}/>}/>
             <Route exact={true} path="/profile" render={(props) => <Profile {...props} users={users}/>}/>
             <Route exact={true} path="/edit" render={(props) => <ProfileEditor {...props} users={users}/>}/>
+            <Route exact={true} path="/register" render={(props) => <Register {...props}/>}/>
           </Switch>
-        </div>
-        <Alert stack={{ limit: 3 }}
-               timeout={3000}
-               position='top-right' effect='slide' offset={65}/>
-        <div className={'app-footer'}>
         </div>
       </div>
     )
-  }
-  handleLogout() {
-    //TODO
   }
 }
 

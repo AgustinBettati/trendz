@@ -14,11 +14,11 @@ export const TrendzInput = (props: InputProps) => (
     <div className={'input-wrapper'}>
         <div className={'input-label'}>{props.label}</div>
         <input
-        onChange={props.onChange}
-        disabled={props.disabled}
-        placeholder={props.placeholder}
-        type={props.password ? 'password' : 'text'}
-        value={props.value}
+            onChange={props.onChange}
+            disabled={props.disabled}
+            placeholder={props.placeholder}
+            type={props.password ? 'password' : 'text'}
+            value={props.value}
         />
     </div>
 )
