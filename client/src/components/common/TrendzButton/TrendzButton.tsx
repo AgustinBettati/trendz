@@ -1,12 +1,13 @@
+
 import React from 'react';
 import './TrendzButton.css'
 
 type ButtonProps = {
-    title: String,
+    title: string,
     disabled?: boolean,
-    onClick: any
+    onClick: () => any
 }
 
-export const TrendzButton = ({title, onClick, disabled}: ButtonProps) => (
-    <button onClick={onClick} disabled={disabled}>{title}</button>
+export const TrendzButton = (props: ButtonProps) => (
+    <button className={props.disabled ? 'disabled' : 'enabled'} onClick={props.onClick} disabled={props.disabled}>{props.title}</button>
 )

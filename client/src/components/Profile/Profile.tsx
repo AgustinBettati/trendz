@@ -58,12 +58,12 @@ render() { return (
                     Profile:
                 </h2>
 
-                <TrendzInput value={"Sofia"} disabled={true} label={"Username"}></TrendzInput>
+                <TrendzInput value={"Sofia"} disabled={true} label={"Username"}/>
 
-                <TrendzInput value={"sofiasdz@ing.austral.edu.ar"} disabled={true} label={"Email"}></TrendzInput>
-                <ul></ul>
+                <TrendzInput value={"sofiasdz@ing.austral.edu.ar"} disabled={true} label={"Email"}/>
 
-                <TrendzButton title={'Edit'} onClick={() => this.setState({EditOn: !this.state.EditOn})}></TrendzButton>
+
+                <TrendzButton title={'Edit'} onClick={() => this.setState({EditOn: !this.state.EditOn})}/>
 
             </form>
                 </article>
