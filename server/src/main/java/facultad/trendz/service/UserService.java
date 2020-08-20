@@ -53,11 +53,13 @@ public class UserService {
         return new UserResponseDTO(user.getEmail(), user.getUsername(), user.getRole());
     }
 
-    public void validateUsernameAndEmail(UserCreateDTO user) throws UsernameExistsException {
-        if (userRepository.existsByUsername(user.getUsername()))
-            throw new UsernameExistsException("Username " + user.getUsername() + " already taken");
+    public void validateUsername(String username) throws UsernameExistsException {
+        if (userRepository.existsByUsername(username))
+            throw new UsernameExistsException("Username " + username + " already taken");
+    }
 
-        if (userRepository.existsByEmail(user.getEmail()))
-            throw new EmailExistsException("Email " + user.getEmail() + " already taken");
+    public void validateEmail(String email) throws EmailExistsException {
+        if (userRepository.existsByEmail(email))
+            throw new EmailExistsException("Email " + email + " already taken");
     }
 }

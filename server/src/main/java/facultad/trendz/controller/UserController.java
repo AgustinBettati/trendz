@@ -44,7 +44,8 @@ public class UserController {
 
     @PostMapping(value = "/user")
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserCreateDTO user) throws UsernameExistsException {
-        userService.validateUsernameAndEmail(user);
+        userService.validateEmail(user.getEmail());
+        userService.validateUsername(user.getUsername());
         final UserResponseDTO body = userService.saveUser(user);
         final HttpStatus status = HttpStatus.CREATED;
 
