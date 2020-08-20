@@ -5,16 +5,18 @@
 }
 
 .input-label{
-    color: #24C29E;
+    color: #00B090;
     font-weight: bold;
     font-size: 20px;
     margin-bottom: 2px;
+    font-family: Bitter, sans-serif;
 }
 
 input{
-    border: 2px solid #24C29E;
+    border: 2px solid #00B090;
     border-radius: 5px;
     font-size: 16px;
     outline: none;
     padding: 5px;
+    width: 300px;
 }

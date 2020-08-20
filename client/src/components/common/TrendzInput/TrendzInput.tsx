@@ -2,15 +2,23 @@ import React from 'react';
 import './TrendzInput.css';
 
 type InputProps = {
-    label?: String,
+    value?: string,
+    label?: string,
     placeholder?: string,
-    disabled?: boolean
-    onChange: any
+    disabled?: boolean,
+    password?: boolean,
+    onChange?: any
 }
 
-export const TrendzInput = ({label, placeholder, disabled, onChange}: InputProps) => (
+export const TrendzInput = (props: InputProps) => (
     <div className={'input-wrapper'}>
-        <div className={'input-label'}>{label}</div>
-        <input onChange={onChange} disabled={disabled} placeholder={placeholder}/>
+        <div className={'input-label'}>{props.label}</div>
+        <input
+            onChange={props.onChange}
+            disabled={props.disabled}
+            placeholder={props.placeholder}
+            type={props.password ? 'password' : 'text'}
+            value={props.value}
+        />
     </div>
 )
