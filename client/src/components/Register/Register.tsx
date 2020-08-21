@@ -5,13 +5,15 @@ import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import logo from '../../assets/TrendzLogo.png';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import {registerUser} from "../../api/UserApi";
 
 export type Props = {
 
 }
 
 export type State = {
-
+    errorMessage: string,
+    successMessage: string
 }
 
 const registerSchema = yup.object({
@@ -22,6 +24,26 @@ const registerSchema = yup.object({
 })
 
 export class Register extends Component<Props, State> {
+
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            errorMessage: '',
+            successMessage: ''
+        }
+    }
+
+    handleRegister = (email: string, username: string, password: string) => {
+        registerUser(email, username, password, 'user')
+            .then(() => {
+                this.setState({successMessage: 'User successfully registered'});
+                setTimeout(() => this.setState({successMessage: ''}), 3000);
+            })
+            .catch((err) => {
+                this.setState({errorMessage: err.message});
+                setTimeout(() => this.setState({errorMessage: ''}), 3000);
+            })
+    }
 
     render() {
         return (
@@ -34,7 +56,7 @@ export class Register extends Component<Props, State> {
                     </div>
                     <Formik
                         initialValues={{email: '', username: '', password: '', confirmPassword: ''}}
-                        onSubmit={values => console.log(values)}
+                        onSubmit={values => this.handleRegister(values.email, values.username, values.password)}
                         validationSchema={registerSchema}
                     >
                         {(props) => (
@@ -85,7 +107,16 @@ export class Register extends Component<Props, State> {
                                         onClick={() => props.handleSubmit()}
                                         disabled={!!(props.errors.email || props.errors.username || props.errors.password || props.errors.confirmPassword)}
                                     />
-                                    <div className={'error-message'}></div>
+                                    <div style={{height: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10}}>
+                                        {
+                                            this.state.errorMessage !== '' &&
+                                            <div className={'error-message'}>{this.state.errorMessage}</div>
+                                        }
+                                        {
+                                            this.state.successMessage !== '' &&
+                                            <div className={'success-message'}>{this.state.successMessage}</div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         )}

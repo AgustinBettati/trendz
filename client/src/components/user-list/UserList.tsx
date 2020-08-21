@@ -12,7 +12,7 @@ export class UserList extends Component<Props> {
     const usersItems = users && users.map(user => {
       return (
         <li className="list-group-item">
-          <span>{user.name}</span>
+          <span>{user.username}</span>
         </li>
       )
     })
