@@ -3,6 +3,7 @@ import { User } from '../types/types'
 import { TrendzButton} from "../common/TrendzButton/TrendzButton";
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import { Redirect } from 'react-router-dom';
+import './Profile.css';
 
 
 export type Props = {
@@ -49,14 +50,15 @@ class Profile extends Component<Props, State> {
 
 render() { return (
 
-    <div>
+<div className={'container'}>
+    <div className={'profile-card'}>
         {this.state.EditOn ?
-            <Redirect to="/edit" push/> :
-            <article >
+            <Redirect to="/editProfile" push/> :
+            <article>
             <form onSubmit={this.handleSubmit}>
-                <h2>
+                <div className={'title'}>
                     Profile:
-                </h2>
+                </div>
 
                 <TrendzInput value={"Sofia"} disabled={true} label={"Username"}/>
 
@@ -68,6 +70,7 @@ render() { return (
             </form>
                 </article>
         }</div>
+</div>
 
         );
     }

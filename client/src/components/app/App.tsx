@@ -56,7 +56,7 @@ class App extends Component<Props, State> {
           <Switch>
             <Route exact={true} path="/" render={(props) => <UserList {...props} users={users}/>}/>
             <Route exact={true} path="/profile" render={(props) => <Profile {...props} users={users}/>}/>
-            <Route exact={true} path="/edit" render={(props) => <ProfileEditor {...props} users={users}/>}/>
+            <Route exact={true} path="/editProfile" render={(props) => <ProfileEditor {...props} users={users}/>}/>
             <Route exact={true} path="/register" render={(props) => <Register {...props}/>}/>
           </Switch>
         </div>

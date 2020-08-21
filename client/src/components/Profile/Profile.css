@@ -1,11 +1,29 @@
-h2 {
-    color: #24C29E;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 2px;
-}
 
-article{
-    align-content: center;
-    background-color:#24C29E  ;
+.profile-card{
+    background-color: #F4F4F4;
+    border-radius: 20px;
+    -webkit-box-shadow: 0px 0px 20px 3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 20px 3px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 20px 3px rgba(0,0,0,0.75);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #00B090;
+    width: 400px;
+    padding: 30px 0;
+}
+.title{
+    margin-bottom: 20px;
+    font-family: Bitter, sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+    color: #00B090;
+}
+.container{
+    background-color: #232020;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
