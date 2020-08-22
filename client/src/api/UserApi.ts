@@ -13,3 +13,12 @@ export function getAllUsers(): Promise<User[]> {
     method: 'GET'
   });
 }
+
+export function addUser(name : String, surname : String, email : String) : Promise<User> {
+  return request({
+    url : API_BASE_URL + "/user",
+    method : 'POST',
+    body : JSON.stringify({'email' : email, 'name' : name, 'surname' : surname})
+  })
+}
+
