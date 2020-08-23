@@ -7,7 +7,9 @@ type InputProps = {
     placeholder?: string,
     disabled?: boolean,
     password?: boolean,
-    onChange?: any
+    onChange?: any,
+    onFocus?: any,
+    onBlur?: any
 }
 
 export const TrendzInput = (props: InputProps) => (
@@ -19,6 +21,8 @@ export const TrendzInput = (props: InputProps) => (
             placeholder={props.placeholder}
             type={props.password ? 'password' : 'text'}
             value={props.value}
+            onFocus={props.onFocus}
+            onBlur={props.onBlur}
         />
     </div>
 )

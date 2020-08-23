@@ -14,11 +14,10 @@ export function getAllUsers(): Promise<User[]> {
   });
 }
 
-export function addUser(name : String, surname : String, email : String) : Promise<User> {
+export function registerUser(email: string, username: string, password: string, role: string): Promise<User[]> {
   return request({
-    url : API_BASE_URL + "/user",
-    method : 'POST',
-    body : JSON.stringify({'email' : email, 'name' : name, 'surname' : surname})
-  })
+    url: API_BASE_URL + "/user",
+    method: 'POST',
+    body : JSON.stringify({'email': email, 'username': username, 'password': password, 'role': role})
+  });
 }
-
