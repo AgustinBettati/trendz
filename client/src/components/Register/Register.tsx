@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import "./Register.css"
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
@@ -7,13 +7,15 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {registerUser} from "../../api/UserApi";
 
-export type Props = {
-
-}
+export type Props = {}
 
 export type State = {
     errorMessage: string,
-    successMessage: string
+    successMessage: string,
+    emailTouched: boolean,
+    usernameTouched: boolean,
+    passwordTouched: boolean,
+    confirmPasswordTouched: boolean,
 }
 
 const registerSchema = yup.object({
@@ -29,19 +31,23 @@ export class Register extends Component<Props, State> {
         super(props);
         this.state = {
             errorMessage: '',
-            successMessage: ''
+            successMessage: '',
+            emailTouched: false,
+            usernameTouched: false,
+            passwordTouched: false,
+            confirmPasswordTouched: false
         }
     }
 
     handleRegister = (email: string, username: string, password: string) => {
         registerUser(email, username, password, 'user')
             .then(() => {
+                this.setState({errorMessage: ''})
                 this.setState({successMessage: 'User successfully registered'});
-                setTimeout(() => this.setState({successMessage: ''}), 3000);
             })
             .catch((err) => {
+                this.setState({successMessage: ''})
                 this.setState({errorMessage: err.message});
-                setTimeout(() => this.setState({errorMessage: ''}), 3000);
             })
     }
 
@@ -68,8 +74,15 @@ export class Register extends Component<Props, State> {
                                             label={'Email'}
                                             onChange={props.handleChange('email')}
                                             value={props.values.email}
+                                            onFocus={() => {
+                                                this.setState({emailTouched: true})
+                                                this.setState({errorMessage: ''})
+                                                this.setState({successMessage: ''})
+                                            }}
+                                            onBlur={() => !props.errors.email && this.setState({emailTouched: false})}
                                         />
-                                        <div className={'error-message'}>{props.errors.email}</div>
+                                        <div
+                                            className={'error-message'}>{this.state.emailTouched && props.errors.email}</div>
                                     </div>
                                     <div className={'register-field'}>
                                         <TrendzInput
@@ -77,8 +90,15 @@ export class Register extends Component<Props, State> {
                                             label={'Username'}
                                             onChange={props.handleChange('username')}
                                             value={props.values.username}
+                                            onFocus={() => {
+                                                this.setState({usernameTouched: true})
+                                                this.setState({errorMessage: ''})
+                                                this.setState({successMessage: ''})
+                                            }}
+                                            onBlur={() => !props.errors.username && this.setState({usernameTouched: false})}
                                         />
-                                        <div className={'error-message'}>{props.errors.username}</div>
+                                        <div
+                                            className={'error-message'}>{this.state.usernameTouched && props.errors.username}</div>
                                     </div>
                                     <div className={'register-field'}>
                                         <TrendzInput
@@ -87,8 +107,15 @@ export class Register extends Component<Props, State> {
                                             password={true}
                                             onChange={props.handleChange('password')}
                                             value={props.values.password}
+                                            onFocus={() => {
+                                                this.setState({passwordTouched: true})
+                                                this.setState({errorMessage: ''})
+                                                this.setState({successMessage: ''})
+                                            }}
+                                            onBlur={() => !props.errors.password && this.setState({passwordTouched: false})}
                                         />
-                                        <div className={'error-message'}>{props.errors.password}</div>
+                                        <div
+                                            className={'error-message'}>{this.state.passwordTouched && props.errors.password}</div>
                                     </div>
                                     <div className={'register-field'}>
                                         <TrendzInput
@@ -97,17 +124,31 @@ export class Register extends Component<Props, State> {
                                             password={true}
                                             onChange={props.handleChange('confirmPassword')}
                                             value={props.values.confirmPassword}
+                                            onFocus={() => {
+                                                this.setState({confirmPasswordTouched: true})
+                                                this.setState({errorMessage: ''})
+                                                this.setState({successMessage: ''})
+                                            }}
+                                            onBlur={() => !props.errors.confirmPassword && this.setState({confirmPasswordTouched: false})}
                                         />
-                                        <div className={'error-message'}>{props.errors.confirmPassword}</div>
+                                        <div
+                                            className={'error-message'}>{this.state.confirmPasswordTouched && props.errors.confirmPassword}</div>
                                     </div>
                                 </div>
                                 <div className={'register-footer'}>
                                     <TrendzButton
                                         title={'Submit'}
-                                        onClick={() => props.handleSubmit()}
+                                        onClick={() => props.values.email === '' && props.values.username === '' && props.values.password === '' ?
+                                            this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
                                         disabled={!!(props.errors.email || props.errors.username || props.errors.password || props.errors.confirmPassword)}
                                     />
-                                    <div style={{height: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10}}>
+                                    <div style={{
+                                        height: 20,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        marginTop: 10
+                                    }}>
                                         {
                                             this.state.errorMessage !== '' &&
                                             <div className={'error-message'}>{this.state.errorMessage}</div>
