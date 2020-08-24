@@ -42,13 +42,46 @@ export class Register extends Component<Props, State> {
     handleRegister = (email: string, username: string, password: string) => {
         registerUser(email, username, password, 'user')
             .then(() => {
-                this.setState({errorMessage: ''})
-                this.setState({successMessage: 'User successfully registered'});
+                this.setState({errorMessage: '', successMessage: 'User successfully registered'});
             })
             .catch((err) => {
-                this.setState({successMessage: ''})
-                this.setState({errorMessage: err.message});
+                this.setState({successMessage: '', errorMessage: err.message});
             })
+    }
+
+    handleOnFocus = (prop: string) => {
+        this.setState({errorMessage: '', successMessage: ''})
+        switch (prop){
+            case 'email':
+                this.setState({emailTouched: true});
+                break;
+            case 'username':
+                this.setState({usernameTouched: true});
+                break;
+            case 'password':
+                this.setState({passwordTouched: true});
+                break;
+            case 'confirmPassword':
+                this.setState({confirmPasswordTouched: true});
+                break;
+        }
+    }
+
+    handleOnBlur = (prop: string) => {
+        switch (prop){
+            case 'email':
+                this.setState({emailTouched: false});
+                break;
+            case 'username':
+                this.setState({usernameTouched: false});
+                break;
+            case 'password':
+                this.setState({passwordTouched: false});
+                break;
+            case 'confirmPassword':
+                this.setState({confirmPasswordTouched: false});
+                break;
+        }
     }
 
     render() {
@@ -74,12 +107,8 @@ export class Register extends Component<Props, State> {
                                             label={'Email'}
                                             onChange={props.handleChange('email')}
                                             value={props.values.email}
-                                            onFocus={() => {
-                                                this.setState({emailTouched: true})
-                                                this.setState({errorMessage: ''})
-                                                this.setState({successMessage: ''})
-                                            }}
-                                            onBlur={() => !props.errors.email && this.setState({emailTouched: false})}
+                                            onFocus={() => this.handleOnFocus('email')}
+                                            onBlur={() => !props.errors.email && this.handleOnBlur('email')}
                                         />
                                         <div
                                             className={'error-message'}>{this.state.emailTouched && props.errors.email}</div>
@@ -90,12 +119,8 @@ export class Register extends Component<Props, State> {
                                             label={'Username'}
                                             onChange={props.handleChange('username')}
                                             value={props.values.username}
-                                            onFocus={() => {
-                                                this.setState({usernameTouched: true})
-                                                this.setState({errorMessage: ''})
-                                                this.setState({successMessage: ''})
-                                            }}
-                                            onBlur={() => !props.errors.username && this.setState({usernameTouched: false})}
+                                            onFocus={() => this.handleOnFocus('username')}
+                                            onBlur={() => !props.errors.username && this.handleOnBlur('username')}
                                         />
                                         <div
                                             className={'error-message'}>{this.state.usernameTouched && props.errors.username}</div>
@@ -107,12 +132,8 @@ export class Register extends Component<Props, State> {
                                             password={true}
                                             onChange={props.handleChange('password')}
                                             value={props.values.password}
-                                            onFocus={() => {
-                                                this.setState({passwordTouched: true})
-                                                this.setState({errorMessage: ''})
-                                                this.setState({successMessage: ''})
-                                            }}
-                                            onBlur={() => !props.errors.password && this.setState({passwordTouched: false})}
+                                            onFocus={() => this.handleOnFocus('password')}
+                                            onBlur={() => !props.errors.password && this.handleOnBlur('password')}
                                         />
                                         <div
                                             className={'error-message'}>{this.state.passwordTouched && props.errors.password}</div>
@@ -124,12 +145,8 @@ export class Register extends Component<Props, State> {
                                             password={true}
                                             onChange={props.handleChange('confirmPassword')}
                                             value={props.values.confirmPassword}
-                                            onFocus={() => {
-                                                this.setState({confirmPasswordTouched: true})
-                                                this.setState({errorMessage: ''})
-                                                this.setState({successMessage: ''})
-                                            }}
-                                            onBlur={() => !props.errors.confirmPassword && this.setState({confirmPasswordTouched: false})}
+                                            onFocus={() => this.handleOnFocus('confirmPassword')}
+                                            onBlur={() => !props.errors.confirmPassword && this.handleOnBlur('confirmPassword')}
                                         />
                                         <div
                                             className={'error-message'}>{this.state.confirmPasswordTouched && props.errors.confirmPassword}</div>
