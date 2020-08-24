@@ -121,8 +121,10 @@ public class UserControllerTests {
 		restTemplate.postForEntity(uri, request01, String.class);
 
 		try {
-			//WHEN
+		//WHEN
 			restTemplate.postForEntity(uri, request02, String.class);
+
+		//THEN
 			Assert.fail();
 		}
 		catch (HttpClientErrorException e){
@@ -145,8 +147,10 @@ public class UserControllerTests {
 		restTemplate.postForEntity(uri, request01, String.class);
 
 		try {
-			//WHEN
+		//WHEN
 			restTemplate.postForEntity(uri, request02, String.class);
+
+		//THEN
 			Assert.fail();
 		}
 		catch (HttpClientErrorException e){
