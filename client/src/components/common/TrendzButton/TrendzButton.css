@@ -30,3 +30,13 @@
     cursor: pointer;
     font-family: Bitter, sans-serif;
 }
+
+.disabled {
+    background-color: #00B090;
+    filter: opacity(0.5);
+    padding: 5px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+}

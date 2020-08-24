@@ -6,6 +6,8 @@ import LoadingIndicator from '../common/LoadingIndicator'
 import AppHeader from '../common/AppHeader/AppHeader'
 import { Switch, Route } from 'react-router-dom'
 import UserList from '../user-list/UserList'
+import Profile from "../Profile/Profile";
+import ProfileEditor from "../ProfileEditor/ProfileEditor";
 import Register from "../Register/Register";
 
 export type Props = {
@@ -53,6 +55,8 @@ class App extends Component<Props, State> {
         <div className="app-body">
           <Switch>
             <Route exact={true} path="/" render={(props) => <UserList {...props} users={users}/>}/>
+            <Route exact={true} path="/profile" render={(props) => <Profile {...props} users={users}/>}/>
+            <Route exact={true} path="/editProfile" render={(props) => <ProfileEditor {...props} users={users}/>}/>
             <Route exact={true} path="/register" render={(props) => <Register {...props}/>}/>
           </Switch>
         </div>
