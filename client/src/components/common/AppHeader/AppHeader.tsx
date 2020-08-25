@@ -19,6 +19,7 @@ class AppHeader extends Component<Props> {
                     <NavLink to="/" className="app-option">Home</NavLink>
                     <NavLink to="/register" className="app-option">Register</NavLink>
                     <NavLink to="/profile" className="app-option">Profile</NavLink>
+                    <NavLink to="/login" className="app-option">Login</NavLink>
                     {this.props.authenticated && (
                         <div>
                             <NavLink className="app-option" to="/profile">Profile</NavLink>

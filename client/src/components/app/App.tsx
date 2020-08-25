@@ -8,6 +8,7 @@ import { Switch, Route } from 'react-router-dom'
 import Profile from "../Profile/Profile";
 import ProfileEditor from "../ProfileEditor/ProfileEditor";
 import Register from "../Register/Register";
+import Login from "../Login/Login";
 
 export type Props = {
 
@@ -56,6 +57,7 @@ class App extends Component<Props, State> {
             <Route exact={true} path="/profile" render={(props) => <Profile {...props} users={users}/>}/>
             <Route exact={true} path="/editProfile" render={(props) => <ProfileEditor {...props} users={users}/>}/>
             <Route exact={true} path="/register" render={(props) => <Register {...props}/>}/>
+            <Route exact={true} path="/login" render={(props) => <Login {...props}/>}/>
           </Switch>
         </div>
       </div>
