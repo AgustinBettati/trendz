@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {User} from '../types/types'
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import './Profile.css';
+import {NavLink} from "react-router-dom";
 
 
 export type Props = {
@@ -27,7 +28,7 @@ class Profile extends Component<Props> {
                     <TrendzInput value={"Sofia"} disabled={true} label={"Username"}/>
                     <TrendzInput value={"sofiasdz@ing.austral.edu.ar"} disabled={true} label={"Email"}/>
                     <div className={'button-c'}>
-                        <a href="http://localhost:3000/editProfile" className="button">Edit</a>
+                        <NavLink to="http://localhost:3000/editProfile" className="button">Edit</NavLink>
                     </div>
 
                 </div>
