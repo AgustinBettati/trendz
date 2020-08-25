@@ -50,7 +50,7 @@ public class UserService {
         final User user = new User(userCreateDTO.getEmail(), userCreateDTO.getUsername(), encryptedPassword, role);
 
         userRepository.save(user);
-        return new UserResponseDTO(user.getEmail(), user.getUsername(), user.getRole());
+        return new UserResponseDTO(user.getId(),user.getEmail(), user.getUsername(), user.getRole());
     }
 
     public void validateUsername(String username) throws UsernameExistsException {
