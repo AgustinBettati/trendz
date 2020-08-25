@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { User } from '../types/types'
-import { TrendzButton} from "../common/TrendzButton/TrendzButton";
+import React, {Component} from 'react'
+import {User} from '../types/types'
+import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
-import { Redirect } from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 
 
 export type Props = {
@@ -10,12 +10,7 @@ export type Props = {
 
 }
 
-type State = {
-
-
-
-}
-
+type State = {}
 
 
 class ProfileEditor extends Component<Props, State> {
@@ -24,28 +19,16 @@ class ProfileEditor extends Component<Props, State> {
         super(props);
 
 
-
     };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    render() { return (
-        <div>
-            <h2>Profile Editor</h2>
-            <h3> TO DO</h3>
+    render() {
+        return (
+            <div>
+                <h2>Profile Editor</h2>
+                <h3> TO DO</h3>
             </div>
-    );
+        );
     }
 
 
