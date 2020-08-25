@@ -28,7 +28,7 @@ class Profile extends Component<Props> {
                     <TrendzInput value={"Sofia"} disabled={true} label={"Username"}/>
                     <TrendzInput value={"sofiasdz@ing.austral.edu.ar"} disabled={true} label={"Email"}/>
                     <div className={'button-c'}>
-                        <NavLink to="http://localhost:3000/editProfile" className="button">Edit</NavLink>
+                        <NavLink to="/editProfile" className="button">Edit</NavLink>
                     </div>
 
                 </div>
