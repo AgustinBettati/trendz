@@ -19,8 +19,8 @@ export type State = {
 }
 
 const loginSchema = yup.object({
-    email: yup.string().required('Email is required').email('Invalid email'),
-    password: yup.string().required('Password is required'),
+    email: yup.string().required('Email cannot be empty').email('Invalid email'),
+    password: yup.string().required('Password cannot be empty'),
 
 })
 
