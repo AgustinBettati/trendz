@@ -40,9 +40,10 @@
     outline: none;
     cursor: pointer;
     font-family: Bitter, sans-serif;
+    text-decoration: none;
 }
 
-.enabled:hover{
+.button:hover{
     background-color: #1EA083;
 }
 
