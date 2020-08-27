@@ -42,7 +42,7 @@ public class UserService {
     }
 
     public UserResponseDTO saveUser(UserCreateDTO userCreateDTO) {
-        ERole eRole = (userCreateDTO.getRole() == null || userCreateDTO.getRole().equals("user")) ? ERole.ROLE_USER : ERole.ROLE_ADMIN;
+        ERole eRole = (userCreateDTO.getRole().equals("admin")) ? ERole.ROLE_ADMIN : ERole.ROLE_USER;
         Role role = roleRepository.getByRole(eRole);
 
         String encryptedPassword = passwordEncoder.encode(userCreateDTO.getPassword());
