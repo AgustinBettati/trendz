@@ -1,34 +1,29 @@
-import React, {Component} from 'react';
-import { NavLink } from 'react-router-dom';
+import React from 'react';
+import { NavLink, withRouter} from 'react-router-dom';
 import './AppHeader.css';
 import logo from '../../../assets/TrendzLogo.png';
 
-export type Props = {
-    authenticated: boolean,
-    onLogout: () => void
-}
+const AppHeader = ({history}: any) => {
 
-class AppHeader extends Component<Props> {
-    render() {
-        return (
-            <header className="app-header">
-                <div className="app-branding">
-                    <img src={logo} alt={''}/>
-                </div>
-                <div className="app-options">
-                    <NavLink to="/" className="app-option">Home</NavLink>
-                    <NavLink to="/register" className="app-option">Register</NavLink>
-                    <NavLink to="/profile" className="app-option">Profile</NavLink>
-                    {this.props.authenticated && (
-                        <div>
-                            <NavLink className="app-option" to="/profile">Profile</NavLink>
-                            <a className="app-option" onClick={this.props.onLogout}>Logout</a>
-                        </div>
-                    )}
-                </div>
-            </header>
-        )
+    const handleLogout = () => {
+        localStorage.removeItem('token')
+        history.push('/login')
     }
+
+    return (
+        <header className={"app-header"}>
+            <div className={"app-branding"}>
+                <img src={logo} alt={''}/>
+            </div>
+            <div className={"app-options"}>
+                <div style={{display: 'flex', flexDirection: 'row', height: '100%'}}>
+                    <NavLink to={"/main/home"} className={"app-option"}>Home</NavLink>
+                    <NavLink to={"/main/profile"} className={"app-option"}>Profile</NavLink>
+                </div>
+                <div className={'logout'} onClick={() => handleLogout()}>Logout</div>
+            </div>
+        </header>
+    )
 }
 
-export default AppHeader;
+export default withRouter(AppHeader);
