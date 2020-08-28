@@ -22,7 +22,7 @@ export function registerUser(email: string, username: string, password: string, 
     });
 }
 
-    export function loginUser(email: string, password: string, role: string ): Promise<User[]> {
+    export function loginUser(email: string, password: string, role: string ): Promise<any> {
         return request({
             url: API_BASE_URL + "/login",
             method: 'POST',

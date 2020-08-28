@@ -41,9 +41,9 @@ export class Login extends Component<Props, State> {
 
     handleLogin = (email: string, password: string) => {
         loginUser(email, password, 'user')
-            .then(() => {
-                this.setState({errorMessage: '', successMessage: 'User successfully logged in', isLoggedIn: !this.state.isLoggedIn})
-                ;
+            .then((res) => {
+                this.setState({errorMessage: '', successMessage: 'User successfully logged in', isLoggedIn: !this.state.isLoggedIn});
+                localStorage.setItem('token',res.token);
             })
             .catch((err) => {
                 this.setState({successMessage: '', errorMessage: err.message});
