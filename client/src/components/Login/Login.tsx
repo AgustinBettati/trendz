@@ -5,7 +5,6 @@ import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import logo from '../../assets/TrendzLogo.png';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {registerUser} from "../../api/UserApi";
 import {NavLink} from "react-router-dom";
 
 export type Props = {}
@@ -14,14 +13,12 @@ export type State = {
     errorMessage: string,
     successMessage: string,
     emailTouched: boolean,
-    passwordTouched: boolean,
-
+    passwordTouched: boolean
 }
 
 const loginSchema = yup.object({
     email: yup.string().required('Email cannot be empty').email('Invalid email'),
-    password: yup.string().required('Password cannot be empty'),
-
+    password: yup.string().required('Password cannot be empty')
 })
 
 export class Login extends Component<Props, State> {

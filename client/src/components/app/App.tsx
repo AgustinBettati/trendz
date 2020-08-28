@@ -6,6 +6,7 @@ import PrivateRoute from "../Routing/PrivateRoute";
 import {AppFrame} from "../Routing/AppFrame";
 import Profile from "../Profile/Profile";
 import ProfileEditor from "../ProfileEditor/ProfileEditor";
+import Login from "../Login/Login";
 
 type MatchProps = {
   match: {
@@ -18,7 +19,7 @@ class App extends Component{
     return (
       <div className="app">
         <Switch>
-          <Route exact={true} path="/login" render={() => <div>login</div>}/>
+          <Route exact={true} path="/login" component={Login}/>
           <Route exact={true} path="/register" component={Register}/>
           <PrivateRoute path={'/main'} component={({match}: MatchProps) => ([
               <AppFrame>
