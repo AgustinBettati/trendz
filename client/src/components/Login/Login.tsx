@@ -6,6 +6,8 @@ import logo from '../../assets/TrendzLogo.png';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {NavLink} from "react-router-dom";
+import {loginUser} from "../../api/UserApi";
+
 
 export type Props = {}
 
@@ -34,13 +36,13 @@ export class Login extends Component<Props, State> {
     }
 
     handleLogin = (email: string, password: string) => {
-       /* registerUser(email, password, 'user')
+        loginUser(email, password, 'user')
             .then(() => {
                 this.setState({errorMessage: '', successMessage: 'User successfully logged in'});
             })
             .catch((err) => {
                 this.setState({successMessage: '', errorMessage: err.message});
-            })*/
+            })
     }
 
     handleOnFocus = (prop: string) => {
