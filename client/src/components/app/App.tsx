@@ -1,63 +1,35 @@
 import React, { Component } from 'react'
 import './App.css'
-import { User } from '../types/types'
-import { getAllUsers } from '../../api/UserApi'
-import LoadingIndicator from '../common/LoadingIndicator'
-import AppHeader from '../common/AppHeader/AppHeader'
 import { Switch, Route } from 'react-router-dom'
+import Register from "../Register/Register";
+import PrivateRoute from "../Routing/PrivateRoute";
+import {AppFrame} from "../Routing/AppFrame";
 import Profile from "../Profile/Profile";
 import ProfileEditor from "../ProfileEditor/ProfileEditor";
-import Register from "../Register/Register";
+import Login from "../Login/Login";
 
-export type Props = {
-
+type MatchProps = {
+  match: {
+    url: string
+  }
 }
 
-type State = {
-  users?: User[]
-  loading: boolean
-  authenticated: boolean
-}
-
-class App extends Component<Props, State> {
-
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      loading: true,
-      authenticated: false
-    }
-  }
-
-  componentDidMount() {
-    getAllUsers().then(users => {
-      this.setState({users: users, loading: false})
-    })
-  }
-
-  handleLogout() {
-    //TODO
-  }
-
+class App extends Component{
   render() {
-    const {loading, users, authenticated} = this.state
-
-    if (loading) {
-      return <LoadingIndicator/>
-    }
-
     return (
       <div className="app">
-        <div className="app-top-box">
-          <AppHeader authenticated={authenticated} onLogout={this.handleLogout}/>
-        </div>
-        <div className="app-body">
-          <Switch>
-            <Route exact={true} path="/profile" render={(props) => <Profile {...props} users={users}/>}/>
-            <Route exact={true} path="/editProfile" render={(props) => <ProfileEditor {...props} users={users}/>}/>
-            <Route exact={true} path="/register" render={(props) => <Register {...props}/>}/>
-          </Switch>
-        </div>
+        <Switch>
+          <Route exact={true} path="/login" component={Login}/>
+          <Route exact={true} path="/register" component={Register}/>
+          <PrivateRoute path={'/main'} component={({match}: MatchProps) => ([
+              <AppFrame>
+                <Switch>
+                  <Route exact path={`${match.url}/profile`} component={Profile}/>
+                  <Route exact path={`${match.url}/profileEditor`} component={ProfileEditor}/>
+                </Switch>
+              </AppFrame>
+          ])}/>
+        </Switch>
       </div>
     )
   }
