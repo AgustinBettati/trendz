@@ -4,10 +4,8 @@ import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import './Profile.css';
 import {NavLink} from "react-router-dom";
 
-
 export type Props = {
-    users?: User[],
-
+    users?: User[]
 }
 
 class Profile extends Component<Props> {
@@ -16,10 +14,8 @@ class Profile extends Component<Props> {
         super(props);
     };
 
-
     render() {
         return (
-
             <div className={'container'}>
                 <div className={'profile-card'}>
                     <div className={'title'}>
@@ -28,16 +24,12 @@ class Profile extends Component<Props> {
                     <TrendzInput value={"Sofia"} disabled={true} label={"Username"}/>
                     <TrendzInput value={"sofiasdz@ing.austral.edu.ar"} disabled={true} label={"Email"}/>
                     <div className={'button-c'}>
-                        <NavLink to="/editProfile" className="button">Edit</NavLink>
+                        <NavLink to="/main/editProfile" className="button">Edit</NavLink>
                     </div>
-
                 </div>
             </div>
-
         );
     }
-
-
 }
 
 export default Profile
