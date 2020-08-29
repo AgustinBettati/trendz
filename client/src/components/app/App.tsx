@@ -19,7 +19,7 @@ class App extends Component{
     return (
       <div className="app">
         <Switch>
-          <Route exact={true} path="/login" component={Login}/>
+          <Route exact={true} path="/" component={Login}/>
           <Route exact={true} path="/register" component={Register}/>
           <PrivateRoute path={'/main'} component={({match}: MatchProps) => ([
               <AppFrame>

@@ -6,8 +6,8 @@ import logo from '../../../assets/TrendzLogo.png';
 const AppHeader = ({history}: any) => {
 
     const handleLogout = () => {
-        localStorage.removeItem('token')
-        history.push('/login')
+        localStorage.removeItem('token');
+        history.push('/');
     }
 
     return (
