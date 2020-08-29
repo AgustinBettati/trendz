@@ -1,32 +1,29 @@
 import React, {Component} from 'react'
-import "./Register.css"
+import "./Login.css"
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import logo from '../../assets/TrendzLogo.png';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {registerUser} from "../../api/UserApi";
-import {NavLink} from "react-router-dom";
+import {NavLink, withRouter} from "react-router-dom";
+import {loginUser} from "../../api/UserApi";
+import {RouteComponentProps} from 'react-router-dom';
 
-export type Props = {}
+export type Props = RouteComponentProps<any> & {}
 
 export type State = {
     errorMessage: string,
     successMessage: string,
     emailTouched: boolean,
-    usernameTouched: boolean,
     passwordTouched: boolean,
-    confirmPasswordTouched: boolean,
 }
 
-const registerSchema = yup.object({
-    email: yup.string().required('Email is required').email('Invalid email'),
-    username: yup.string().required('Username required'),
-    password: yup.string().required('Password is required').min(8, 'Password must have at least 8 characters'),
-    confirmPassword: yup.string().required('Password confirmation is required').oneOf([yup.ref('password')], 'Passwords must match')
+const loginSchema = yup.object({
+    email: yup.string().required('Email cannot be empty').email('Invalid email'),
+    password: yup.string().required('Password cannot be empty')
 })
 
-export class Register extends Component<Props, State> {
+class Login extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
@@ -34,19 +31,19 @@ export class Register extends Component<Props, State> {
             errorMessage: '',
             successMessage: '',
             emailTouched: false,
-            usernameTouched: false,
             passwordTouched: false,
-            confirmPasswordTouched: false
         }
     }
 
-    handleRegister = (email: string, username: string, password: string) => {
-        registerUser(email, username, password, 'user')
-            .then(() => {
-                this.setState({errorMessage: '', successMessage: 'User successfully registered'});
+    handleLogin = (email: string, password: string) => {
+        loginUser(email, password, 'user')
+            .then((res) => {
+                this.setState({errorMessage: '', successMessage: 'User successfully logged in'});
+                localStorage.setItem('token', res.token);
+                this.props.history.push('/main/home');
             })
-            .catch((err) => {
-                this.setState({successMessage: '', errorMessage: err.message});
+            .catch(() => {
+                this.setState({successMessage: '', errorMessage:'Invalid Credentials'});
             })
     }
 
@@ -56,14 +53,8 @@ export class Register extends Component<Props, State> {
             case 'email':
                 this.setState({emailTouched: true});
                 break;
-            case 'username':
-                this.setState({usernameTouched: true});
-                break;
             case 'password':
                 this.setState({passwordTouched: true});
-                break;
-            case 'confirmPassword':
-                this.setState({confirmPasswordTouched: true});
                 break;
         }
     }
@@ -73,14 +64,8 @@ export class Register extends Component<Props, State> {
             case 'email':
                 this.setState({emailTouched: false});
                 break;
-            case 'username':
-                this.setState({usernameTouched: false});
-                break;
             case 'password':
                 this.setState({passwordTouched: false});
-                break;
-            case 'confirmPassword':
-                this.setState({confirmPasswordTouched: false});
                 break;
         }
     }
@@ -88,21 +73,21 @@ export class Register extends Component<Props, State> {
     render() {
         return (
             <div className={"main-container"}>
-                <div className={'register-card'}>
-                    <div className={'register-header'}>
+                <div className={'login-card'}>
+                    <div className={'login-header'}>
                         <img className={'trendz-logo'} src={logo} alt={''}/>
                         <div className={'divisor'}/>
-                        <div className={'register-title'}>Register</div>
+                        <div className={'login-title'}>Login</div>
                     </div>
                     <Formik
-                        initialValues={{email: '', username: '', password: '', confirmPassword: ''}}
-                        onSubmit={values => this.handleRegister(values.email, values.username, values.password)}
-                        validationSchema={registerSchema}
+                        initialValues={{email: '', password: ''}}
+                        onSubmit={values => this.handleLogin(values.email, values.password)}
+                        validationSchema={loginSchema}
                     >
                         {(props) => (
                             <div className={'form-container'}>
-                                <div className={'register-body'}>
-                                    <div className={'register-field'}>
+                                <div className={'login-body'}>
+                                    <div className={'login-field'}>
                                         <TrendzInput
                                             placeholder={'Email'}
                                             label={'Email'}
@@ -114,19 +99,7 @@ export class Register extends Component<Props, State> {
                                         <div
                                             className={'error-message'}>{this.state.emailTouched && props.errors.email}</div>
                                     </div>
-                                    <div className={'register-field'}>
-                                        <TrendzInput
-                                            placeholder={'Username'}
-                                            label={'Username'}
-                                            onChange={props.handleChange('username')}
-                                            value={props.values.username}
-                                            onFocus={() => this.handleOnFocus('username')}
-                                            onBlur={() => !props.errors.username && this.handleOnBlur('username')}
-                                        />
-                                        <div
-                                            className={'error-message'}>{this.state.usernameTouched && props.errors.username}</div>
-                                    </div>
-                                    <div className={'register-field'}>
+                                    <div className={'login-field'}>
                                         <TrendzInput
                                             placeholder={'Password'}
                                             label={'Password'}
@@ -139,26 +112,13 @@ export class Register extends Component<Props, State> {
                                         <div
                                             className={'error-message'}>{this.state.passwordTouched && props.errors.password}</div>
                                     </div>
-                                    <div className={'register-field'}>
-                                        <TrendzInput
-                                            placeholder={'Confirm password'}
-                                            label={'Confirm password'}
-                                            password={true}
-                                            onChange={props.handleChange('confirmPassword')}
-                                            value={props.values.confirmPassword}
-                                            onFocus={() => this.handleOnFocus('confirmPassword')}
-                                            onBlur={() => !props.errors.confirmPassword && this.handleOnBlur('confirmPassword')}
-                                        />
-                                        <div
-                                            className={'error-message'}>{this.state.confirmPasswordTouched && props.errors.confirmPassword}</div>
-                                    </div>
                                 </div>
-                                <div className={'register-footer'}>
+                                <div className={'login-footer'}>
                                     <TrendzButton
                                         title={'Submit'}
-                                        onClick={() => props.values.email === '' && props.values.username === '' && props.values.password === '' ?
+                                        onClick={() => props.values.email === ''  && props.values.password === '' ?
                                             this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
-                                        disabled={!!(props.errors.email || props.errors.username || props.errors.password || props.errors.confirmPassword)}
+                                        disabled={!!(props.errors.email  || props.errors.password )}
                                     />
                                     <div style={{
                                         height: 20,
@@ -181,8 +141,8 @@ export class Register extends Component<Props, State> {
                         )}
                     </Formik>
                     <div style={{fontFamily: 'Bitter, sans-serif'}}>
-                        Already registered?
-                        <NavLink to="/" className="register-link">Login</NavLink>
+                        Don't have an account? Create one
+                        <NavLink to="/register" className="register-link">here</NavLink>
                     </div>
                 </div>
             </div>
@@ -190,4 +150,4 @@ export class Register extends Component<Props, State> {
     }
 }
 
-export default Register
+export default withRouter(Login)

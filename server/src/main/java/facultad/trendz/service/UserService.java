@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -42,7 +43,7 @@ public class UserService {
     }
 
     public UserResponseDTO saveUser(UserCreateDTO userCreateDTO) {
-        ERole eRole = (userCreateDTO.getRole() == null || userCreateDTO.getRole().equals("user")) ? ERole.ROLE_USER : ERole.ROLE_ADMIN;
+        ERole eRole = (userCreateDTO.getRole().equals("admin")) ? ERole.ROLE_ADMIN : ERole.ROLE_USER;
         Role role = roleRepository.getByRole(eRole);
 
         String encryptedPassword = passwordEncoder.encode(userCreateDTO.getPassword());
@@ -50,7 +51,7 @@ public class UserService {
         final User user = new User(userCreateDTO.getEmail(), userCreateDTO.getUsername(), encryptedPassword, role);
 
         userRepository.save(user);
-        return new UserResponseDTO(user.getId(),user.getEmail(), user.getUsername(), user.getRole());
+        return new UserResponseDTO(user.getId(), user.getEmail(), user.getUsername(), user.getRole());
     }
 
     public void validateUsername(String username) throws UsernameExistsException {
@@ -61,5 +62,13 @@ public class UserService {
     public void validateEmail(String email) throws EmailExistsException {
         if (userRepository.existsByEmail(email))
             throw new EmailExistsException("Email " + email + " already taken");
+    }
+
+    public UserResponseDTO getUserById(Long userId) {
+        final Optional<User> user = userRepository.findById(userId);
+
+        if (!user.isPresent()) throw new UserNotFoundException();
+
+        return new UserResponseDTO(user.get().getId(), user.get().getEmail(), user.get().getUsername(), user.get().getRole());
     }
 }
