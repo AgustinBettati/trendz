@@ -7,7 +7,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {NavLink, withRouter} from "react-router-dom";
 import {loginUser} from "../../api/UserApi";
-import {Redirect, RouteComponentProps} from 'react-router-dom';
+import {RouteComponentProps} from 'react-router-dom';
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -16,7 +16,6 @@ export type State = {
     successMessage: string,
     emailTouched: boolean,
     passwordTouched: boolean,
-    isLoggedIn: boolean
 }
 
 const loginSchema = yup.object({
@@ -33,19 +32,18 @@ class Login extends Component<Props, State> {
             successMessage: '',
             emailTouched: false,
             passwordTouched: false,
-            isLoggedIn: false,
         }
     }
 
     handleLogin = (email: string, password: string) => {
         loginUser(email, password, 'user')
             .then((res) => {
-                this.setState({errorMessage: '', successMessage: 'User successfully logged in', isLoggedIn: !this.state.isLoggedIn});
+                this.setState({errorMessage: '', successMessage: 'User successfully logged in'});
                 localStorage.setItem('token', res.token);
                 this.props.history.push('/main/home');
             })
-            .catch((err) => {
-                this.setState({successMessage: '', errorMessage: err.message});
+            .catch(() => {
+                this.setState({successMessage: '', errorMessage:'Invalid Credentials'});
             })
     }
 
@@ -73,9 +71,6 @@ class Login extends Component<Props, State> {
     }
 
     render() {
-        if (this.state.isLoggedIn) {
-            return <Redirect to='/main/home' />
-        }
         return (
             <div className={"main-container"}>
                 <div className={'login-card'}>
