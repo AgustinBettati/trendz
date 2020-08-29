@@ -6,6 +6,7 @@ import logo from '../../assets/TrendzLogo.png';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {registerUser} from "../../api/UserApi";
+import {NavLink} from "react-router-dom";
 
 export type Props = {}
 
@@ -179,6 +180,10 @@ export class Register extends Component<Props, State> {
                             </div>
                         )}
                     </Formik>
+                    <div style={{fontFamily: 'Bitter, sans-serif'}}>
+                        Already registered?
+                        <NavLink to="/" className="register-link">Login</NavLink>
+                    </div>
                 </div>
             </div>
         )

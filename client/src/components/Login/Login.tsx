@@ -5,13 +5,11 @@ import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import logo from '../../assets/TrendzLogo.png';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {NavLink} from "react-router-dom";
+import {NavLink, withRouter} from "react-router-dom";
 import {loginUser} from "../../api/UserApi";
-import {isLoggedIn} from "../Routing/utils";
-import {Redirect} from 'react-router-dom';
+import {Redirect, RouteComponentProps} from 'react-router-dom';
 
-
-export type Props = {}
+export type Props = RouteComponentProps<any> & {}
 
 export type State = {
     errorMessage: string,
@@ -26,7 +24,7 @@ const loginSchema = yup.object({
     password: yup.string().required('Password cannot be empty')
 })
 
-export class Login extends Component<Props, State> {
+class Login extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
@@ -43,16 +41,13 @@ export class Login extends Component<Props, State> {
         loginUser(email, password, 'user')
             .then((res) => {
                 this.setState({errorMessage: '', successMessage: 'User successfully logged in', isLoggedIn: !this.state.isLoggedIn});
-                localStorage.setItem('token',res.token);
+                localStorage.setItem('token', res.token);
+                this.props.history.push('/main/home');
             })
             .catch((err) => {
                 this.setState({successMessage: '', errorMessage: err.message});
             })
-
-
     }
-
-
 
     handleOnFocus = (prop: string) => {
         this.setState({errorMessage: '', successMessage: ''})
@@ -79,7 +74,7 @@ export class Login extends Component<Props, State> {
 
     render() {
         if (this.state.isLoggedIn) {
-            return <Redirect to='/main' />
+            return <Redirect to='/main/home' />
         }
         return (
             <div className={"main-container"}>
@@ -150,14 +145,14 @@ export class Login extends Component<Props, State> {
                             </div>
                         )}
                     </Formik>
-                    <a> Don't have an account? Create one
+                    <div style={{fontFamily: 'Bitter, sans-serif'}}>
+                        Don't have an account? Create one
                         <NavLink to="/register" className="register-link">here</NavLink>
-                    </a>
-
+                    </div>
                 </div>
             </div>
         )
     }
 }
 
-export default Login
+export default withRouter(Login)
