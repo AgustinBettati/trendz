@@ -6,6 +6,10 @@ import logo from '../../assets/TrendzLogo.png';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {NavLink} from "react-router-dom";
+import {loginUser} from "../../api/UserApi";
+import {isLoggedIn} from "../Routing/utils";
+import {Redirect} from 'react-router-dom';
+
 
 export type Props = {}
 
@@ -13,7 +17,8 @@ export type State = {
     errorMessage: string,
     successMessage: string,
     emailTouched: boolean,
-    passwordTouched: boolean
+    passwordTouched: boolean,
+    isLoggedIn: boolean
 }
 
 const loginSchema = yup.object({
@@ -30,18 +35,24 @@ export class Login extends Component<Props, State> {
             successMessage: '',
             emailTouched: false,
             passwordTouched: false,
+            isLoggedIn: false,
         }
     }
 
     handleLogin = (email: string, password: string) => {
-       /* registerUser(email, password, 'user')
-            .then(() => {
-                this.setState({errorMessage: '', successMessage: 'User successfully logged in'});
+        loginUser(email, password, 'user')
+            .then((res) => {
+                this.setState({errorMessage: '', successMessage: 'User successfully logged in', isLoggedIn: !this.state.isLoggedIn});
+                localStorage.setItem('token',res.token);
             })
             .catch((err) => {
                 this.setState({successMessage: '', errorMessage: err.message});
-            })*/
+            })
+
+
     }
+
+
 
     handleOnFocus = (prop: string) => {
         this.setState({errorMessage: '', successMessage: ''})
@@ -67,6 +78,9 @@ export class Login extends Component<Props, State> {
     }
 
     render() {
+        if (this.state.isLoggedIn) {
+            return <Redirect to='/main' />
+        }
         return (
             <div className={"main-container"}>
                 <div className={'login-card'}>
