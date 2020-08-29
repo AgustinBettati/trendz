@@ -25,10 +25,9 @@ public class UserController {
         this.userService = userService;
     }
 
-
-    @GetMapping(value = "/user/{email}")
-    public ResponseEntity<User> getUser(@PathVariable("email") String email) {
-        final User body = userService.getUserByEmail(email);
+    @GetMapping(value = "/user/{userId}")
+    public ResponseEntity<UserResponseDTO> getUser(@PathVariable("userId") Long userId) {
+        final UserResponseDTO body = userService.getUserById(userId);
         final HttpStatus status = HttpStatus.OK;
 
         return new ResponseEntity<>(body, status);
@@ -36,19 +35,19 @@ public class UserController {
 
     @GetMapping(value = "/user")
     public ResponseEntity<List<User>> getAll() {
-      final List<User> result = userService.getAll();
-      final HttpStatus status = HttpStatus.OK;
+        final List<User> result = userService.getAll();
+        final HttpStatus status = HttpStatus.OK;
 
-      return new ResponseEntity<>(result, status);
+        return new ResponseEntity<>(result, status);
     }
 
     @PostMapping(value = "/user")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserCreateDTO user,BindingResult bindingResult) throws UsernameExistsException {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserCreateDTO user, BindingResult bindingResult) throws UsernameExistsException {
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             final HttpStatus status = HttpStatus.BAD_REQUEST;
             String error = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.joining(", "));
-            return new ResponseEntity<>(error,status);
+            return new ResponseEntity<>(error, status);
         }
         userService.validateEmail(user.getEmail());
         userService.validateUsername(user.getUsername());
