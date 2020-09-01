@@ -54,6 +54,13 @@ public class UserService {
         return new UserResponseDTO(user.getId(), user.getEmail(), user.getUsername(), user.getRole());
     }
 
+    public UserResponseDTO deleteUser(String userName){
+        final Optional<User> user = userRepository.findByUsername(userName);
+        if (!user.isPresent()) throw new UserNotFoundException();
+        userRepository.delete(user.get());
+        return new UserResponseDTO(user.get().getId(), user.get().getEmail(), user.get().getUsername(), user.get().getRole());
+    }
+
     public void validateUsername(String username) throws UsernameExistsException {
         if (userRepository.existsByUsername(username))
             throw new UsernameExistsException("Username " + username + " already taken");
