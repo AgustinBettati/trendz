@@ -5,20 +5,17 @@ import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import logo from '../../assets/TrendzLogo.png';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {NavLink} from "react-router-dom";
+import {NavLink, withRouter} from "react-router-dom";
 import {loginUser} from "../../api/UserApi";
-import {isLoggedIn} from "../Routing/utils";
-import {Redirect} from 'react-router-dom';
+import {RouteComponentProps} from 'react-router-dom';
 
-
-export type Props = {}
+export type Props = RouteComponentProps<any> & {}
 
 export type State = {
     errorMessage: string,
     successMessage: string,
     emailTouched: boolean,
     passwordTouched: boolean,
-    isLoggedIn: boolean
 }
 
 const loginSchema = yup.object({
@@ -26,7 +23,7 @@ const loginSchema = yup.object({
     password: yup.string().required('Password cannot be empty')
 })
 
-export class Login extends Component<Props, State> {
+class Login extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
@@ -35,24 +32,20 @@ export class Login extends Component<Props, State> {
             successMessage: '',
             emailTouched: false,
             passwordTouched: false,
-            isLoggedIn: false,
         }
     }
 
     handleLogin = (email: string, password: string) => {
         loginUser(email, password, 'user')
             .then((res) => {
-                this.setState({errorMessage: '', successMessage: 'User successfully logged in', isLoggedIn: !this.state.isLoggedIn});
-                localStorage.setItem('token',res.token);
+                this.setState({errorMessage: '', successMessage: 'User successfully logged in'});
+                localStorage.setItem('token', res.token);
+                this.props.history.push('/main/home');
             })
-            .catch((err) => {
-                this.setState({successMessage: '', errorMessage: err.message});
+            .catch(() => {
+                this.setState({successMessage: '', errorMessage:'Invalid Credentials'});
             })
-
-
     }
-
-
 
     handleOnFocus = (prop: string) => {
         this.setState({errorMessage: '', successMessage: ''})
@@ -78,9 +71,6 @@ export class Login extends Component<Props, State> {
     }
 
     render() {
-        if (this.state.isLoggedIn) {
-            return <Redirect to='/main' />
-        }
         return (
             <div className={"main-container"}>
                 <div className={'login-card'}>
@@ -150,14 +140,14 @@ export class Login extends Component<Props, State> {
                             </div>
                         )}
                     </Formik>
-                    <a> Don't have an account? Create one
+                    <div style={{fontFamily: 'Bitter, sans-serif'}}>
+                        Don't have an account? Create one
                         <NavLink to="/register" className="register-link">here</NavLink>
-                    </a>
-
+                    </div>
                 </div>
             </div>
         )
     }
 }
 
-export default Login
+export default withRouter(Login)

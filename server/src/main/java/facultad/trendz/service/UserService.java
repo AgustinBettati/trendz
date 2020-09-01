@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -61,5 +62,13 @@ public class UserService {
     public void validateEmail(String email) {
         if (userRepository.existsByEmail(email))
             throw new EmailExistsException("Email " + email + " already taken");
+    }
+
+    public UserResponseDTO getUserById(Long userId) {
+        final Optional<User> user = userRepository.findById(userId);
+
+        if (!user.isPresent()) throw new UserNotFoundException();
+
+        return new UserResponseDTO(user.get().getId(), user.get().getEmail(), user.get().getUsername(), user.get().getRole());
     }
 }
