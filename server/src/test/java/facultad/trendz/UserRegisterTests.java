@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserControllerTests {
+public class UserRegisterTests {
 
 	@LocalServerPort
 	int randomServerPort;
@@ -77,7 +77,7 @@ public class UserControllerTests {
 		Assert.assertEquals("testEmail02@gmail.com",user.get().getEmail());
 		Assert.assertEquals("testUsername02",user.get().getUsername());
 		Assert.assertTrue(passwordEncoder.matches("testPassword",user.get().getPassword())); //assert password is encrypted
-		Assert.assertEquals(ERole.ROLE_USER,user.get().getRole().getRole());
+		Assert.assertEquals(ERole.ROLE_USER,user.get().getRole().getEnumRole());
 	}
 
 	@Test
