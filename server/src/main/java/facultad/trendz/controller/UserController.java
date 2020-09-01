@@ -1,6 +1,7 @@
 package facultad.trendz.controller;
 
 import facultad.trendz.config.jwt.JwtUtils;
+import facultad.trendz.config.model.MyUserDetails;
 import facultad.trendz.dto.JwtResponseDTO;
 import facultad.trendz.dto.LoginDTO;
 import facultad.trendz.dto.UserCreateDTO;
@@ -71,13 +72,13 @@ public class UserController {
         return new ResponseEntity<>(body, status);
     }
 
-    @PostMapping(value = "/deleteUser")
-    public ResponseEntity<?> deleteUser(Principal principal)  {
-        String username=jwtUtils.getIdFromJwtToken(((UserDetails)principal).getUsername());
-        final UserResponseDTO body = userService.deleteUser(username);
+    @DeleteMapping(value = "/user")
+    public ResponseEntity<?> deleteUser()  {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long id = ((MyUserDetails)authentication.getPrincipal()).getId();
+         userService.deleteUser(id);
         final HttpStatus status = HttpStatus.OK;
-
-        return new ResponseEntity<>(body, status);
+        return new ResponseEntity<>("User Deleted", status);
     }
 
     @PostMapping("/login")
