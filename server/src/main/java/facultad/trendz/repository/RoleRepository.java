@@ -5,5 +5,5 @@ import facultad.trendz.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    Role getByRole(ERole eRole);
+    Role getByEnumRole(ERole enumRole);
 }

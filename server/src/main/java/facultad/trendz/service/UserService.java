@@ -43,22 +43,22 @@ public class UserService {
 
     public UserResponseDTO saveUser(UserCreateDTO userCreateDTO) {
         ERole eRole = (userCreateDTO.getRole().equals("admin")) ? ERole.ROLE_ADMIN : ERole.ROLE_USER;
-        Role role = roleRepository.getByRole(eRole);
+        Role role = roleRepository.getByEnumRole(eRole);
 
         String encryptedPassword = passwordEncoder.encode(userCreateDTO.getPassword());
 
         final User user = new User(userCreateDTO.getEmail(), userCreateDTO.getUsername(), encryptedPassword, role);
 
         userRepository.save(user);
-        return new UserResponseDTO(user.getId(),user.getEmail(), user.getUsername(), user.getRole());
+        return new UserResponseDTO(user.getId(), user.getEmail(), user.getUsername(), user.getRole());
     }
 
-    public void validateUsername(String username) throws UsernameExistsException {
+    public void validateUsername(String username) {
         if (userRepository.existsByUsername(username))
             throw new UsernameExistsException("Username " + username + " already taken");
     }
 
-    public void validateEmail(String email) throws EmailExistsException {
+    public void validateEmail(String email) {
         if (userRepository.existsByEmail(email))
             throw new EmailExistsException("Email " + email + " already taken");
     }
