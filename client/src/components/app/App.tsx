@@ -5,8 +5,8 @@ import Register from "../Register/Register";
 import PrivateRoute from "../Routing/PrivateRoute";
 import {AppFrame} from "../Routing/AppFrame";
 import Profile from "../Profile/Profile";
-import ProfileEditor from "../ProfileEditor/ProfileEditor";
 import Login from "../Login/Login";
+import EditProfile from "../EditProfile/EditProfile";
 
 type MatchProps = {
   match: {
@@ -25,7 +25,7 @@ class App extends Component{
               <AppFrame>
                 <Switch>
                   <Route exact path={`${match.url}/profile`} component={Profile}/>
-                  <Route exact path={`${match.url}/profileEditor`} component={ProfileEditor}/>
+                  <Route exact path={`${match.url}/editProfile`} component={EditProfile}/>
                 </Switch>
               </AppFrame>
           ])}/>
