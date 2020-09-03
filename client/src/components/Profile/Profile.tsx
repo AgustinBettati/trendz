@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import './Profile.css';
-import {NavLink} from "react-router-dom";
+import {RouteComponentProps, withRouter} from "react-router-dom";
 import {getUserData} from "../../api/UserApi";
+import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 
-export type Props = {}
+export type Props = RouteComponentProps<any> & {}
 
 export type State = {
     username: string,
@@ -39,6 +40,10 @@ class Profile extends Component<Props, State> {
             .catch(() => this.setState({username: 'Unknown', email: 'Unknown'}))
     }
 
+    handleDelete() {
+
+    }
+
     render() {
         return (
             <div className={'container'}>
@@ -50,8 +55,9 @@ class Profile extends Component<Props, State> {
                         <TrendzInput value={this.state.username} disabled={true} label={"Username"}/>
                     </div>
                     <TrendzInput value={this.state.email} disabled={true} label={"Email"}/>
-                    <div className={'button-c'}>
-                        <NavLink to="/main/editProfile" className="button">Edit</NavLink>
+                    <div style={{display: 'flex', flexDirection: 'row', marginTop: 20, width: '70%', justifyContent: 'space-around'}}>
+                        <TrendzButton title={'Edit'} onClick={() => this.props.history.push('/main/editProfile')}/>
+                        <TrendzButton title={'Delete'} onClick={() => this.handleDelete()}/>
                     </div>
                 </div>
             </div>
@@ -59,4 +65,4 @@ class Profile extends Component<Props, State> {
     }
 }
 
-export default Profile
+export default withRouter(Profile)
