@@ -51,9 +51,9 @@ public class JwtAuthorizationTests {
     public void testRequestWithInvalidRole() throws URISyntaxException { // accessing admin exclusive endpoint with regular user jwt
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
-        registerUser("testEmail09@gmail.com", "testUsername09", "testPassword", "user");
+        registerUser("testEmail11@gmail.com", "testUsername11", "testPassword", "user");
 
-        ResponseEntity<JwtResponseDTO> response = loginUser("testEmail09@gmail.com", "testPassword");
+        ResponseEntity<JwtResponseDTO> response = loginUser("testEmail11@gmail.com", "testPassword");
 
         String jwt = response.getBody().getToken();
 
