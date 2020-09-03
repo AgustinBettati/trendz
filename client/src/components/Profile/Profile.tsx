@@ -3,14 +3,16 @@ import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import './Profile.css';
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import {getUserData} from "../../api/UserApi";
-import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import {parseJwt} from "../Routing/utils";
+import {TrendzButton} from "../common/TrendzButton/TrendzButton";
+import Modal from 'react-modal';
 
 export type Props = RouteComponentProps<any> & {}
 
 export type State = {
     username: string,
-    email: string
+    email: string,
+    showModal: boolean
 }
 
 class Profile extends Component<Props, State> {
@@ -19,7 +21,8 @@ class Profile extends Component<Props, State> {
         super(props);
         this.state = {
             username: '',
-            email: ''
+            email: '',
+            showModal: false
         }
     };
 
@@ -32,12 +35,36 @@ class Profile extends Component<Props, State> {
     }
 
     handleDelete() {
+        this.setState({showModal: true})
+    }
 
+    handleConfirm(){
+
+    }
+
+    handleCancel(){
+        this.setState({showModal: false})
     }
 
     render() {
         return (
             <div className={'container'}>
+                <Modal
+                    isOpen={this.state.showModal}
+                    onRequestClose={this.handleCancel}
+                    shouldCloseOnOverlayClick={true}
+                    className={'modal'}
+                    overlayClassName={'overlay'}
+                >
+                    <div className={'modal-text'}>
+                        <span>You are about to delete your profile</span>
+                        <span>Do you wish to continue?</span>
+                    </div>
+                    <div className={'modal-buttons'}>
+                        <TrendzButton title={'Confirm'} onClick={this.handleConfirm}/>
+                        <TrendzButton title={'Cancel'} onClick={this.handleCancel.bind(this)}/>
+                    </div>
+                </Modal>
                 <div className={'profile-card'}>
                     <div className={'title'}>
                         Profile
@@ -48,7 +75,7 @@ class Profile extends Component<Props, State> {
                     <TrendzInput value={this.state.email} disabled={true} label={"Email"}/>
                     <div style={{display: 'flex', flexDirection: 'row', marginTop: 20, width: '70%', justifyContent: 'space-around'}}>
                         <TrendzButton title={'Edit'} onClick={() => this.props.history.push('/main/editProfile')}/>
-                        <TrendzButton title={'Delete'} onClick={() => this.handleDelete()}/>
+                        <TrendzButton title={'Delete'} onClick={this.handleDelete.bind(this)}/>
                     </div>
                 </div>
             </div>
