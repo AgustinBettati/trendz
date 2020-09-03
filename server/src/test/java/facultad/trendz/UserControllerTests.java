@@ -1,5 +1,6 @@
 package facultad.trendz;
 
+import facultad.trendz.dto.JwtResponseDTO;
 import facultad.trendz.dto.UserCreateDTO;
 import facultad.trendz.dto.UserResponseDTO;
 import facultad.trendz.model.ERole;
@@ -15,6 +16,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
@@ -158,4 +162,25 @@ public class UserControllerTests {
 			Assert.assertTrue(e.getResponseBodyAsString().contains("Email testEmail06@gmail.com already taken"));
 		}
 	}
+
+	/*@Test
+	public void testDeleteUserSuccessfulResponse() throws URISyntaxException {
+		//GIVEN
+		RestTemplate restTemplate = new RestTemplate();
+		final String baseUrl = "http://localhost:" + randomServerPort + "/user";
+		URI uri = new URI(baseUrl);
+		HttpHeaders headers = new HttpHeaders();
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(user.getUsername(), loginDTO.getPassword()));
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		JwtResponseDTO body = new JwtResponseDTO(jwtUtils.generateJwtToken(authentication));
+		HttpEntity<UserCreateDTO> request = new HttpEntity<>(userCreateDTO,headers);
+
+		//WHEN
+		ResponseEntity<UserResponseDTO> response = restTemplate.postForEntity(uri,request,UserResponseDTO.class);
+
+		//THEN
+		Assert.assertEquals(HttpStatus.CREATED,response.getStatusCode());
+	}*/
 }

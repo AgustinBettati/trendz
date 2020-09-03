@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import './Profile.css';
 import {RouteComponentProps, withRouter} from "react-router-dom";
-import {getUserData} from "../../api/UserApi";
+import {deleteUser, getUserData} from "../../api/UserApi";
 import {parseJwt} from "../Routing/utils";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import Modal from 'react-modal';
@@ -39,7 +39,12 @@ class Profile extends Component<Props, State> {
     }
 
     handleConfirm(){
-
+        deleteUser()
+            .then((res)=>{
+                console.log(res)
+                this.props.history.push('/')
+            })
+            .catch((err)=>console.log(err))
     }
 
     handleCancel(){
@@ -51,7 +56,7 @@ class Profile extends Component<Props, State> {
             <div className={'container'}>
                 <Modal
                     isOpen={this.state.showModal}
-                    onRequestClose={this.handleCancel}
+                    onRequestClose={this.handleCancel.bind(this)}
                     shouldCloseOnOverlayClick={true}
                     className={'modal'}
                     overlayClassName={'overlay'}
@@ -61,7 +66,7 @@ class Profile extends Component<Props, State> {
                         <span>Do you wish to continue?</span>
                     </div>
                     <div className={'modal-buttons'}>
-                        <TrendzButton title={'Confirm'} onClick={this.handleConfirm}/>
+                        <TrendzButton title={'Confirm'} onClick={this.handleConfirm.bind(this)}/>
                         <TrendzButton title={'Cancel'} onClick={this.handleCancel.bind(this)}/>
                     </div>
                 </Modal>
