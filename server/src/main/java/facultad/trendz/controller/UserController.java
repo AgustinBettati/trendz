@@ -2,10 +2,7 @@ package facultad.trendz.controller;
 
 import facultad.trendz.config.jwt.JwtUtils;
 import facultad.trendz.config.model.MyUserDetails;
-import facultad.trendz.dto.JwtResponseDTO;
-import facultad.trendz.dto.LoginDTO;
-import facultad.trendz.dto.UserCreateDTO;
-import facultad.trendz.dto.UserResponseDTO;
+import facultad.trendz.dto.*;
 import facultad.trendz.exception.UsernameExistsException;
 import facultad.trendz.model.User;
 import facultad.trendz.service.UserService;
@@ -77,8 +74,9 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long id = ((MyUserDetails)authentication.getPrincipal()).getId();
          userService.deleteUser(id);
+        UserDeletedDTO dto= new UserDeletedDTO("User Deleted");
         final HttpStatus status = HttpStatus.OK;
-        return new ResponseEntity<>("User Deleted", status);
+        return new ResponseEntity<>(dto, status);
     }
 
     @PostMapping("/login")
