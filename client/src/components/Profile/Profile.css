@@ -1,4 +1,3 @@
-
 .profile-card{
     background-color: #F4F4F4;
     border-radius: 20px;
@@ -10,8 +9,10 @@
     align-items: center;
     border: 2px solid #00B090;
     width: 400px;
-    padding: 30px 0;
+    padding-top: 30px;
+    padding-bottom: 10px;
 }
+
 .title{
     margin-bottom: 20px;
     font-family: Bitter, sans-serif;
@@ -19,6 +20,7 @@
     font-size: 30px;
     color: #00B090;
 }
+
 .container{
     background-color: #232020;
     width: 100%;
@@ -27,8 +29,8 @@
     align-items: center;
     justify-content: center;
 }
-.button {
 
+.button {
     background-color: #00B090;
     padding: 5px 20px;
     border: none;
