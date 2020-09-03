@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-class DataLoader implements ApplicationRunner {
+class OnStartLoader implements ApplicationRunner {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -20,7 +20,7 @@ class DataLoader implements ApplicationRunner {
 
 
     @Autowired
-    public DataLoader(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public OnStartLoader(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -30,7 +30,7 @@ class DataLoader implements ApplicationRunner {
         roleRepository.save(new Role(ERole.ROLE_ADMIN, 1L));
         roleRepository.save(new Role(ERole.ROLE_USER, 2L));
 
-        Role role = roleRepository.getByRole(ERole.ROLE_ADMIN);
+        Role role = roleRepository.getByEnumRole(ERole.ROLE_ADMIN);
         userRepository.save(new User("agustinbettati@gmail.com", "AgustinBettati", passwordEncoder.encode("password"), role));
         userRepository.save(new User("marcoskhabie@gmail.com", "MarcosKhabie", passwordEncoder.encode("password"), role));
         userRepository.save(new User("gonzalodeachaval@gmail.com", "GonzaloDeAchaval", passwordEncoder.encode("password"), role));

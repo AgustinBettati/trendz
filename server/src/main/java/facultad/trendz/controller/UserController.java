@@ -5,10 +5,10 @@ import facultad.trendz.dto.JwtResponseDTO;
 import facultad.trendz.dto.LoginDTO;
 import facultad.trendz.dto.UserCreateDTO;
 import facultad.trendz.dto.UserResponseDTO;
-import facultad.trendz.exception.UsernameExistsException;
 import facultad.trendz.model.User;
 import facultad.trendz.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,9 +37,10 @@ public class UserController {
         this.jwtUtils = jwtUtils;
     }
 
-    @GetMapping(value = "/user/{userId}")
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable("userId") Long userId) {
-        final UserResponseDTO body = userService.getUserById(userId);
+
+    @GetMapping(value = "/user/{email}")
+    public ResponseEntity<User> getUser(@PathVariable("email") String email) {
+        final User body = userService.getUserByEmail(email);
         final HttpStatus status = HttpStatus.OK;
 
         return new ResponseEntity<>(body, status);
@@ -54,12 +55,12 @@ public class UserController {
     }
 
     @PostMapping(value = "/user")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserCreateDTO user, BindingResult bindingResult) throws UsernameExistsException {
+    public ResponseEntity<Object> createUser(@Valid @RequestBody UserCreateDTO user,BindingResult bindingResult){
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()){
             final HttpStatus status = HttpStatus.BAD_REQUEST;
-            String error = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.joining(", "));
-            return new ResponseEntity<>(error, status);
+            String error = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(", "));
+            return new ResponseEntity<>(error,status);
         }
         userService.validateEmail(user.getEmail());
         userService.validateUsername(user.getUsername());

@@ -26,8 +26,6 @@ public class UserCreateDTO {
         this.role = role;
     }
 
-    public UserCreateDTO(){}
-
     public String getEmail() {
         return email;
     }
