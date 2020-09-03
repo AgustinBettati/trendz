@@ -37,10 +37,9 @@ public class UserController {
         this.jwtUtils = jwtUtils;
     }
 
-
-    @GetMapping(value = "/user/{email}")
-    public ResponseEntity<User> getUser(@PathVariable("email") String email) {
-        final User body = userService.getUserByEmail(email);
+    @GetMapping(value = "/user/{userId}")
+    public ResponseEntity<UserResponseDTO> getUser(@PathVariable("userId") Long userId) {
+        final UserResponseDTO body = userService.getUserById(userId);
         final HttpStatus status = HttpStatus.OK;
 
         return new ResponseEntity<>(body, status);
