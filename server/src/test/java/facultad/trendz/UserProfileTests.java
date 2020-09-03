@@ -57,7 +57,7 @@ public class UserProfileTests {
         Assert.assertNotNull(response.getBody());
         Assert.assertEquals("testEmail08@gmail.com", response.getBody().getEmail());
         Assert.assertEquals("testUsername08", response.getBody().getUsername());
-        Assert.assertEquals(ERole.ROLE_USER, response.getBody().getRole().getRole());
+        Assert.assertEquals(ERole.ROLE_USER, response.getBody().getRole().getEnumRole());
 
     }
 
