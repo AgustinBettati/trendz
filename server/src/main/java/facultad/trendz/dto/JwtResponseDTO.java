@@ -2,7 +2,7 @@ package facultad.trendz.dto;
 
 public class JwtResponseDTO {
 
-    private static final String type = "Bearer";
+    private static final String TYPE = "Bearer";
     private String token;
 
     public JwtResponseDTO(String token) {
@@ -13,7 +13,7 @@ public class JwtResponseDTO {
     }
 
     public String getType() {
-        return type;
+        return TYPE;
     }
 
     public String getToken() {

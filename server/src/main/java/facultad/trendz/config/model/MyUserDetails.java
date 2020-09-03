@@ -39,7 +39,7 @@ public class MyUserDetails implements UserDetails {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
-                new SimpleGrantedAuthority(user.getRole().getRole().name()));
+                new SimpleGrantedAuthority(user.getRole().getEnumRole().name()));
     }
 
     @Override
@@ -97,6 +97,11 @@ public class MyUserDetails implements UserDetails {
             return false;
         MyUserDetails user = (MyUserDetails) o;
         return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }
 
