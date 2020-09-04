@@ -11,13 +11,13 @@ public class Role {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private ERole role;
+    private ERole enumRole;
 
     public Role() {
     }
 
-    public Role(ERole eRole, Long id) {
-        this.role = eRole;
+    public Role(ERole enumRole, Long id) {
+        this.enumRole = enumRole;
         this.id = id;
     }
 
@@ -29,11 +29,11 @@ public class Role {
         this.id = id;
     }
 
-    public ERole getRole() {
-        return role;
+    public ERole getEnumRole() {
+        return enumRole;
     }
 
-    public void setRole(ERole role) {
-        this.role = role;
+    public void setEnumRole(ERole role) {
+        this.enumRole = role;
     }
 }
