@@ -8,6 +8,10 @@ public class UserDeletedDTO {
         this.message = message;
     }
 
+
+    public UserDeletedDTO() {
+    }
+
     public String getMessage() {
         return message;
     }
