@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import './Profile.css';
 import {RouteComponentProps, withRouter} from "react-router-dom";
-import {getUserData} from "../../api/UserApi";
+import {deleteUser, getUserData} from "../../api/UserApi";
 import {parseJwt} from "../Routing/utils";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import Modal from 'react-modal';
@@ -39,7 +39,12 @@ class Profile extends Component<Props, State> {
     }
 
     handleConfirm(){
-
+        deleteUser()
+            .then((res)=>{
+                console.log(res)
+                this.props.history.push('/')
+            })
+            .catch((err)=>console.log(err))
     }
 
     handleCancel(){
