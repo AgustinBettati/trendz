@@ -29,5 +29,6 @@ export function getUserData(id: string): Promise<any> {
     return request({
         url: API_BASE_URL + "/user/" + id,
         method: 'GET',
+        headers:{'Authorization': 'Bearer '+ localStorage.getItem('token')}
     });
 }

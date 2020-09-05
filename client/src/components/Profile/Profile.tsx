@@ -51,7 +51,7 @@ class Profile extends Component<Props, State> {
             <div className={'container'}>
                 <Modal
                     isOpen={this.state.showModal}
-                    onRequestClose={this.handleCancel}
+                    onRequestClose={this.handleCancel.bind(this)}
                     shouldCloseOnOverlayClick={true}
                     className={'modal'}
                     overlayClassName={'overlay'}
@@ -61,8 +61,8 @@ class Profile extends Component<Props, State> {
                         <span>Do you wish to continue?</span>
                     </div>
                     <div className={'modal-buttons'}>
-                        <TrendzButton title={'Confirm'} onClick={this.handleConfirm}/>
-                        <TrendzButton title={'Cancel'} onClick={this.handleCancel.bind(this)}/>
+                        <TrendzButton title={'Confirm'} onClick={this.handleConfirm.bind(this)}/>
+                        <TrendzButton title={'Cancel'} color={'#DF6052'} onClick={this.handleCancel.bind(this)}/>
                     </div>
                 </Modal>
                 <div className={'profile-card'}>
@@ -75,7 +75,7 @@ class Profile extends Component<Props, State> {
                     <TrendzInput value={this.state.email} disabled={true} label={"Email"}/>
                     <div style={{display: 'flex', flexDirection: 'row', marginTop: 20, width: '70%', justifyContent: 'space-around'}}>
                         <TrendzButton title={'Edit'} onClick={() => this.props.history.push('/main/editProfile')}/>
-                        <TrendzButton title={'Delete'} onClick={this.handleDelete.bind(this)}/>
+                        <TrendzButton title={'Delete'} color={'#DF6052'} onClick={this.handleDelete.bind(this)}/>
                     </div>
                 </div>
             </div>
