@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -50,6 +51,7 @@ public class UserController {
         return new ResponseEntity<>(body, status);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/user")
     public ResponseEntity<List<User>> getAll() {
         final List<User> result = userService.getAll();
@@ -59,12 +61,12 @@ public class UserController {
     }
 
     @PostMapping(value = "/user")
-    public ResponseEntity<Object> createUser(@Valid @RequestBody UserCreateDTO user,BindingResult bindingResult){
+    public ResponseEntity<Object> createUser(@Valid @RequestBody UserCreateDTO user, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             final HttpStatus status = HttpStatus.BAD_REQUEST;
             String error = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(", "));
-            return new ResponseEntity<>(error,status);
+            return new ResponseEntity<>(error, status);
         }
         userService.validateEmail(user.getEmail());
         userService.validateUsername(user.getUsername());
@@ -93,6 +95,14 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         JwtResponseDTO body = new JwtResponseDTO(jwtUtils.generateJwtToken(authentication));
 
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body, status);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin")
+    public ResponseEntity<String> adminContent() { // testing admin exclusive endpoint
+        String body = "Admin Content";
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body, status);
     }
