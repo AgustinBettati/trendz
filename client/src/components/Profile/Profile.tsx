@@ -1,14 +1,18 @@
 import React, {Component} from 'react'
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import './Profile.css';
-import {NavLink} from "react-router-dom";
-import {getUserData} from "../../api/UserApi";
+import {RouteComponentProps, withRouter} from "react-router-dom";
+import {deleteUser, getUserData} from "../../api/UserApi";
+import {parseJwt} from "../Routing/utils";
+import {TrendzButton} from "../common/TrendzButton/TrendzButton";
+import Modal from 'react-modal';
 
-export type Props = {}
+export type Props = RouteComponentProps<any> & {}
 
 export type State = {
     username: string,
-    email: string
+    email: string,
+    showModal: boolean
 }
 
 class Profile extends Component<Props, State> {
@@ -17,31 +21,55 @@ class Profile extends Component<Props, State> {
         super(props);
         this.state = {
             username: '',
-            email: ''
+            email: '',
+            showModal: false
         }
     };
 
-    parseJwt (token: any) {
-        let base64Url = token.split('.')[1];
-        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-
-        return JSON.parse(jsonPayload);
-    };
-
     componentDidMount() {
-        getUserData(this.parseJwt(localStorage.getItem('token')).userId)
+        getUserData(parseJwt(localStorage.getItem('token')).userId)
             .then((res) => {
                 this.setState({username: res.username, email: res.email})
             })
             .catch(() => this.setState({username: 'Unknown', email: 'Unknown'}))
     }
 
+    handleDelete() {
+        this.setState({showModal: true})
+    }
+
+    handleConfirm(){
+        deleteUser()
+            .then((res)=>{
+                console.log(res)
+                this.props.history.push('/')
+            })
+            .catch((err)=>console.log(err))
+    }
+
+    handleCancel(){
+        this.setState({showModal: false})
+    }
+
     render() {
         return (
             <div className={'container'}>
+                <Modal
+                    isOpen={this.state.showModal}
+                    onRequestClose={this.handleCancel.bind(this)}
+                    shouldCloseOnOverlayClick={true}
+                    className={'modal'}
+                    overlayClassName={'overlay'}
+                >
+                    <div className={'modal-text'}>
+                        <span>You are about to delete your profile</span>
+                        <span>Do you wish to continue?</span>
+                    </div>
+                    <div className={'modal-buttons'}>
+                        <TrendzButton title={'Confirm'} onClick={this.handleConfirm.bind(this)}/>
+                        <TrendzButton title={'Cancel'} color={'#DF6052'} onClick={this.handleCancel.bind(this)}/>
+                    </div>
+                </Modal>
                 <div className={'profile-card'}>
                     <div className={'title'}>
                         Profile
@@ -50,8 +78,9 @@ class Profile extends Component<Props, State> {
                         <TrendzInput value={this.state.username} disabled={true} label={"Username"}/>
                     </div>
                     <TrendzInput value={this.state.email} disabled={true} label={"Email"}/>
-                    <div className={'button-c'}>
-                        <NavLink to="/main/editProfile" className="button">Edit</NavLink>
+                    <div style={{display: 'flex', flexDirection: 'row', marginTop: 20, width: '70%', justifyContent: 'space-around'}}>
+                        <TrendzButton title={'Edit'} onClick={() => this.props.history.push('/main/editProfile')}/>
+                        <TrendzButton title={'Delete'} color={'#DF6052'} onClick={this.handleDelete.bind(this)}/>
                     </div>
                 </div>
             </div>
@@ -59,4 +88,4 @@ class Profile extends Component<Props, State> {
     }
 }
 
-export default Profile
+export default withRouter(Profile)

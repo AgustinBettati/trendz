@@ -25,9 +25,18 @@ export function loginUser(email: string, password: string, role: string ): Promi
     });
 }
 
+export function deleteUser(): Promise<any> {
+    return request({
+        url: API_BASE_URL + "/user",
+        method: 'DELETE',
+        headers:{'Authorization': 'Bearer '+ localStorage.getItem('token')}
+    });
+}
+
 export function getUserData(id: string): Promise<any> {
     return request({
         url: API_BASE_URL + "/user/" + id,
         method: 'GET',
+        headers:{'Authorization': 'Bearer '+ localStorage.getItem('token')}
     });
 }

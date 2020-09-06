@@ -56,7 +56,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .headers().frameOptions().disable().and()// h2 console permissions
                 .authorizeRequests().antMatchers("/login").permitAll()
-                .antMatchers("/user/**").permitAll() //currently all access to /user/** isn't authenticated
+                .antMatchers("/user").permitAll() //currently all access to /user/** isn't authenticated
                 .antMatchers("/h2-console/**").permitAll() // h2 console permissions
                 .anyRequest().authenticated();
 
