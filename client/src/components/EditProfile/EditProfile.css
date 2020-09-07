@@ -1,0 +1,62 @@
+@import url(http://fonts.googleapis.com/css?family=Bitter);
+
+.edit-card{
+    background-color: #F4F4F4;
+    border-radius: 20px;
+    -webkit-box-shadow: 0px 0px 20px 3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 20px 3px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 20px 3px rgba(0,0,0,0.75);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #00B090;
+    width: 400px;
+    padding: 30px 0;
+}
+
+.edit-title{
+    font-family: Bitter, sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+    color: #00B090;
+    display: flex;
+    justify-content: center;
+}
+
+.form-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.edit-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 350px;
+    margin-bottom: 20px;
+}
+
+.error-message{
+    font-family: Bitter, sans-serif;
+    font-size: 14px;
+    height: 20px;
+    color: red;
+    margin-top: 2px;
+}
+
+.success-message{
+    font-family: Bitter, sans-serif;
+    font-size: 14px;
+    height: 20px;
+    color: green;
+    margin-top: 2px;
+}
+
+.edit-footer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+}

@@ -1,32 +1,22 @@
-package facultad.trendz.model;
+package facultad.trendz.dto;
 
-import javax.persistence.*;
+import facultad.trendz.model.Role;
 
-@Entity
-@Table(name = "user")
-public class User {
-    @Id
-    @GeneratedValue
+public class UserResponseDTO {
+
     private Long id;
-
     private String email;
-
     private String username;
-
-    private String password;
-
-    @ManyToOne
     private Role role;
 
-    public User() {
-    }
-
-    public User(String email, String username, String password, Role role) {
+    public UserResponseDTO(Long id, String email, String username, Role role) {
+        this.id = id;
         this.email = email;
         this.username = username;
-        this.password = password;
         this.role = role;
     }
+
+    public UserResponseDTO(){}
 
     public Long getId() {
         return id;
@@ -50,14 +40,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Role getRole() {

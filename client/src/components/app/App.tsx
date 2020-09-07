@@ -1,65 +1,37 @@
 import React, { Component } from 'react'
 import './App.css'
-import { User } from '../types/types'
-import { getAllUsers } from '../../api/UserApi'
-import LoadingIndicator from '../common/LoadingIndicator'
-import AppHeader from '../common/AppHeader'
 import { Switch, Route } from 'react-router-dom'
-import UserList from '../user-list/UserList'
-import Alert from 'react-s-alert'
+import Register from "../Register/Register";
+import PrivateRoute from "../Routing/PrivateRoute";
+import {AppFrame} from "../Routing/AppFrame";
+import Profile from "../Profile/Profile";
+import Login from "../Login/Login";
+import EditProfile from "../EditProfile/EditProfile";
 
-
-export type Props = {}
-
-type State = {
-  users?: User[]
-  loading: boolean
-  authenticated: boolean
+type MatchProps = {
+  match: {
+    url: string
+  }
 }
 
-class App extends Component<Props, State> {
-
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      loading: true,
-      authenticated: false
-    }
-  }
-
-  componentDidMount() {
-    getAllUsers().then(users => {
-      this.setState({users: users, loading: false})
-    })
-  }
-
+class App extends Component{
   render() {
-    const {loading, users, authenticated} = this.state
-
-    if (loading) {
-      return <LoadingIndicator/>
-    }
-
     return (
       <div className="app">
-        <div className="app-top-box">
-          <AppHeader authenticated={authenticated} onLogout={this.handleLogout}/>
-        </div>
-        <div className="app-body">
-          <Switch>
-            <Route exact={true} path="/" render={(props) => <UserList {...props} users={users}/>}/>
-          </Switch>
-        </div>
-        <Alert stack={{ limit: 3 }}
-               timeout={3000}
-               position='top-right' effect='slide' offset={65}/>
-        <div className={'app-footer'}>
-        </div>
+        <Switch>
+          <Route exact={true} path="/" component={Login}/>
+          <Route exact={true} path="/register" component={Register}/>
+          <PrivateRoute path={'/main'} component={({match}: MatchProps) => ([
+              <AppFrame>
+                <Switch>
+                  <Route exact path={`${match.url}/profile`} component={Profile}/>
+                  <Route exact path={`${match.url}/editProfile`} component={EditProfile}/>
+                </Switch>
+              </AppFrame>
+          ])}/>
+        </Switch>
       </div>
     )
-  }
-  handleLogout() {
-    //TODO
   }
 }
 
