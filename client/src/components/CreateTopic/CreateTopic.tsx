@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
 import "./CreateTopic.css"
-import {TrendzInput} from "../common/TrendzInput/TrendzInput";
+import {TrendzLongInput} from "../common/TrendzLongInput/TrendzLongInput";
+import {TrendzMultilineInput} from "../common/TrendzMultilineInput/TrendzMultilineInput";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import logo from '../../assets/TrendzLogo.png';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {NavLink, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
 
 export type Props = RouteComponentProps<any> & {}
@@ -60,10 +61,10 @@ class CreateTopic extends Component<Props, State> {
 
     handleOnBlur = (prop: string) => {
         switch (prop){
-            case 'email':
+            case 'title':
                 this.setState({titleTouched: false});
                 break;
-            case 'password':
+            case 'description':
                 this.setState({descriptionTouched: false});
                 break;
         }
@@ -87,10 +88,10 @@ class CreateTopic extends Component<Props, State> {
                             <div className={'form-container'}>
                                 <div className={'createtopic-body'}>
                                     <div className={'createtopic-field'}>
-                                        <TrendzInput
+                                        <TrendzLongInput
                                             placeholder={'Title'}
                                             label={'Title'}
-                                            onChange={props.handleChange('Title')}
+                                            onChange={props.handleChange('title')}
                                             value={props.values.title}
                                             onFocus={() => this.handleOnFocus('title')}
                                             onBlur={() => !props.errors.title && this.handleOnBlur('title')}
@@ -99,14 +100,9 @@ class CreateTopic extends Component<Props, State> {
                                             className={'error-message'}>{this.state.titleTouched && props.errors.title}</div>
                                     </div>
                                     <div className={'createtopic-field'}>
-                                        <TrendzInput
+                                        <TrendzMultilineInput
                                             placeholder={'Description'}
                                             label={'Description'}
-                                            password={true}
-                                            onChange={props.handleChange('description')}
-                                            value={props.values.description}
-                                            onFocus={() => this.handleOnFocus('password')}
-                                            onBlur={() => !props.errors.description && this.handleOnBlur('description')}
                                         />
                                         <div
                                             className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>

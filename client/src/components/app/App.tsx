@@ -7,6 +7,7 @@ import {AppFrame} from "../Routing/AppFrame";
 import Profile from "../Profile/Profile";
 import Login from "../Login/Login";
 import EditProfile from "../EditProfile/EditProfile";
+import CreateTopic from "../CreateTopic/CreateTopic";
 
 type MatchProps = {
   match: {
@@ -26,6 +27,7 @@ class App extends Component{
                 <Switch>
                   <Route exact path={`${match.url}/profile`} component={Profile}/>
                   <Route exact path={`${match.url}/editProfile`} component={EditProfile}/>
+                  <Route exact path={`${match.url}/createTopic`} component={CreateTopic}/>
                 </Switch>
               </AppFrame>
           ])}/>
