@@ -47,6 +47,10 @@ class CreateTopic extends Component<Props, State> {
             })*/
     }
 
+    private handleCancel() {
+        this.props.history.push('/main/home');
+    }
+
     handleOnFocus = (prop: string) => {
         this.setState({errorMessage: '', successMessage: ''})
         switch (prop){
@@ -131,6 +135,10 @@ class CreateTopic extends Component<Props, State> {
                                             <div className={'success-message'}>{this.state.successMessage}</div>
                                         }
                                     </div>
+                                    <TrendzButton
+                                        title={'Cancel'}
+                                        onClick={()=>this.handleCancel() }
+                                    />
                                 </div>
                             </div>
                         )}
@@ -139,6 +147,8 @@ class CreateTopic extends Component<Props, State> {
             </div>
         )
     }
+
+
 }
 
 export default withRouter(CreateTopic)
