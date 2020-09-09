@@ -1,8 +1,10 @@
 package facultad.trendz.service;
 
+import facultad.trendz.dto.ProfileEditDTO;
 import facultad.trendz.dto.UserCreateDTO;
 import facultad.trendz.dto.UserResponseDTO;
 import facultad.trendz.exception.EmailExistsException;
+import facultad.trendz.exception.IncorrectPasswordException;
 import facultad.trendz.exception.UsernameExistsException;
 import facultad.trendz.model.ERole;
 import facultad.trendz.model.Role;
@@ -60,7 +62,7 @@ public class UserService {
         userRepository.delete(user.get());
     }
 
-    public void validateUsername(String username) throws UsernameExistsException {
+    public void validateUsername(String username) {
         if (userRepository.existsByUsername(username))
             throw new UsernameExistsException("Username " + username + " already taken");
     }
@@ -76,5 +78,30 @@ public class UserService {
         if (!user.isPresent()) throw new UserNotFoundException();
 
         return new UserResponseDTO(user.get().getId(), user.get().getEmail(), user.get().getUsername(), user.get().getRole());
+    }
+
+    public void editUser(ProfileEditDTO profileEditDTO, Long userId) {
+        final Optional<User> user = userRepository.findById(userId);
+        if (!user.isPresent()) throw new UserNotFoundException();
+
+        String oldPassword = profileEditDTO.getOldPassword();
+        String newPassword = profileEditDTO.getNewPassword();
+
+        if ((oldPassword != null && !oldPassword.equals("") )){
+            if (passwordEncoder.matches(oldPassword, user.get().getPassword())) {
+                if (newPassword != null && !newPassword.equals(""))
+                    user.get().setPassword(passwordEncoder.encode(newPassword));
+            } else throw new IncorrectPasswordException();
+        }
+
+        String newUsername = profileEditDTO.getUsername();
+
+        if (newUsername != null && !newUsername.equals("")){
+            if(!userRepository.existsByUsername(newUsername)) {
+                user.get().setUsername(newUsername);
+            } else throw new UsernameExistsException(String.format("Username %s already taken",newUsername));
+        }
+
+        userRepository.save(user.get());
     }
 }
