@@ -40,3 +40,12 @@ export function getUserData(id: string): Promise<any> {
         headers:{'Authorization': 'Bearer '+ localStorage.getItem('token')}
     });
 }
+
+export function editUserData(username: string | null, oldPassword: string | null, newPassword: null | string) : Promise<any> {
+    return request({
+        url: API_BASE_URL + "/user",
+        method: 'PUT',
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json'},
+        body: JSON.stringify({'username': username, 'oldPassword': oldPassword,'newPassword': newPassword  })
+    })
+}
