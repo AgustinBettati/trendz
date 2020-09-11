@@ -87,16 +87,16 @@ public class UserService {
         String oldPassword = profileEditDTO.getOldPassword();
         String newPassword = profileEditDTO.getNewPassword();
 
-        if ((oldPassword != null && !oldPassword.equals("") )){
+        if (oldPassword != null){
             if (passwordEncoder.matches(oldPassword, user.get().getPassword())) {
-                if (newPassword != null && !newPassword.equals(""))
+                if (newPassword != null)
                     user.get().setPassword(passwordEncoder.encode(newPassword));
             } else throw new IncorrectPasswordException();
         }
 
         String newUsername = profileEditDTO.getUsername();
 
-        if (newUsername != null && !newUsername.equals("")){
+        if (newUsername != null){
             if(!userRepository.existsByUsername(newUsername)) {
                 user.get().setUsername(newUsername);
             } else throw new UsernameExistsException(String.format("Username %s already taken",newUsername));
