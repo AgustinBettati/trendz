@@ -113,7 +113,19 @@ class CreateTopic extends Component<Props, State> {
                                             className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>
                                     </div>
                                 </div>
-                                <div className={'createTopic-footer'}>
+                                <div className={'createtopic-footer'}>
+                                    <div>
+
+                                        {
+                                            this.state.errorMessage !== '' &&
+                                            <div className={'error-message'}>{this.state.errorMessage}</div>
+                                        }
+                                        {
+                                            this.state.successMessage !== '' &&
+                                            <div className={'success-message'}>{this.state.successMessage}</div>
+                                        }
+
+                                    </div>
                                     <TrendzButton
                                         title={'Submit'}
                                         onClick={() => props.values.title === ''  && props.values.description === '' ?
@@ -127,14 +139,7 @@ class CreateTopic extends Component<Props, State> {
                                         alignItems: 'center',
                                         marginTop: 10
                                     }}>
-                                        {
-                                            this.state.errorMessage !== '' &&
-                                            <div className={'error-message'}>{this.state.errorMessage}</div>
-                                        }
-                                        {
-                                            this.state.successMessage !== '' &&
-                                            <div className={'success-message'}>{this.state.successMessage}</div>
-                                        }
+
                                     </div>
                                     <TrendzButton
                                         title={'Cancel'}
