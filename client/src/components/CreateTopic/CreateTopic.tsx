@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import "./CreateTopic.css"
-import {TrendzLongInput} from "../common/TrendzLongInput/TrendzLongInput";
+import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import {TrendzMultilineInput} from "../common/TrendzMultilineInput/TrendzMultilineInput";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import logo from '../../assets/TrendzLogo.png';
@@ -92,7 +92,8 @@ class CreateTopic extends Component<Props, State> {
                             <div className={'form-container'}>
                                 <div className={'createtopic-body'}>
                                     <div className={'createtopic-field'}>
-                                        <TrendzLongInput
+                                        <TrendzInput
+                                            width='775px'
                                             placeholder={'Title'}
                                             label={'Title'}
                                             onChange={props.handleChange('title')}
