@@ -33,7 +33,7 @@ class Home extends Component<Props, State> {
                 <div className={'home-header'}>
                     <div className={'header-text'}>
                         <span className={'home-title'}>Topics</span>
-                        <span className={'home-subtitle'}>Here you can find every topic and read more about those who interest you.</span>
+                        <span className={'home-subtitle'}>Here you can find every topic and read more about those that interest you.</span>
                     </div>
                     {
                         parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') &&
