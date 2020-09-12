@@ -36,6 +36,7 @@ public class TopicController {
             String error = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(", "));
             return new ResponseEntity<>(error, status);
         }
+        topicService.validateTopicTitle(topic.getTitle());
         final TopicResponseDTO body = topicService.saveTopic(topic);
         final HttpStatus status = HttpStatus.CREATED;
         return new ResponseEntity<>(body, status);
