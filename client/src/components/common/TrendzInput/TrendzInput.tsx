@@ -9,7 +9,9 @@ type InputProps = {
     password?: boolean,
     onChange?: any,
     onFocus?: any,
-    onBlur?: any
+    onBlur?: any,
+    width?: any,
+
 }
 
 export const TrendzInput = (props: InputProps) => (
@@ -23,6 +25,8 @@ export const TrendzInput = (props: InputProps) => (
             value={props.value}
             onFocus={props.onFocus}
             onBlur={props.onBlur}
+            style={{width: props.width}}
+
         />
     </div>
 )

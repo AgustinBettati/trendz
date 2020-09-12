@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import "./CreateTopic.css"
-import {TrendzLongInput} from "../common/TrendzLongInput/TrendzLongInput";
+import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import {TrendzMultilineInput} from "../common/TrendzMultilineInput/TrendzMultilineInput";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import logo from '../../assets/TrendzLogo.png';
@@ -92,7 +92,8 @@ class CreateTopic extends Component<Props, State> {
                             <div className={'form-container'}>
                                 <div className={'createtopic-body'}>
                                     <div className={'createtopic-field'}>
-                                        <TrendzLongInput
+                                        <TrendzInput
+                                            width='775px'
                                             placeholder={'Title'}
                                             label={'Title'}
                                             onChange={props.handleChange('title')}
@@ -112,7 +113,19 @@ class CreateTopic extends Component<Props, State> {
                                             className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>
                                     </div>
                                 </div>
-                                <div className={'createTopic-footer'}>
+                                <div className={'createtopic-footer'}>
+                                    <div>
+
+                                        {
+                                            this.state.errorMessage !== '' &&
+                                            <div className={'error-message'}>{this.state.errorMessage}</div>
+                                        }
+                                        {
+                                            this.state.successMessage !== '' &&
+                                            <div className={'success-message'}>{this.state.successMessage}</div>
+                                        }
+
+                                    </div>
                                     <TrendzButton
                                         title={'Submit'}
                                         onClick={() => props.values.title === ''  && props.values.description === '' ?
@@ -126,14 +139,7 @@ class CreateTopic extends Component<Props, State> {
                                         alignItems: 'center',
                                         marginTop: 10
                                     }}>
-                                        {
-                                            this.state.errorMessage !== '' &&
-                                            <div className={'error-message'}>{this.state.errorMessage}</div>
-                                        }
-                                        {
-                                            this.state.successMessage !== '' &&
-                                            <div className={'success-message'}>{this.state.successMessage}</div>
-                                        }
+
                                     </div>
                                     <TrendzButton
                                         title={'Cancel'}
