@@ -7,6 +7,7 @@ import {AppFrame} from "../Routing/AppFrame";
 import Profile from "../Profile/Profile";
 import Login from "../Login/Login";
 import EditProfile from "../EditProfile/EditProfile";
+import Home from "../Home/Home";
 
 type MatchProps = {
   match: {
@@ -25,6 +26,7 @@ class App extends Component{
               <AppFrame>
                 <Switch>
                   <Route exact path={`${match.url}/profile`} component={Profile}/>
+                  <Route exact path={`${match.url}/home`} component={Home}/>
                   <Route exact path={`${match.url}/editProfile`} component={EditProfile}/>
                 </Switch>
               </AppFrame>
