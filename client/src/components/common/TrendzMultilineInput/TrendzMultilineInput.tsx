@@ -1,7 +1,8 @@
 import React from 'react';
-import './TrendzInput.css';
+import './TrendzMultilineInput.css';
 
-type InputProps = {
+
+type    MultilineProps = {
     value?: string,
     label?: string,
     placeholder?: string,
@@ -9,23 +10,22 @@ type InputProps = {
     password?: boolean,
     onChange?: any,
     onFocus?: any,
-    onBlur?: any,
-    width?: any,
-
+    onBlur?: any
 }
 
-export const TrendzInput = (props: InputProps) => (
+export const TrendzMultilineInput = (props: MultilineProps) => (
     <div className={'input-wrapper'}>
         <div className={'input-label'}>{props.label}</div>
-        <input
+        <textarea
             onChange={props.onChange}
             disabled={props.disabled}
             placeholder={props.placeholder}
-            type={props.password ? 'password' : 'text'}
             value={props.value}
             onFocus={props.onFocus}
             onBlur={props.onBlur}
-            style={{width: props.width}}
+            rows={5}
+            cols={77}
+
 
         />
     </div>
