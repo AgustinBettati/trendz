@@ -5,11 +5,10 @@ import javax.validation.constraints.Size;
 
 public class TopicCreateDTO {
 
-    @Size(max = 200, message = "Password must have as much as 200 characters")
+    @Size(max = 40, message = "Password must have as much as 40 characters")
     @NotNull(message = "Title cannot be empty")
     private String title;
 
-    @NotNull(message = "Description cannot be empty")
     private String description;
 
     public TopicCreateDTO(String title, String description) {

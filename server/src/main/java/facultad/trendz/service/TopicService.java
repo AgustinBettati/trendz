@@ -2,6 +2,7 @@ package facultad.trendz.service;
 
 import facultad.trendz.dto.TopicCreateDTO;
 import facultad.trendz.dto.TopicResponseDTO;
+import facultad.trendz.exception.TopicExistsException;
 import facultad.trendz.model.Topic;
 import facultad.trendz.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,10 @@ public class TopicService {
         final Topic topic = new Topic(topicResponseDTO.getTitle(), topicResponseDTO.getDescription());
         topicRepository.save(topic);
         return new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription());
+    }
+
+    public void validateTopicTitle(String title) throws TopicExistsException{
+        if(topicRepository.existsByTitle(title))
+            throw new TopicExistsException("Title " + title + " already in use");
     }
 }
