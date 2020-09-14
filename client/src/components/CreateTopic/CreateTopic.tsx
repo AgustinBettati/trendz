@@ -19,8 +19,8 @@ export type State = {
 }
 
 const createTopicSchema = yup.object({
-    title: yup.string().required('Title cannot be empty').max(200,"Title can be up to 200 characters long"),
-    description: yup.string(),
+    title: yup.string().required('Title cannot be empty').matches(/[0-9a-zA-Z]*$/,"Title must be alfanumeric").max(200,"Title can be up to 200 characters long").min(2,"Title must be at least 2 characters long"),
+    description: yup.string().matches(/[0-9a-zA-Z]*$/,"Title must be alfanumeric"),
 })
 
 class CreateTopic extends Component<Props, State> {
