@@ -1,0 +1,92 @@
+@import url(http://fonts.googleapis.com/css?family=Bitter);
+
+.main-container{
+    background-color: #232020;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.createpost-card{
+    background-color: #F4F4F4;
+    border-radius: 20px;
+    -webkit-box-shadow: 0px 0px 20px 3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 20px 3px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 20px 3px rgba(0,0,0,0.75);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #00B090;
+    width: 900px;
+    padding: 30px 0;
+}
+
+.createpost-header{
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.trendz-logo{
+    height: 80px;
+    width: 80px;
+}
+
+.divisor{
+    background-image: linear-gradient(to right, #F4F4F4, #00B090, #F4F4F4);
+    width: 300px;
+    height: 1px;
+    margin-top: 20px;
+}
+
+.createpost-title{
+    margin-top: 20px;
+    font-family: Bitter, sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+    color: #00B090;
+}
+
+.form-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.createpost-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 270px;
+    width: 800px;
+    margin-bottom: 20px;
+}
+
+.error-message{
+    font-family: Bitter, sans-serif;
+    font-size: 14px;
+    height: 20px;
+    color: red;
+    margin-top: 2px;
+}
+
+.success-message{
+    font-family: Bitter, sans-serif;
+    font-size: 14px;
+    height: 20px;
+    color: green;
+    margin-top: 2px;
+}
+
+.createpost-footer{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.createpost-field{
+    width: 600px;
+}

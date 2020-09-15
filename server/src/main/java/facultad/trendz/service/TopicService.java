@@ -19,9 +19,9 @@ public class TopicService {
     }
 
     public TopicResponseDTO saveTopic(TopicCreateDTO topicResponseDTO){
-        final Topic topic = new Topic(topicResponseDTO.getTitle(), topicResponseDTO.getDescription());
+        final Topic topic = new Topic( topicResponseDTO.getTitle(), topicResponseDTO.getDescription(),topicResponseDTO.getDate());
         topicRepository.save(topic);
-        return new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription());
+        return new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(), topic.getCreationDate());
     }
 
     public void validateTopicTitle(String title) throws TopicExistsException{
