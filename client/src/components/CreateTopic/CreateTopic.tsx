@@ -90,8 +90,8 @@ class CreateTopic extends Component<Props, State> {
                     >
                         {(props) => (
                             <div className={'form-container'}>
-                                <div className={'createtopic-body'}>
-                                    <div className={'createtopic-field'}>
+                                <div className={'createpost-body'}>
+                                    <div className={'createpost-field'}>
                                         <TrendzInput
                                             width='775px'
                                             placeholder={'Title'}
@@ -104,7 +104,7 @@ class CreateTopic extends Component<Props, State> {
                                         <div
                                             className={'error-message'}>{this.state.titleTouched && props.errors.title}</div>
                                     </div>
-                                    <div className={'createtopic-field'}>
+                                    <div className={'createpost-field'}>
                                         <TrendzMultilineInput
                                             placeholder={'Description'}
                                             label={'Description'}
@@ -113,7 +113,7 @@ class CreateTopic extends Component<Props, State> {
                                             className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>
                                     </div>
                                 </div>
-                                <div className={'createtopic-footer'}>
+                                <div className={'createpost-footer'}>
                                     <div>
 
                                         {
