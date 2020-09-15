@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -34,7 +35,7 @@ public class TopicTests {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
 
-        TopicCreateDTO body = new TopicCreateDTO("TestTitle", "Test Description");
+        TopicCreateDTO body = new TopicCreateDTO("TestTitle", "Test Description",new Date());
 
         HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(body, headers);
         final String createTopicUrl = "http://localhost:" + randomServerPort + "/topic";
@@ -60,7 +61,7 @@ public class TopicTests {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
 
-        TopicCreateDTO body = new TopicCreateDTO("TestTitle1", "Test Description");
+        TopicCreateDTO body = new TopicCreateDTO("TestTitle1", "Test Description",new Date());
 
         HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(body, headers);
         final String createTopicUrl = "http://localhost:" + randomServerPort + "/topic";
@@ -68,7 +69,7 @@ public class TopicTests {
 
         restTemplate.postForEntity(createTopicUri, entity, TopicResponseDTO.class); // post 1st topic
 
-        TopicCreateDTO body2 = new TopicCreateDTO("TestTitle1", "Description");
+        TopicCreateDTO body2 = new TopicCreateDTO("TestTitle1", "Description",new Date());
 
         HttpEntity<TopicCreateDTO> entity2 = new HttpEntity<>(body2, headers);
 
