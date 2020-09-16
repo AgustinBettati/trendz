@@ -65,6 +65,16 @@
     color: #00B090;
 }
 
+.delete-icon{
+    color: #ff5e5e;
+    margin-left: 20px;
+}
+
+.delete-icon:hover{
+    color: #ff1c1c;
+    cursor: pointer;
+}
+
 .topic-body{
     margin-bottom: 10px;
 }
