@@ -8,6 +8,8 @@ import facultad.trendz.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.*;
+
 @Service
 public class TopicService {
 
@@ -19,13 +21,25 @@ public class TopicService {
     }
 
     public TopicResponseDTO saveTopic(TopicCreateDTO topicResponseDTO){
-        final Topic topic = new Topic(topicResponseDTO.getTitle(), topicResponseDTO.getDescription());
+        final Topic topic = new Topic( topicResponseDTO.getTitle(), topicResponseDTO.getDescription(),topicResponseDTO.getDate());
         topicRepository.save(topic);
-        return new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription());
+        return new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(), topic.getCreationDate());
     }
 
-    public void validateTopicTitle(String title) throws TopicExistsException{
-        if(topicRepository.existsByTitle(title))
+    public void validateTopicTitle(String title) {
+        if (topicRepository.existsByTitle(title))
             throw new TopicExistsException("Title " + title + " already in use");
+    }
+
+    public List<TopicResponseDTO> getTopicsByPopularity() {
+        List<Topic> topics = topicRepository.findAllByDeletedIsFalse();
+
+        topics.sort(Comparator.comparingInt((Topic topic) -> topic.getPosts().size()).reversed());
+
+        List<TopicResponseDTO> topicResponses = new ArrayList<>(topics.size());
+        for (Topic topic : topics) {
+            topicResponses.add(new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(),new Date()));
+        }
+        return topicResponses;
     }
 }

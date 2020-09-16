@@ -1,5 +1,6 @@
 package facultad.trendz.model;
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -12,16 +13,30 @@ public class Topic {
     private String title;
     private String description;
 
+    private Date creationDate;
+
     @OneToMany(mappedBy = "topic")
      private List<Post> posts;
 
-    public Topic(String title, String description) {
+    private Boolean deleted;
+
+    public Topic(String title, String description, Date creationDate) {
         this.title = title;
         this.description = description;
+        this.creationDate=creationDate;
+        deleted = false;
     }
 
     public Topic() {
 
+    }
+
+    public Boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     public Long getId() {
@@ -54,5 +69,13 @@ public class Topic {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 }

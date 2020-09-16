@@ -1,4 +1,4 @@
-package facultad.trendz.dto;
+package facultad.trendz.dto.user;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

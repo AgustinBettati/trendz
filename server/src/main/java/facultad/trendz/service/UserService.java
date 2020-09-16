@@ -1,8 +1,8 @@
 package facultad.trendz.service;
 
-import facultad.trendz.dto.ProfileEditDTO;
-import facultad.trendz.dto.UserCreateDTO;
-import facultad.trendz.dto.UserResponseDTO;
+import facultad.trendz.dto.user.ProfileEditDTO;
+import facultad.trendz.dto.user.UserCreateDTO;
+import facultad.trendz.dto.user.UserResponseDTO;
 import facultad.trendz.exception.EmailExistsException;
 import facultad.trendz.exception.IncorrectPasswordException;
 import facultad.trendz.exception.UsernameExistsException;

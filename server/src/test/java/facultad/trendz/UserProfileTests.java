@@ -1,6 +1,7 @@
 package facultad.trendz;
 
 import facultad.trendz.dto.*;
+import facultad.trendz.dto.user.*;
 import facultad.trendz.model.ERole;
 import facultad.trendz.model.User;
 import facultad.trendz.repository.UserRepository;
@@ -123,7 +124,7 @@ public class UserProfileTests {
         URI profileEditUri = new URI(profileEditUrl);
 
         //WHEN
-        ResponseEntity<ProfileEditResponseDTO> response = restTemplate.exchange(profileEditUri, HttpMethod.PUT, entity, ProfileEditResponseDTO.class);
+        ResponseEntity<MessageResponseDTO> response = restTemplate.exchange(profileEditUri, HttpMethod.PUT, entity, MessageResponseDTO.class);
 
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
@@ -156,7 +157,7 @@ public class UserProfileTests {
         URI profileEditUri = new URI(profileEditUrl);
 
         //WHEN
-        ResponseEntity<ProfileEditResponseDTO> response = restTemplate.exchange(profileEditUri, HttpMethod.PUT, entity, ProfileEditResponseDTO.class);
+        ResponseEntity<MessageResponseDTO> response = restTemplate.exchange(profileEditUri, HttpMethod.PUT, entity, MessageResponseDTO.class);
 
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
@@ -189,7 +190,7 @@ public class UserProfileTests {
         URI profileEditUri = new URI(profileEditUrl);
 
         //WHEN
-        ResponseEntity<ProfileEditResponseDTO> response = restTemplate.exchange(profileEditUri, HttpMethod.PUT, entity, ProfileEditResponseDTO.class);
+        ResponseEntity<MessageResponseDTO> response = restTemplate.exchange(profileEditUri, HttpMethod.PUT, entity, MessageResponseDTO.class);
 
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
@@ -223,7 +224,7 @@ public class UserProfileTests {
         try {
 
         //WHEN
-            restTemplate.exchange(profileEditUri, HttpMethod.PUT, entity, ProfileEditResponseDTO.class);
+            restTemplate.exchange(profileEditUri, HttpMethod.PUT, entity, MessageResponseDTO.class);
 
         //THEN
             Assert.fail();
@@ -256,7 +257,7 @@ public class UserProfileTests {
         try {
 
         //WHEN
-            restTemplate.exchange(profileEditUri, HttpMethod.PUT, entity, ProfileEditResponseDTO.class);
+            restTemplate.exchange(profileEditUri, HttpMethod.PUT, entity, MessageResponseDTO.class);
 
         //THEN
             Assert.fail();
