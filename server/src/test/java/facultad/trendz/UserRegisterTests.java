@@ -1,8 +1,7 @@
 package facultad.trendz;
 
-import facultad.trendz.dto.JwtResponseDTO;
-import facultad.trendz.dto.UserCreateDTO;
-import facultad.trendz.dto.UserResponseDTO;
+import facultad.trendz.dto.user.UserCreateDTO;
+import facultad.trendz.dto.user.UserResponseDTO;
 import facultad.trendz.model.ERole;
 import facultad.trendz.model.User;
 import facultad.trendz.repository.UserRepository;
@@ -16,9 +15,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;

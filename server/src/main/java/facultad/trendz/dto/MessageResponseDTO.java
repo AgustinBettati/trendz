@@ -1,14 +1,14 @@
 package facultad.trendz.dto;
 
-public class ProfileEditResponseDTO {
+public class MessageResponseDTO {
 
     private String message;
 
-    public ProfileEditResponseDTO(String message) {
+    public MessageResponseDTO(String message) {
         this.message = message;
     }
 
-    public ProfileEditResponseDTO() {
+    public MessageResponseDTO() {
     }
 
     public String getMessage() {

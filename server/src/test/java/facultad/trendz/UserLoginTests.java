@@ -1,8 +1,8 @@
 package facultad.trendz;
 
-import facultad.trendz.dto.JwtResponseDTO;
-import facultad.trendz.dto.LoginDTO;
-import facultad.trendz.dto.UserCreateDTO;
+import facultad.trendz.dto.user.JwtResponseDTO;
+import facultad.trendz.dto.user.LoginDTO;
+import facultad.trendz.dto.user.UserCreateDTO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
