@@ -10,11 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
@@ -40,5 +39,12 @@ public class TopicController {
         final TopicResponseDTO body = topicService.saveTopic(topic);
         final HttpStatus status = HttpStatus.CREATED;
         return new ResponseEntity<>(body, status);
+    }
+
+    @GetMapping("/topic")
+    public ResponseEntity<List<TopicResponseDTO>> getTopics(){
+        final List<TopicResponseDTO> body = topicService.getTopicsByPopularity();
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body,status);
     }
 }
