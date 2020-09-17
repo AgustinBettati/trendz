@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -99,6 +100,69 @@ public class TopicTests {
         Assert.assertEquals("Topic1", response.getBody().get(1).getTitle()); //topic#1 with 2 posts
         Assert.assertEquals("Topic2", response.getBody().get(2).getTitle()); //topic#2 with 1 post
 
+    }
+
+    @Test
+    public void testDeleteTopic() throws URISyntaxException {
+        //GIVEN
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+        String jwtToken = loginResponse.getBody().getToken();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken);
+
+        TopicCreateDTO topic = new TopicCreateDTO("Topic4", "description", new Date());
+        HttpEntity<TopicCreateDTO> topicEntity = new HttpEntity<>(topic, headers);
+
+        final String topicsUrl = "http://localhost:" + randomServerPort + "/topic";
+        URI topicsUri = new URI(topicsUrl);
+
+        ResponseEntity<TopicResponseDTO> response = restTemplate.postForEntity(topicsUri, topicEntity, TopicResponseDTO.class);
+        Long topicId = response.getBody().getId();
+
+        HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(headers);
+
+        final String deleteTopicUrl = String.format("http://localhost:%d/topic/%d", randomServerPort, topicId);
+        URI deleteTopicUri = new URI(deleteTopicUrl);
+
+        //WHEN
+        ResponseEntity<MessageResponseDTO> deleteResponse = restTemplate.exchange(deleteTopicUri, HttpMethod.DELETE, entity, MessageResponseDTO.class);
+
+        //THEN
+        Assert.assertEquals(200, deleteResponse.getStatusCodeValue());
+        Assert.assertTrue(topicRepository.getTopicById(topicId).isDeleted());
+
+        ResponseEntity<List<TopicResponseDTO>> topicsResponse = restTemplate.exchange(topicsUri, HttpMethod.GET, entity, new ParameterizedTypeReference<List<TopicResponseDTO>>() {});
+
+        topicsResponse.getBody().forEach(topicResponseDTO -> Assert.assertNotEquals(topicId, topicResponseDTO.getId())); // assert get topics doesn't return the deleted topic
+    }
+
+    @Test
+    public void testDeleteInvalidTopic() throws URISyntaxException {
+        //GIVEN
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+
+        String jwtToken = loginResponse.getBody().getToken();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken);
+
+        Long topicId = Long.MAX_VALUE;
+        HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(headers);
+
+        final String deleteTopicUrl = String.format("http://localhost:%d/topic/%d", randomServerPort, topicId);
+        URI deleteTopicUri = new URI(deleteTopicUrl);
+
+        try {
+            //WHEN
+            restTemplate.exchange(deleteTopicUri, HttpMethod.DELETE, entity, MessageResponseDTO.class);
+
+            //THEN
+            Assert.fail();
+        } catch (HttpClientErrorException e){
+            Assert.assertEquals(404,e.getRawStatusCode());
+            Assert.assertTrue(e.getResponseBodyAsString().contains("Requested topic not found"));
+        }
     }
 
     private ResponseEntity<JwtResponseDTO> loginUser(String email, String password) throws URISyntaxException {
