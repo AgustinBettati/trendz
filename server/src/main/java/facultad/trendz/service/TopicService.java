@@ -38,7 +38,7 @@ public class TopicService {
 
         List<TopicResponseDTO> topicResponses = new ArrayList<>(topics.size());
         for (Topic topic : topics) {
-            topicResponses.add(new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(),new Date()));
+            topicResponses.add(new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(), topic.getCreationDate()));
         }
         return topicResponses;
     }
