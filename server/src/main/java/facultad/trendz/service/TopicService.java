@@ -3,6 +3,7 @@ package facultad.trendz.service;
 import facultad.trendz.dto.TopicCreateDTO;
 import facultad.trendz.dto.TopicResponseDTO;
 import facultad.trendz.exception.TopicExistsException;
+import facultad.trendz.exception.TopicNotFoundException;
 import facultad.trendz.model.Topic;
 import facultad.trendz.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,13 @@ public class TopicService {
             topicResponses.add(new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(),new Date()));
         }
         return topicResponses;
+    }
+
+    public void deleteTopic(long topicId) {
+        Optional<Topic> topic = topicRepository.findById(topicId);
+        if (!topic.isPresent()) throw new TopicNotFoundException();
+
+        topic.get().setDeleted(true);
+        topicRepository.save(topic.get());
     }
 }
