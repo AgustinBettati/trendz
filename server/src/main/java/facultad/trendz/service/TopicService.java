@@ -8,6 +8,8 @@ import facultad.trendz.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class TopicService {
 
@@ -18,8 +20,8 @@ public class TopicService {
         this.topicRepository = topicRepository;
     }
 
-    public TopicResponseDTO saveTopic(TopicCreateDTO topicResponseDTO){
-        final Topic topic = new Topic( topicResponseDTO.getTitle(), topicResponseDTO.getDescription(),topicResponseDTO.getDate());
+    public TopicResponseDTO saveTopic(TopicCreateDTO topicCreateDTO){
+        final Topic topic = new Topic( topicCreateDTO.getTitle(), topicCreateDTO.getDescription(),new Date());
         topicRepository.save(topic);
         return new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(), topic.getCreationDate());
     }

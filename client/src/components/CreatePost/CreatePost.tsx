@@ -8,6 +8,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
+import {createPost} from "../../api/PostApi";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -38,15 +39,13 @@ class CreatePost extends Component<Props, State> {
     }
 
     handleSubmitPost = (title: string, description: string, link: string) => {
-        /*     loginUser(title, description, 'user')
+             createPost(title, description, link,8)
                  .then((res) => {
-                     this.setState({errorMessage: '', successMessage: 'User successfully logged in'});
-                     localStorage.setItem('token', res.token);
-                     this.props.history.push('/main/home');
+                     this.setState({errorMessage: '', successMessage: 'Post succesfully created'});
                  })
                  .catch(() => {
-                     this.setState({successMessage: '', errorMessage:'Invalid Credentials'});
-                 })*/
+                     this.setState({successMessage: '', errorMessage:'Title already in use'});
+                 })
     }
 
     private handleCancel() {
