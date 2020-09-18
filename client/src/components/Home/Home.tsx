@@ -8,6 +8,7 @@ import {parseJwt} from "../Routing/utils";
 import {Icon} from "react-icons-kit";
 import {trash} from 'react-icons-kit/fa/trash';
 import Modal from "react-modal";
+import {deleteTopic} from "../../api/TopicApi";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -43,7 +44,7 @@ class Home extends Component<Props, State> {
     }
 
     handleConfirm = () => {
-
+        deleteTopic(this.state.selectedTopic).then(() => console.log('Topic deleted'))
     }
 
     handleDelete = (id: number) => {

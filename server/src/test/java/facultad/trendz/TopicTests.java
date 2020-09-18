@@ -1,6 +1,8 @@
 package facultad.trendz;
 
 import facultad.trendz.dto.*;
+import facultad.trendz.dto.user.*;
+import facultad.trendz.dto.user.JwtResponseDTO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
