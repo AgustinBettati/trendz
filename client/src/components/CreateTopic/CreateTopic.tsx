@@ -8,6 +8,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
+import {createTopic} from "../../api/TopicApi";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -36,15 +37,14 @@ class CreateTopic extends Component<Props, State> {
     }
 
     handleSubmitTopic = (title: string, description: string) => {
-   /*     loginUser(title, description, 'user')
-            .then((res) => {
-                this.setState({errorMessage: '', successMessage: 'User successfully logged in'});
-                localStorage.setItem('token', res.token);
+        createTopic(title,description)
+            .then(() => {
+                this.setState({errorMessage: '', successMessage: 'Topic successfully created'});
                 this.props.history.push('/main/home');
             })
-            .catch(() => {
-                this.setState({successMessage: '', errorMessage:'Invalid Credentials'});
-            })*/
+            .catch((err) => {
+                this.setState({successMessage: '', errorMessage: err.message});
+            })
     }
 
     private handleCancel() {
@@ -108,6 +108,8 @@ class CreateTopic extends Component<Props, State> {
                                         <TrendzMultilineInput
                                             placeholder={'Description'}
                                             label={'Description'}
+                                            onChange={props.handleChange('description')}
+                                            value={props.values.description}
                                         />
                                         <div
                                             className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>

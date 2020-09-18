@@ -80,7 +80,7 @@ class Home extends Component<Props, State> {
                     </div>
                     {
                         parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') &&
-                        <TrendzButton title={'Create topic'} onClick={() => this.createTopic()}/>
+                        <TrendzButton title={'Create topic'} onClick={() => this.props.history.push('/main/createTopic')}/>
                     }
                 </div>
                 <div className={'topics-container'}>
