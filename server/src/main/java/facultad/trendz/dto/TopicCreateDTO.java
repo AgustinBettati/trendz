@@ -2,7 +2,6 @@ package facultad.trendz.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 public class TopicCreateDTO {
 
@@ -12,12 +11,9 @@ public class TopicCreateDTO {
 
     private String description;
 
-    private Date date;
-
-    public TopicCreateDTO(String title, String description, Date date) {
+    public TopicCreateDTO(String title, String description) {
         this.title = title;
         this.description = description;
-        this.date=date;
     }
 
     public String getTitle() {
@@ -36,7 +32,5 @@ public class TopicCreateDTO {
         this.description = description;
     }
 
-    public Date getDate() {
-        return date;
-    }
+
 }

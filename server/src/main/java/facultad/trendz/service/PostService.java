@@ -9,6 +9,8 @@ import facultad.trendz.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class PostService {
 
@@ -21,9 +23,9 @@ public class PostService {
         this.topicRepository=topicRepository;
     }
 
-    public PostResponseDTO savePost(PostCreateDTO postResponseDTO){
-        final Post post = new Post(postResponseDTO.getTitle(), postResponseDTO.getDescription(),
-                postResponseDTO.getLink(),postResponseDTO.getCreationDate(), topicRepository.getTopicById(postResponseDTO.getTopicId()));
+    public PostResponseDTO savePost(PostCreateDTO postCreateDTO){
+        final Post post = new Post(postCreateDTO.getTitle(), postCreateDTO.getDescription(),
+                postCreateDTO.getLink(),new Date(), topicRepository.getTopicById(postCreateDTO.getTopicId()));
         postRepository.save(post);
         return new PostResponseDTO(post.getId(), post.getTitle(), post.getDescription(),post.getLink(), post.getDate(),post.getTopic().getId());
     }

@@ -14,15 +14,12 @@ public class PostCreateDTO {
 
     private String link;
 
-    private Date creationDate;
-
     private Long topicId;
 
-    public PostCreateDTO(String title, String description, String link, Date creationDate, Long topicId) {
+    public PostCreateDTO(String title, String description, String link,Long topicId) {
         this.title = title;
         this.description = description;
         this.link=link;
-        this.creationDate=creationDate;
         this.topicId=topicId;
     }
 
@@ -48,14 +45,6 @@ public class PostCreateDTO {
 
     public void setLink(String link) {
         this.link = link;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
     }
 
     public Long getTopicId() {
