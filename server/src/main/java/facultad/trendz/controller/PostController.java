@@ -30,7 +30,6 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/post")
     public ResponseEntity<Object> createPost(@Valid @RequestBody PostCreateDTO post, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
