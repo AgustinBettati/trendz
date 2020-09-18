@@ -39,7 +39,7 @@ class CreatePost extends Component<Props, State> {
     }
 
     handleSubmitPost = (title: string, description: string, link: string) => {
-             createPost(title, description, link,8)
+             createPost(title, description, link,8,"post")
                  .then((res) => {
                      this.setState({errorMessage: '', successMessage: 'Post succesfully created'});
                  })
@@ -115,6 +115,10 @@ class CreatePost extends Component<Props, State> {
                                         <TrendzMultilineInput
                                             placeholder={'Description'}
                                             label={'Description'}
+                                            onChange={props.handleChange('description')}
+                                            value={props.values.description}
+                                            onFocus={() => this.handleOnFocus('description')}
+                                            onBlur={() => !props.errors.description && this.handleOnBlur('description')}
                                         />
                                         <div
                                             className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>
