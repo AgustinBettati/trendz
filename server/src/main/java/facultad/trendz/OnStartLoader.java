@@ -4,6 +4,7 @@ import facultad.trendz.model.ERole;
 import facultad.trendz.model.Role;
 import facultad.trendz.model.Topic;
 import facultad.trendz.model.User;
+import facultad.trendz.repository.PostRepository;
 import facultad.trendz.repository.RoleRepository;
 import facultad.trendz.repository.TopicRepository;
 import facultad.trendz.repository.UserRepository;
@@ -19,22 +20,25 @@ import java.util.Date;
 class OnStartLoader implements ApplicationRunner {
 
     private final UserRepository userRepository;
-    private final TopicRepository topicRepository;
     private final RoleRepository roleRepository;
+    private final TopicRepository topicRepository;
+    private  final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public OnStartLoader(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, TopicRepository topicRepository) {
+    public OnStartLoader(UserRepository userRepository, RoleRepository roleRepository, TopicRepository topicRepository, PostRepository postRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.topicRepository=topicRepository;
+        this.postRepository=postRepository;
         this.passwordEncoder = passwordEncoder;
-        this.topicRepository = topicRepository;
     }
 
     public void run(ApplicationArguments args) {
         roleRepository.save(new Role(ERole.ROLE_ADMIN, 1L));
         roleRepository.save(new Role(ERole.ROLE_USER, 2L));
+
 
         Role role = roleRepository.getByEnumRole(ERole.ROLE_ADMIN);
         userRepository.save(new User("agustinbettati@gmail.com", "AgustinBettati", passwordEncoder.encode("password"), role));
@@ -45,12 +49,6 @@ class OnStartLoader implements ApplicationRunner {
         userRepository.save(new User("1@gmail.com", "1", passwordEncoder.encode("1"), role));
         userRepository.save(new User("2@gmail.com", "2", passwordEncoder.encode("2"), role));
         userRepository.save(new User("3@gmail.com", "3", passwordEncoder.encode("3"), role));
-        topicRepository.save(new Topic("Humor", "Best humor posts of the internet", new Date()));
-        topicRepository.save(new Topic("Humor", "Best humor posts of the internet", new Date()));
-        topicRepository.save(new Topic("Humor", "Best humor posts of the internet", new Date()));
-        topicRepository.save(new Topic("Humor", "Best humor posts of the internet", new Date()));
-        topicRepository.save(new Topic("Humor", "Best humor posts of the internet", new Date()));
-        topicRepository.save(new Topic("Humor", "Best humor posts of the internet", new Date()));
-        topicRepository.save(new Topic("Humor", "Best humor posts of the internet", new Date()));
+        topicRepository.save(new Topic("Movies","Here we talk about recent theatrical releases", new Date()));
     }
 }

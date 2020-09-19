@@ -37,7 +37,7 @@ public class TopicTests {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
 
-        TopicCreateDTO body = new TopicCreateDTO("TestTitle", "Test Description",new Date());
+        TopicCreateDTO body = new TopicCreateDTO("TestTitle", "Test Description");
 
         HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(body, headers);
         final String createTopicUrl = "http://localhost:" + randomServerPort + "/topic";
@@ -63,7 +63,7 @@ public class TopicTests {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
 
-        TopicCreateDTO body = new TopicCreateDTO("TestTitle1", "Test Description",new Date());
+        TopicCreateDTO body = new TopicCreateDTO("TestTitle1", "Test Description");
 
         HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(body, headers);
         final String createTopicUrl = "http://localhost:" + randomServerPort + "/topic";
@@ -71,7 +71,7 @@ public class TopicTests {
 
         restTemplate.postForEntity(createTopicUri, entity, TopicResponseDTO.class); // post 1st topic
 
-        TopicCreateDTO body2 = new TopicCreateDTO("TestTitle1", "Description",new Date());
+        TopicCreateDTO body2 = new TopicCreateDTO("TestTitle1", "Description");
 
         HttpEntity<TopicCreateDTO> entity2 = new HttpEntity<>(body2, headers);
 
