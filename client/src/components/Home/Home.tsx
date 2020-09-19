@@ -8,12 +8,13 @@ import {parseJwt} from "../Routing/utils";
 import {Icon} from "react-icons-kit";
 import {trash} from 'react-icons-kit/fa/trash';
 import Modal from "react-modal";
-import {deleteTopic} from "../../api/TopicApi";
+import {deleteTopic, getTopics} from "../../api/TopicApi";
+import {Topic} from "../types/types";
 
 export type Props = RouteComponentProps<any> & {}
 
 export type State = {
-    topics: {id: number, title: string, description: string}[],
+    topics: Topic[],
     showModal: boolean,
     selectedTopic: number
 }
@@ -25,15 +26,17 @@ class Home extends Component<Props, State> {
         this.state = {
             selectedTopic: -1,
             showModal: false,
-            topics: [
-                {id: 0, title: 'Humor', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'},
-                {id: 1, title: 'Humor', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'},
-                {id: 2, title: 'Humor', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'},
-                {id: 3, title: 'Humor', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'},
-                {id: 4, title: 'Humor', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'},
-            ]
+            topics: []
         }
     };
+
+    componentDidMount() {
+        this.getTopics()
+    }
+
+    getTopics() {
+        getTopics().then(res => this.setState({topics: res}))
+    }
 
     createTopic = () => {
         this.props.history.push('createTopic');
@@ -44,7 +47,9 @@ class Home extends Component<Props, State> {
     }
 
     handleConfirm = () => {
-        deleteTopic(this.state.selectedTopic).then(() => console.log('Topic deleted'))
+        deleteTopic(this.state.selectedTopic).then(() => this.getTopics())
+        this.setState({selectedTopic: -1})
+        this.handleCancel()
     }
 
     handleDelete = (id: number) => {
@@ -64,7 +69,7 @@ class Home extends Component<Props, State> {
                     <div className={'modal-text'}>
                         {
                             this.state.selectedTopic !== -1 &&
-                            <span>{'You are about to delete the topic ' + this.state.topics[this.state.selectedTopic].title + '.'}</span>
+                            <span>{'You are about to delete the topic ' + this.state.topics.filter(topic => topic.id === this.state.selectedTopic)[0].title + '.'}</span>
                         }
                         <span>This action is irreversible, </span>
                         <span>do you wish to continue?</span>

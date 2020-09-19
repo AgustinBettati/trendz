@@ -10,10 +10,18 @@ export function createTopic(title: string, description: string): Promise<any> {
     });
 }
 
+export function getTopics(): Promise<any> {
+    return request({
+        url: API_BASE_URL + "/topic",
+        method: 'GET',
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json'}
+    });
+}
+
 export function deleteTopic(id: number): Promise<any> {
     return request({
         url: API_BASE_URL + "/topic/" + id,
-        method: 'DEL',
+        method: 'DELETE',
         headers: {'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json'}
     });
 }
