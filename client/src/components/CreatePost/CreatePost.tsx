@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import "./CreateTopic.css"
+import "./CreatePost.css"
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import {TrendzMultilineInput} from "../common/TrendzMultilineInput/TrendzMultilineInput";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
@@ -8,7 +8,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
-import {createTopic} from "../../api/TopicApi";
+import {createPost} from "../../api/PostApi";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -17,14 +17,15 @@ export type State = {
     successMessage: string,
     titleTouched: boolean,
     descriptionTouched: boolean,
+    linkTouched: boolean,
 }
 
-const createTopicSchema = yup.object({
-    title: yup.string().required('Title cannot be empty').matches(/^[0-9a-zA-Z ]*$/,"Title must be alfanumeric").max(40,"Title can be up to 40 characters long").min(2,"Title must be at least 2 characters long"),
+const createPostSchema = yup.object({
+    title: yup.string().required('Title cannot be empty').max(60,"Title can be up to 60 characters long").min(2,"Title must be at least 2 characters long"),
     description: yup.string(),
 })
 
-class CreateTopic extends Component<Props, State> {
+class CreatePost extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
@@ -33,18 +34,18 @@ class CreateTopic extends Component<Props, State> {
             successMessage: '',
             titleTouched: false,
             descriptionTouched: false,
+            linkTouched: false,
         }
     }
 
-    handleSubmitTopic = (title: string, description: string) => {
-        createTopic(title,description)
-            .then(() => {
-                this.setState({errorMessage: '', successMessage: 'Topic successfully created'});
-                this.props.history.push('/main/home');
-            })
-            .catch((err) => {
-                this.setState({successMessage: '', errorMessage: err.message});
-            })
+    handleSubmitPost = (title: string, description: string, link: string) => {
+             createPost(title, description, link,8,"post")
+                 .then((res) => {
+                     this.setState({errorMessage: '', successMessage: 'Post succesfully created'});
+                 })
+                 .catch(() => {
+                     this.setState({successMessage: '', errorMessage:'Title already in use'});
+                 })
     }
 
     private handleCancel() {
@@ -60,6 +61,9 @@ class CreateTopic extends Component<Props, State> {
             case 'description':
                 this.setState({descriptionTouched: true});
                 break;
+            case 'link':
+                this.setState({linkTouched: true});
+                break;
         }
     }
 
@@ -71,22 +75,25 @@ class CreateTopic extends Component<Props, State> {
             case 'description':
                 this.setState({descriptionTouched: false});
                 break;
+            case 'link':
+                this.setState({linkTouched: false});
+                break;
         }
     }
 
     render() {
         return (
             <div className={"main-container"}>
-                <div className={'createtopic-card'}>
-                    <div className={'createtopic-header'}>
+                <div className={'createpost-card'}>
+                    <div className={'createpost-header'}>
                         <img className={'trendz-logo'} src={logo} alt={''}/>
                         <div className={'divisor'}/>
-                        <div className={'createtopic-title'}>Create Topic</div>
+                        <div className={'createpost-title'}>Create Post</div>
                     </div>
                     <Formik
-                        initialValues={{title: '', description: ''}}
-                        onSubmit={values => this.handleSubmitTopic(values.title, values.description)}
-                        validationSchema={createTopicSchema}
+                        initialValues={{title: '', description: '',link: ''}}
+                        onSubmit={values => this.handleSubmitPost(values.title, values.description,values.link)}
+                        validationSchema={createPostSchema}
                     >
                         {(props) => (
                             <div className={'form-container'}>
@@ -110,9 +117,24 @@ class CreateTopic extends Component<Props, State> {
                                             label={'Description'}
                                             onChange={props.handleChange('description')}
                                             value={props.values.description}
+                                            onFocus={() => this.handleOnFocus('description')}
+                                            onBlur={() => !props.errors.description && this.handleOnBlur('description')}
                                         />
                                         <div
                                             className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>
+                                    </div>
+                                    <div className={'createpost-field'}>
+                                        <TrendzInput
+                                            width='775px'
+                                            placeholder={'Link'}
+                                            label={'Link'}
+                                            onChange={props.handleChange('link')}
+                                            value={props.values.link}
+                                            onFocus={() => this.handleOnFocus('link')}
+                                            onBlur={() => !props.errors.link && this.handleOnBlur('link')}
+                                        />
+                                        <div
+                                            className={'error-message'}>{this.state.linkTouched && props.errors.link}</div>
                                     </div>
                                 </div>
                                 <div className={'createpost-footer'}>
@@ -159,4 +181,4 @@ class CreateTopic extends Component<Props, State> {
 
 }
 
-export default withRouter(CreateTopic)
+export default withRouter(CreatePost)
