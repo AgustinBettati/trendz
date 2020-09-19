@@ -17,6 +17,7 @@ export type State = {
     topics: Topic[],
     showModal: boolean,
     selectedTopic: number
+    currentPage: number
 }
 
 class Home extends Component<Props, State> {
@@ -26,7 +27,8 @@ class Home extends Component<Props, State> {
         this.state = {
             selectedTopic: -1,
             showModal: false,
-            topics: []
+            topics: [],
+            currentPage: 0
         }
     };
 
@@ -54,6 +56,14 @@ class Home extends Component<Props, State> {
 
     handleDelete = (id: number) => {
         this.setState({selectedTopic: id, showModal: true})
+    }
+
+    renderTopics = (currentPage: number) => {
+        return this.state.topics.slice(currentPage*5, currentPage*5+5)
+    }
+
+    handlePageClick = (data: {selected: number}) => {
+        this.setState({currentPage: data.selected})
     }
 
     render() {
@@ -92,7 +102,7 @@ class Home extends Component<Props, State> {
                 <div className={'topics-container'}>
                     {
                         this.state.topics.length &&
-                        this.state.topics.map((topic) => (
+                        this.renderTopics(this.state.currentPage).map((topic) => (
                             <div className={'topic-card'}>
                                 <div className={'topic-header'}>
                                     {topic.title}
@@ -120,11 +130,12 @@ class Home extends Component<Props, State> {
                 </div>
                 <div className={'home-footer'}>
                     <ReactPaginate
-                        pageCount={10}
-                        pageRangeDisplayed={3}
-                        marginPagesDisplayed={3}
-                        previousLabel={"<< Previous"}
-                        nextLabel={"Next >>"}
+                        onPageChange={this.handlePageClick}
+                        pageCount={this.state.topics.length/5}
+                        pageRangeDisplayed={5}
+                        marginPagesDisplayed={2}
+                        previousLabel={"<"}
+                        nextLabel={">"}
                         breakLabel={'...'}
                         containerClassName={"pagination"}
                         previousLinkClassName={"previous_page"}
