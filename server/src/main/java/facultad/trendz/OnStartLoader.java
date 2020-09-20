@@ -39,7 +39,6 @@ class OnStartLoader implements ApplicationRunner {
         roleRepository.save(new Role(ERole.ROLE_ADMIN, 1L));
         roleRepository.save(new Role(ERole.ROLE_USER, 2L));
 
-
         Role role = roleRepository.getByEnumRole(ERole.ROLE_ADMIN);
         userRepository.save(new User("agustinbettati@gmail.com", "AgustinBettati", passwordEncoder.encode("password"), role));
         userRepository.save(new User("marcoskhabie@gmail.com", "MarcosKhabie", passwordEncoder.encode("password"), role));
@@ -49,6 +48,17 @@ class OnStartLoader implements ApplicationRunner {
         userRepository.save(new User("1@gmail.com", "1", passwordEncoder.encode("1"), role));
         userRepository.save(new User("2@gmail.com", "2", passwordEncoder.encode("2"), role));
         userRepository.save(new User("3@gmail.com", "3", passwordEncoder.encode("3"), role));
-        topicRepository.save(new Topic("Movies","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies1","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies2","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies3","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies4","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies5","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies6","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies7","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies8","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies9","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies10","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies11","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies12","Here we talk about recent theatrical releases", new Date()));
     }
 }
