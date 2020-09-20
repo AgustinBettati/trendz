@@ -1,4 +1,4 @@
-package facultad.trendz.dto;
+package facultad.trendz.dto.user;
 
 public class JwtResponseDTO {
 

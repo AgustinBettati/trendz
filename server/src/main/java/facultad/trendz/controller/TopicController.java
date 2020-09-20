@@ -1,5 +1,6 @@
 package facultad.trendz.controller;
 
+import facultad.trendz.dto.MessageResponseDTO;
 import facultad.trendz.dto.TopicCreateDTO;
 import facultad.trendz.dto.TopicResponseDTO;
 import facultad.trendz.service.TopicService;
@@ -10,11 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
@@ -40,5 +40,21 @@ public class TopicController {
         final TopicResponseDTO body = topicService.saveTopic(topic);
         final HttpStatus status = HttpStatus.CREATED;
         return new ResponseEntity<>(body, status);
+    }
+
+    @GetMapping("/topic")
+    public ResponseEntity<List<TopicResponseDTO>> getTopics(){
+        final List<TopicResponseDTO> body = topicService.getTopicsByPopularity();
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body,status);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/topic/{topicId}")
+    public ResponseEntity<MessageResponseDTO> deleteTopic(@PathVariable Long topicId){
+        topicService.deleteTopic(topicId);
+        final MessageResponseDTO body = new MessageResponseDTO("Topic deleted");
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body,status);
     }
 }
