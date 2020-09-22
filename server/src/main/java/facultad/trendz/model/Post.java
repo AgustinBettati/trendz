@@ -12,6 +12,7 @@ public class Post {
 
     private String title;
 
+    @Column(length=40000)
     private String description;
 
     private String link;
