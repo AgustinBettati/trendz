@@ -1,8 +1,8 @@
 package facultad.trendz.controller;
 
 import facultad.trendz.dto.MessageResponseDTO;
-import facultad.trendz.dto.TopicCreateDTO;
-import facultad.trendz.dto.TopicResponseDTO;
+import facultad.trendz.dto.topic.TopicCreateDTO;
+import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

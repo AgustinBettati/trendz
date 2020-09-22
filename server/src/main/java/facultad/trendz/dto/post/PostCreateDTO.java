@@ -1,8 +1,7 @@
-package facultad.trendz.dto;
+package facultad.trendz.dto.post;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 public class PostCreateDTO {
 
