@@ -49,7 +49,7 @@ public class PostTests {
         ResponseEntity<PostResponseDTO> postResponse = postPost(jwtToken, "testTitle4", "test description", "testLink.com", topicResponse.getBody().getId());
 
         //THEN
-        Assert.assertEquals(201,postResponse.getStatusCodeValue());
+        Assert.assertEquals(201, postResponse.getStatusCodeValue());
         Assert.assertEquals("testTitle4", postResponse.getBody().getTitle());
         Assert.assertEquals("test description", postResponse.getBody().getDescription());
         Assert.assertEquals("testLink.com", postResponse.getBody().getLink());
@@ -59,6 +59,32 @@ public class PostTests {
         Assert.assertEquals("testTitle4", post.get().getTitle());
         Assert.assertEquals("test description", post.get().getDescription());
         Assert.assertEquals("testLink.com", post.get().getLink());
+    }
+
+    @Test
+    public void testPostCreationWithInvalidTitle() throws URISyntaxException {
+        //GIVEN
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+
+        String jwtToken = loginResponse.getBody().getToken();
+
+        //post new Topic
+        ResponseEntity<TopicResponseDTO> topicResponse = postTopic(jwtToken, "testTopic5", "test description");
+
+        //post new post
+        postPost(jwtToken, "usedPostTitle", "test description", "testLink.com", topicResponse.getBody().getId());
+        Long bodyId = topicResponse.getBody().getId();
+
+        try {
+        //WHEN trying to create a new post with an already used title
+            postPost(jwtToken, "usedPostTitle", "test description", "testLink.com", bodyId);
+
+        //THEN
+            Assert.fail();
+        } catch (HttpClientErrorException e) {
+            Assert.assertEquals(409, e.getRawStatusCode());
+            Assert.assertTrue(e.getResponseBodyAsString().contains("Title usedPostTitle already in use"));
+        }
     }
 
     private ResponseEntity<TopicResponseDTO> postTopic(String jwt, String title, String description) throws URISyntaxException {
