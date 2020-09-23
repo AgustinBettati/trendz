@@ -2,7 +2,6 @@ package facultad.trendz.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 public class PostCreateDTO {
 
@@ -10,6 +9,7 @@ public class PostCreateDTO {
     @NotNull(message = "Title cannot be empty")
     private String title;
 
+    @Size(max = 40000, message = "Description can be up to 40000 characters long")
     private String description;
 
     private String link;

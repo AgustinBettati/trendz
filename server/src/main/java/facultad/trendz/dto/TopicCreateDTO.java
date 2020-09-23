@@ -9,6 +9,7 @@ public class TopicCreateDTO {
     @NotNull(message = "Title cannot be empty")
     private String title;
 
+    @Size(max = 40000, message = "Description can be up to 40000 characters long")
     private String description;
 
     public TopicCreateDTO(String title, String description) {
