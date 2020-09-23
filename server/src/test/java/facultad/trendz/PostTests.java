@@ -7,9 +7,12 @@ import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.JwtResponseDTO;
 import facultad.trendz.dto.user.LoginDTO;
+import facultad.trendz.model.Post;
+import facultad.trendz.repository.PostRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
@@ -22,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -29,6 +33,9 @@ public class PostTests {
 
     @LocalServerPort
     int randomServerPort;
+
+    @Autowired
+    PostRepository postRepository;
 
     @Test
     public void testPostEdit() throws URISyntaxException {
@@ -62,6 +69,12 @@ public class PostTests {
         Assert.assertEquals("newTitle", response.getBody().getTitle()); //title is edited to new title
         Assert.assertEquals("New description", response.getBody().getDescription()); // description is edited to new description
         Assert.assertEquals("newLink.com", response.getBody().getLink()); // link is edited to new link
+
+        Optional<Post> post = postRepository.findById(response.getBody().getId()); // Post also updated on db
+        Assert.assertTrue(post.isPresent());
+        Assert.assertEquals("newTitle", post.get().getTitle());
+        Assert.assertEquals("New description", post.get().getDescription());
+        Assert.assertEquals("newLink.com", post.get().getLink());
     }
 
     @Test
@@ -96,6 +109,12 @@ public class PostTests {
         Assert.assertEquals("newTitle2", response.getBody().getTitle()); //title is edited to new title
         Assert.assertEquals("test description", response.getBody().getDescription()); // description remains unchanged
         Assert.assertEquals("testLink.com", response.getBody().getLink()); // link remains unchanged
+
+        Optional<Post> post = postRepository.findById(response.getBody().getId()); // Post also updated on db
+        Assert.assertTrue(post.isPresent());
+        Assert.assertEquals("newTitle2", post.get().getTitle());
+        Assert.assertEquals("test description", post.get().getDescription());
+        Assert.assertEquals("testLink.com", post.get().getLink());
     }
 
     @Test
@@ -128,7 +147,7 @@ public class PostTests {
             restTemplate.exchange(postEditUri, HttpMethod.PUT, postEditEntity, PostResponseDTO.class);
         //THEN
             Assert.fail();
-        } catch (HttpClientErrorException e){
+        } catch (HttpClientErrorException e) {
             Assert.assertEquals(409, e.getRawStatusCode());
             Assert.assertTrue(e.getResponseBodyAsString().contains("Title usedTestTitle already in use"));
         }
@@ -157,7 +176,7 @@ public class PostTests {
             restTemplate.exchange(postEditUri, HttpMethod.PUT, postEditEntity, PostResponseDTO.class);
         //THEN
             Assert.fail();
-        } catch (HttpClientErrorException e){
+        } catch (HttpClientErrorException e) {
             Assert.assertEquals(404, e.getRawStatusCode());
             Assert.assertTrue(e.getResponseBodyAsString().contains("Requested post not found"));
         }
