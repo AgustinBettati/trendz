@@ -11,3 +11,12 @@ export function createPost(title: string, description: string, link: string, top
         headers:{'Authorization': 'Bearer '+ localStorage.getItem('token'),'Content-Type': 'application/json'}
     });
 }
+
+export function editPost(title: string, description: string, link: string, postId: number, role:string): Promise<Post[]> {
+    return request({
+        url: API_BASE_URL + "/post/"+postId,
+        method: 'PUT',
+        body: JSON.stringify({'title': title, 'description': description, 'link': link, 'role': role}),
+        headers:{'Authorization': 'Bearer '+ localStorage.getItem('token'),'Content-Type': 'application/json'}
+    });
+}

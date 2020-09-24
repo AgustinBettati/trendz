@@ -1,9 +1,6 @@
 package facultad.trendz;
 
-import facultad.trendz.model.ERole;
-import facultad.trendz.model.Role;
-import facultad.trendz.model.Topic;
-import facultad.trendz.model.User;
+import facultad.trendz.model.*;
 import facultad.trendz.repository.PostRepository;
 import facultad.trendz.repository.RoleRepository;
 import facultad.trendz.repository.TopicRepository;
@@ -60,5 +57,7 @@ class OnStartLoader implements ApplicationRunner {
         topicRepository.save(new Topic("Movies10","Here we talk about recent theatrical releases", new Date()));
         topicRepository.save(new Topic("Movies11","Here we talk about recent theatrical releases", new Date()));
         topicRepository.save(new Topic("Movies12","Here we talk about recent theatrical releases", new Date()));
+        postRepository.save(new Post("Star Wars","Han Solo was the best","alink",new Date(),topicRepository.getTopicById(Long.valueOf(1))));
+
     }
 }

@@ -8,7 +8,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
-import {createPost} from "../../api/PostApi";
+import {editPost} from "../../api/PostApi";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -38,14 +38,14 @@ class EditPost extends Component<Props, State> {
         }
     }
 
-    handleEditPost = (title: string, description: string, link: string) => {/*
-        createPost(title, description, link,8,"post")
+    handleEditPost = (title: string, description: string, link: string) => {
+        editPost(title, description, link,1,"post")
             .then((res) => {
-                this.setState({errorMessage: '', successMessage: 'Post succesfully created'});
+                this.setState({errorMessage: '', successMessage: 'Post succesfully edited'});
             })
             .catch(() => {
                 this.setState({successMessage: '', errorMessage:'Title already in use'});
-            })*/
+            })
     }
 
     private handleCancel() {
