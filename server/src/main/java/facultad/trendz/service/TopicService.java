@@ -55,7 +55,7 @@ public class TopicService {
     }
 
     public List<PostGetDTO> getTopicPosts(Long topicId) {
-       List<Post> posts = topicRepository.allPostsFromTopic(topicId);
+       List<Post> posts = topicRepository.getTopicById(topicId).getPosts();
         List<PostGetDTO> postsInfo = new ArrayList<>(posts.size());
         for (Post post : posts) {
             postsInfo.add(new PostGetDTO(post.getId(), post.getTitle(), post.getDescription(),post.getLink(), post.getDate()));
