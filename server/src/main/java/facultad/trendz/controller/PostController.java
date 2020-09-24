@@ -1,20 +1,16 @@
 package facultad.trendz.controller;
 
-import facultad.trendz.dto.PostCreateDTO;
-import facultad.trendz.dto.PostResponseDTO;
-import facultad.trendz.dto.TopicResponseDTO;
+import facultad.trendz.dto.post.PostCreateDTO;
+import facultad.trendz.dto.post.PostEditDTO;
+import facultad.trendz.dto.post.PostResponseDTO;
 import facultad.trendz.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.stream.Collectors;
@@ -31,7 +27,7 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<Object> createPost(@Valid @RequestBody PostCreateDTO post, BindingResult bindingResult){
+    public ResponseEntity<Object> createPost(@Valid @RequestBody PostCreateDTO post, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             final HttpStatus status = HttpStatus.BAD_REQUEST;
             String error = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(", "));
@@ -41,6 +37,13 @@ public class PostController {
         final PostResponseDTO body = postService.savePost(post);
         final HttpStatus status = HttpStatus.CREATED;
         return new ResponseEntity<>(body, status);
+    }
+
+    @PutMapping("/post/{postId}")
+    public ResponseEntity<PostResponseDTO> editPost(@Valid @RequestBody PostEditDTO postEdit, @PathVariable Long postId) {
+        final PostResponseDTO body = postService.editPost(postEdit, postId);
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body,status);
     }
 }
 

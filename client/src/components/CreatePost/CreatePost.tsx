@@ -22,7 +22,7 @@ export type State = {
 
 const createPostSchema = yup.object({
     title: yup.string().required('Title cannot be empty').max(60,"Title can be up to 60 characters long").min(2,"Title must be at least 2 characters long"),
-    description: yup.string(),
+    description: yup.string().max(40000, "Description can be up to 40000 characters long"),
 })
 
 class CreatePost extends Component<Props, State> {

@@ -1,6 +1,10 @@
 package facultad.trendz;
 
 import facultad.trendz.dto.*;
+import facultad.trendz.dto.post.PostCreateDTO;
+import facultad.trendz.dto.post.PostResponseDTO;
+import facultad.trendz.dto.topic.TopicCreateDTO;
+import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.*;
 import facultad.trendz.dto.user.JwtResponseDTO;
 import facultad.trendz.repository.TopicRepository;
@@ -145,7 +149,7 @@ public class TopicTests {
         final String postsUrl = "http://localhost:" + randomServerPort + "/post";
         URI postsUri = new URI(postsUrl);
 
-        restTemplate.postForEntity(postsUri,postEntity1,PostResponseDTO.class);
+        restTemplate.postForEntity(postsUri,postEntity1, PostResponseDTO.class);
         restTemplate.postForEntity(postsUri,postEntity2,PostResponseDTO.class);
         restTemplate.postForEntity(postsUri,postEntity3,PostResponseDTO.class);
         restTemplate.postForEntity(postsUri,postEntity4,PostResponseDTO.class);

@@ -1,38 +1,35 @@
-package facultad.trendz.dto;
+package facultad.trendz.dto.post;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
-public class PostCreateDTO {
+public class PostEditDTO {
 
-    @Size(max = 40, message = "Password must have as much as 40 characters")
+    @Size(max = 40, message = "Password must have as long as 40 characters")
     @NotNull(message = "Title cannot be empty")
     private String title;
 
+    @Size(max = 40000, message = "Description must have as long as 40000 characters")
     private String description;
 
     private String link;
 
-    private Long topicId;
-
-    public PostCreateDTO(String title, String description, String link,Long topicId) {
+    public PostEditDTO(String title, String description, String link) {
         this.title = title;
         this.description = description;
-        this.link=link;
-        this.topicId=topicId;
+        this.link = link;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
@@ -45,13 +42,5 @@ public class PostCreateDTO {
 
     public void setLink(String link) {
         this.link = link;
-    }
-
-    public Long getTopicId() {
-        return topicId;
-    }
-
-    public void setTopicId(Long topicId) {
-        this.topicId = topicId;
     }
 }
