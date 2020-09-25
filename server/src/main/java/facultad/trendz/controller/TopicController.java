@@ -61,7 +61,7 @@ public class TopicController {
 
 
 
-    @GetMapping("/topic/{topicId}")
+    @GetMapping("/topicposts/{topicId}")
     public ResponseEntity<List<PostGetDTO>> getTopicPosts(@PathVariable Long topicId){
         List<PostGetDTO> body=topicService.getTopicPosts(topicId);
         final HttpStatus status = HttpStatus.OK;
