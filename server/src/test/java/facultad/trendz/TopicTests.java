@@ -127,17 +127,20 @@ public class TopicTests {
 
         //add different amount of posts to each topic
 
-        //3 posts por topic#3
+        //4 posts por topic#3
         PostCreateDTO post1 = new PostCreateDTO("Post1","description","testUrl",response3.getBody().getId());
         PostCreateDTO post2 = new PostCreateDTO("Post2","description","testUrl",response3.getBody().getId());
         PostCreateDTO post3 = new PostCreateDTO("Post3","description","testUrl",response3.getBody().getId());
+        PostCreateDTO post4 = new PostCreateDTO("Post4","description","testUrl",response3.getBody().getId());
 
-        //2 posts por topic#1
-        PostCreateDTO post4 = new PostCreateDTO("Post4","description","testUrl",response1.getBody().getId());
+        //3 posts por topic#1
         PostCreateDTO post5 = new PostCreateDTO("Post5","description","testUrl",response1.getBody().getId());
+        PostCreateDTO post6 = new PostCreateDTO("Post6","description","testUrl",response1.getBody().getId());
+        PostCreateDTO post7 = new PostCreateDTO("Post7","description","testUrl",response1.getBody().getId());
 
-        //1 post por topic#2
-        PostCreateDTO post6 = new PostCreateDTO("Post6","description","testUrl",response2.getBody().getId());
+        //2 post por topic#2
+        PostCreateDTO post8 = new PostCreateDTO("Post8","description","testUrl",response2.getBody().getId());
+        PostCreateDTO post9 = new PostCreateDTO("Post9","description","testUrl",response2.getBody().getId());
 
         HttpEntity<PostCreateDTO> postEntity1 = new HttpEntity<>(post1, headers);
         HttpEntity<PostCreateDTO> postEntity2 = new HttpEntity<>(post2, headers);
@@ -145,6 +148,9 @@ public class TopicTests {
         HttpEntity<PostCreateDTO> postEntity4 = new HttpEntity<>(post4, headers);
         HttpEntity<PostCreateDTO> postEntity5 = new HttpEntity<>(post5, headers);
         HttpEntity<PostCreateDTO> postEntity6 = new HttpEntity<>(post6, headers);
+        HttpEntity<PostCreateDTO> postEntity7 = new HttpEntity<>(post7, headers);
+        HttpEntity<PostCreateDTO> postEntity8 = new HttpEntity<>(post8, headers);
+        HttpEntity<PostCreateDTO> postEntity9 = new HttpEntity<>(post9, headers);
 
         final String postsUrl = "http://localhost:" + randomServerPort + "/post";
         URI postsUri = new URI(postsUrl);
@@ -155,6 +161,9 @@ public class TopicTests {
         restTemplate.postForEntity(postsUri,postEntity4,PostResponseDTO.class);
         restTemplate.postForEntity(postsUri,postEntity5,PostResponseDTO.class);
         restTemplate.postForEntity(postsUri,postEntity6,PostResponseDTO.class);
+        restTemplate.postForEntity(postsUri,postEntity7,PostResponseDTO.class);
+        restTemplate.postForEntity(postsUri,postEntity8,PostResponseDTO.class);
+        restTemplate.postForEntity(postsUri,postEntity9,PostResponseDTO.class);
 
 
         HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(headers);
@@ -163,9 +172,9 @@ public class TopicTests {
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
 
-        Assert.assertEquals("Topic3", response.getBody().get(0).getTitle()); //topic#3 with 3 posts
-        Assert.assertEquals("Topic1", response.getBody().get(1).getTitle()); //topic#1 with 2 posts
-        Assert.assertEquals("Topic2", response.getBody().get(2).getTitle()); //topic#2 with 1 post
+        Assert.assertEquals("Topic3", response.getBody().get(0).getTitle()); //topic#3 with 4 posts
+        Assert.assertEquals("Topic1", response.getBody().get(1).getTitle()); //topic#1 with 3 posts
+        Assert.assertEquals("Topic2", response.getBody().get(2).getTitle()); //topic#2 with 2 post
 
     }
 

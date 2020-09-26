@@ -1,10 +1,17 @@
 package facultad.trendz;
 
+<<<<<<< HEAD
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostEditDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
+=======
+import facultad.trendz.dto.PostCreateDTO;
+import facultad.trendz.dto.PostResponseDTO;
+import facultad.trendz.dto.TopicCreateDTO;
+import facultad.trendz.dto.TopicResponseDTO;
+>>>>>>> release/2.0
 import facultad.trendz.dto.user.JwtResponseDTO;
 import facultad.trendz.dto.user.LoginDTO;
 import facultad.trendz.model.Post;
@@ -38,6 +45,8 @@ public class PostTests {
     PostRepository postRepository;
 
     @Test
+    public void testPostCreation() throws URISyntaxException {
+        //GIVEN
     public void testPostEdit() throws URISyntaxException {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
@@ -87,6 +96,20 @@ public class PostTests {
         String jwtToken = loginResponse.getBody().getToken();
 
         //post new Topic
+        ResponseEntity<TopicResponseDTO> topicResponse = postTopic(jwtToken, "testTopic4", "test description");
+
+        //WHEN
+        ResponseEntity<PostResponseDTO> postResponse = postPost(jwtToken, "testTitle4", "test description", "testLink.com", topicResponse.getBody().getId());
+
+        //THEN
+        Assert.assertEquals(201, postResponse.getStatusCodeValue());
+        Assert.assertEquals("testTitle4", postResponse.getBody().getTitle());
+        Assert.assertEquals("test description", postResponse.getBody().getDescription());
+        Assert.assertEquals("testLink.com", postResponse.getBody().getLink());
+
+        Optional<Post> post = postRepository.findById(postResponse.getBody().getId());
+        Assert.assertTrue(post.isPresent());
+        Assert.assertEquals("testTitle4", post.get().getTitle());
         ResponseEntity<TopicResponseDTO> topicResponse = postTopic(jwtToken, "testTopic2", "test description");
 
         //post new Post
@@ -122,6 +145,8 @@ public class PostTests {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
 
+    public void testPostCreationWithInvalidTitle() throws URISyntaxException {
+        //GIVEN
         ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
 
         String jwtToken = loginResponse.getBody().getToken();
@@ -182,6 +207,24 @@ public class PostTests {
         }
     }
 
+
+        ResponseEntity<TopicResponseDTO> topicResponse = postTopic(jwtToken, "testTopic5", "test description");
+
+        //post new post
+        postPost(jwtToken, "usedPostTitle", "test description", "testLink.com", topicResponse.getBody().getId());
+        Long bodyId = topicResponse.getBody().getId();
+
+        try {
+        //WHEN trying to create a new post with an already used title
+            postPost(jwtToken, "usedPostTitle", "test description", "testLink.com", bodyId);
+
+        //THEN
+            Assert.fail();
+        } catch (HttpClientErrorException e) {
+            Assert.assertEquals(409, e.getRawStatusCode());
+            Assert.assertTrue(e.getResponseBodyAsString().contains("Title usedPostTitle already in use"));
+        }
+    }
 
     private ResponseEntity<TopicResponseDTO> postTopic(String jwt, String title, String description) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
