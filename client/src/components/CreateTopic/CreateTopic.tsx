@@ -21,7 +21,7 @@ export type State = {
 
 const createTopicSchema = yup.object({
     title: yup.string().required('Title cannot be empty').matches(/^[0-9a-zA-Z ]*$/,"Title must be alfanumeric").max(40,"Title can be up to 40 characters long").min(2,"Title must be at least 2 characters long"),
-    description: yup.string(),
+    description: yup.string().max(40000, "Description can be up to 40000 characters long"),
 })
 
 class CreateTopic extends Component<Props, State> {
@@ -110,6 +110,8 @@ class CreateTopic extends Component<Props, State> {
                                             label={'Description'}
                                             onChange={props.handleChange('description')}
                                             value={props.values.description}
+                                            onFocus={() => this.handleOnFocus('description')}
+                                            onBlur={() => !props.errors.description && this.handleOnBlur('description')}
                                         />
                                         <div
                                             className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>

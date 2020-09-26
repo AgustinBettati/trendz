@@ -11,6 +11,8 @@ public class Topic {
     private Long id;
 
     private String title;
+
+    @Column(length=40000)
     private String description;
 
     private Date creationDate;
