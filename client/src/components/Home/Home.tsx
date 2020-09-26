@@ -65,6 +65,10 @@ class Home extends Component<Props, State> {
         this.setState({currentPage: data.selected})
     }
 
+    handleTopicSelection = () => {
+        this.props.history.push('/main/topic')
+    }
+
     render() {
         return (
             <div className={'home-container'}>
@@ -103,7 +107,7 @@ class Home extends Component<Props, State> {
                         this.state.topics.length &&
                         this.renderTopics(this.state.currentPage).map((topic) => (
                             <div className={'card-wrapper'}>
-                                <div className={'topic-card'}>
+                                <div className={'topic-card'} onClick={() => this.handleTopicSelection()}>
                                     <div className={'topic-header'}>
                                         {topic.title}
                                         {

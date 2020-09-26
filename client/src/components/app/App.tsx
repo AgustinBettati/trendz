@@ -11,6 +11,7 @@ import Home from "../Home/Home";
 import CreateTopic from "../CreateTopic/CreateTopic";
 import CreatePost from "../CreatePost/CreatePost";
 import EditPost from "../EditPost/EditPost";
+import Topic from "../Topic/Topic";
 type MatchProps = {
   match: {
     url: string
@@ -29,6 +30,7 @@ class App extends Component{
                 <Switch>
                   <Route exact path={`${match.url}/profile`} component={Profile}/>
                   <Route exact path={`${match.url}/home`} component={Home}/>
+                  <Route exact path={`${match.url}/topic`} component={Topic}/>
                   <Route exact path={`${match.url}/editProfile`} component={EditProfile}/>
                   <Route exact path={`${match.url}/createTopic`} component={CreateTopic}/>
                   <Route exact path={`${match.url}/createPost`} component={CreatePost}/>
