@@ -12,5 +12,5 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
     boolean existsByTitle(String title);
     Topic getTopicById(Long id);
     List<Topic> findAllByDeletedIsFalse();
-    List<Post> allPostsFromTopic(Long id);
+
 }
