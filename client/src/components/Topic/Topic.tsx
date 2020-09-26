@@ -12,7 +12,6 @@ export type Props = RouteComponentProps<any> & {}
 export type State = {
     posts: any[],
     showModal: boolean,
-    selectedTopic: number
     currentPage: number
 }
 
@@ -21,7 +20,6 @@ class Topic extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            selectedTopic: -1,
             showModal: false,
             posts: [
                 {id: 0, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
@@ -54,13 +52,11 @@ class Topic extends Component<Props, State> {
     }
 
     handleConfirm = () => {
-        deleteTopic(this.state.selectedTopic).then(() => this.getTopics())
-        this.setState({selectedTopic: -1})
-        this.handleCancel()
+        deleteTopic(this.props.location.state.topic.id).then(() => this.props.history.push('/main/home'))
     }
 
-    handleDelete = (id: number) => {
-        this.setState({selectedTopic: id, showModal: true})
+    handleDelete = () => {
+        this.setState({showModal: true})
     }
 
     renderPosts = (currentPage: number) => {
@@ -82,10 +78,7 @@ class Topic extends Component<Props, State> {
                     overlayClassName={'overlay'}
                 >
                     <div className={'modal-text'}>
-                        {
-                            this.state.selectedTopic !== -1 &&
-                            <span>{'You are about to delete the topic.'}</span>
-                        }
+                        <span>{'You are about to delete ' + this.props.location.state.topic.title + ' topic.'}</span>
                         <span>This action is irreversible, </span>
                         <span>do you wish to continue?</span>
                     </div>
@@ -96,14 +89,14 @@ class Topic extends Component<Props, State> {
                 </Modal>
                 <div className={'topic-header-wrapper'}>
                     <div className={'header-text'}>
-                        <span className={'topic-title'}>Humor</span>
-                        <span className={'topic-subtitle'}>Here you can find every topic and read more about those that interest you.</span>
+                        <span className={'topic-title'}>{this.props.location.state.topic.title}</span>
+                        <span className={'topic-subtitle'}>{this.props.location.state.topic.description}</span>
                     </div>
                     {
                         parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') &&
                         <TrendzButton
                             title={'Delete topic'}
-                            onClick={() => this.props.history.push('/main/createTopic')}
+                            onClick={() => this.handleDelete()}
                             color={'#DF6052'}
                         />
                     }
@@ -124,7 +117,7 @@ class Topic extends Component<Props, State> {
                                             </div>
                                         </div>
                                         <div className={'post-topic'}>
-                                            {'Humor'}
+                                            {this.props.location.state.topic.title}
                                         </div>
                                     </div>
                                     <div className={'post-card-body'}>
