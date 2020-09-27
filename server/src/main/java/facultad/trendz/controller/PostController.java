@@ -2,6 +2,7 @@ package facultad.trendz.controller;
 
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostEditDTO;
+import facultad.trendz.dto.post.PostGetDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
 import facultad.trendz.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,13 @@ public class PostController {
     @PutMapping("/post/{postId}")
     public ResponseEntity<PostResponseDTO> editPost(@Valid @RequestBody PostEditDTO postEdit, @PathVariable Long postId) {
         final PostResponseDTO body = postService.editPost(postEdit, postId);
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body,status);
+    }
+
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<PostGetDTO> getPost(@PathVariable Long postId) {
+        final PostGetDTO body = postService.getPost(postId);
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body,status);
     }

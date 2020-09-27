@@ -2,6 +2,7 @@ package facultad.trendz.service;
 
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostEditDTO;
+import facultad.trendz.dto.post.PostGetDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
 import facultad.trendz.exception.post.PostExistsException;
 import facultad.trendz.exception.post.PostNotFoundException;
@@ -63,4 +64,20 @@ public class PostService {
                 editedPost.getDate() ,
                 editedPost.getTopic().getId());
     }
+
+    public PostGetDTO getPost(Long postId){
+        final Optional<Post> post= postRepository.findById(postId);
+        if (!post.isPresent()) throw new PostNotFoundException();
+
+        return new PostGetDTO(post.get().getTopic().getId(),
+                post.get().getTitle(),
+                post.get().getDescription(),
+                post.get().getLink(),
+                post.get().getDate() );
+
+
+
+    }
+
+
 }
