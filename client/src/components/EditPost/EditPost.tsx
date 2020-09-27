@@ -9,10 +9,16 @@ import * as yup from 'yup';
 import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
 import {editPost} from "../../api/PostApi";
+import {getPostData} from "../../api/PostApi";
+import {parseJwt} from "../Routing/utils";
+import {getUserData} from "../../api/UserApi";
 
 export type Props = RouteComponentProps<any> & {}
 
 export type State = {
+    title: string,
+    description: string,
+    link: string,
     errorMessage: string,
     successMessage: string,
     titleTouched: boolean,
@@ -30,6 +36,9 @@ class EditPost extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
+            title:'',
+            description:'',
+            link:'',
             errorMessage: '',
             successMessage: '',
             titleTouched: false,
@@ -37,6 +46,17 @@ class EditPost extends Component<Props, State> {
             linkTouched: false,
         }
     }
+
+
+
+    componentDidMount() {
+        getPostData(1)
+            .then((res:any) => {
+                this.setState({title: res.title, description: res.description, link:res.description})
+            })
+            .catch(() => this.setState({title:'Unknown', description:'Unknown', link:'Unknown'}))
+    }
+
 
     handleEditPost = (title: string, description: string, link: string) => {
         editPost(title, description, link,1,"post")
@@ -91,7 +111,7 @@ class EditPost extends Component<Props, State> {
                         <div className={'editpost-title'}>Edit Post</div>
                     </div>
                     <Formik
-                        initialValues={{title: '', description: '',link: ''}}
+                        initialValues={{title:this.state.title, description:this.state.title,link:this.state.link}}
                         onSubmit={values => this.handleEditPost(values.title, values.description,values.link)}
                         validationSchema={editPostSchema}
                     >
@@ -104,7 +124,7 @@ class EditPost extends Component<Props, State> {
                                             placeholder={'Title'}
                                             label={'Title'}
                                             onChange={props.handleChange('title')}
-                                            value={props.values.title}
+                                            value={this.state.title}
                                             onFocus={() => this.handleOnFocus('title')}
                                             onBlur={() => !props.errors.title && this.handleOnBlur('title')}
                                         />
@@ -116,7 +136,7 @@ class EditPost extends Component<Props, State> {
                                             placeholder={'Description'}
                                             label={'Description'}
                                             onChange={props.handleChange('description')}
-                                            value={props.values.description}
+                                            value={this.state.description}
                                             onFocus={() => this.handleOnFocus('description')}
                                             onBlur={() => !props.errors.description && this.handleOnBlur('description')}
                                         />
@@ -129,7 +149,7 @@ class EditPost extends Component<Props, State> {
                                             placeholder={'Link'}
                                             label={'Link'}
                                             onChange={props.handleChange('link')}
-                                            value={props.values.link}
+                                            value={this.state.description}
                                             onFocus={() => this.handleOnFocus('link')}
                                             onBlur={() => !props.errors.link && this.handleOnBlur('link')}
                                         />
