@@ -47,9 +47,11 @@ public class PostService {
         String newDescription = postEdit.getDescription();
         String newLink = postEdit.getLink();
 
-        if (postRepository.existsByTitle(newTitle)){
-            throw new PostExistsException(String.format("Title %s already in use",newTitle));
-        } else post.get().setTitle(newTitle);
+        if(!newTitle.equals(post.get().getTitle())) {
+            if (postRepository.existsByTitle(newTitle)) {
+                throw new PostExistsException(String.format("Title %s already in use", newTitle));
+            } else post.get().setTitle(newTitle);
+        }
 
         if (newDescription != null) post.get().setDescription(newDescription);
 
