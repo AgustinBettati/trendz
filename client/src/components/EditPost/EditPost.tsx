@@ -19,6 +19,7 @@ export type State = {
     title: string,
     description: string,
     link: string,
+    postDataLoaded: boolean,
     errorMessage: string,
     successMessage: string,
     titleTouched: boolean,
@@ -39,6 +40,7 @@ class EditPost extends Component<Props, State> {
             title:'',
             description:'',
             link:'',
+            postDataLoaded:false,
             errorMessage: '',
             successMessage: '',
             titleTouched: false,
@@ -52,9 +54,18 @@ class EditPost extends Component<Props, State> {
     componentDidMount() {
         getPostData(1)
             .then((res:any) => {
-                this.setState({title: res.title, description: res.description, link:res.description})
+                this.setState({title: res.title, description: res.description, link:res.link})
+                this.setState({
+                    postDataLoaded: true
+                });
             })
-            .catch(() => this.setState({title:'Unknown', description:'Unknown', link:'Unknown'}))
+            .catch(() => {this.setState
+                ({title:'Unknown', description:'Unknown', link:'Unknown'})
+            this.setState({
+                postDataLoaded: true
+            });
+        })
+
     }
 
 
@@ -62,6 +73,7 @@ class EditPost extends Component<Props, State> {
         editPost(title, description, link,1,"post")
             .then((res) => {
                 this.setState({errorMessage: '', successMessage: 'Post succesfully edited'});
+                this.props.history.push('/main/home');
             })
             .catch(() => {
                 this.setState({successMessage: '', errorMessage:'Title already in use'});
@@ -102,100 +114,107 @@ class EditPost extends Component<Props, State> {
     }
 
     render() {
-        return (
-            <div className={"main-container"}>
-                <div className={'editpost-card'}>
-                    <div className={'editpost-header'}>
-                        <img className={'trendz-logo'} src={logo} alt={''}/>
-                        <div className={'divisor'}/>
-                        <div className={'editpost-title'}>Edit Post</div>
+        if (this.state.postDataLoaded) {
+            return (
+                <div className={"main-container"}>
+                    <div className={'editpost-card'}>
+
+                        <div className={'editpost-header'}>
+                            <img className={'trendz-logo'} src={logo} alt={''}/>
+                            <div className={'divisor'}/>
+                            <div className={'editpost-title'}>Edit Post</div>
+                        </div>
+                        <Formik
+                            initialValues={{
+                                title: this.state.title,
+                                description: this.state.description,
+                                link: this.state.link
+                            }}
+                            onSubmit={values => this.handleEditPost(values.title, values.description, values.link)}
+                            validationSchema={editPostSchema}
+                        >
+                            {(props) => (
+                                <div className={'form-container'}>
+                                    <div className={'editpost-body'}>
+                                        <div className={'editpost-field'}>
+                                            <TrendzInput
+                                                width='775px'
+                                                label={'Title'}
+                                                onChange={props.handleChange('title')}
+                                                value={props.values.title}
+                                                onFocus={() => this.handleOnFocus('title')}
+                                                onBlur={() => !props.errors.title && this.handleOnBlur('title')}
+                                            />
+                                            <div
+                                                className={'error-message'}>{this.state.titleTouched && props.errors.title}</div>
+                                        </div>
+                                        <div className={'editpost-field'}>
+                                            <TrendzMultilineInput
+                                                label={'Description'}
+                                                onChange={props.handleChange('description')}
+                                                value={props.values.description}
+                                                onFocus={() => this.handleOnFocus('description')}
+                                                onBlur={() => !props.errors.description && this.handleOnBlur('description')}
+                                            />
+                                            <div
+                                                className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>
+                                        </div>
+                                        <div className={'editpost-field'}>
+                                            <TrendzInput
+                                                width='775px'
+                                                label={'Link'}
+                                                onChange={props.handleChange('link')}
+                                                value={props.values.link}
+                                                onFocus={() => this.handleOnFocus('link')}
+                                                onBlur={() => !props.errors.link && this.handleOnBlur('link')}
+                                            />
+                                            <div
+                                                className={'error-message'}>{this.state.linkTouched && props.errors.link}</div>
+                                        </div>
+                                    </div>
+                                    <div className={'editpost-footer'}>
+                                        <div>
+
+                                            {
+                                                this.state.errorMessage !== '' &&
+                                                <div className={'error-message'}>{this.state.errorMessage}</div>
+                                            }
+                                            {
+                                                this.state.successMessage !== '' &&
+                                                <div className={'success-message'}>{this.state.successMessage}</div>
+                                            }
+
+                                        </div>
+                                        <TrendzButton
+                                            title={'Submit'}
+                                            onClick={() => props.values.title === '' && props.values.description === '' ?
+                                                this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
+                                            disabled={!!(props.errors.title || props.errors.description)}
+                                        />
+                                        <div style={{
+                                            height: 20,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            marginTop: 10
+                                        }}>
+
+                                        </div>
+                                        <TrendzButton
+                                            title={'Cancel'}
+                                            onClick={() => this.handleCancel()}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </Formik>
                     </div>
-                    <Formik
-                        initialValues={{title:this.state.title, description:this.state.title,link:this.state.link}}
-                        onSubmit={values => this.handleEditPost(values.title, values.description,values.link)}
-                        validationSchema={editPostSchema}
-                    >
-                        {(props) => (
-                            <div className={'form-container'}>
-                                <div className={'editpost-body'}>
-                                    <div className={'editpost-field'}>
-                                        <TrendzInput
-                                            width='775px'
-                                            placeholder={'Title'}
-                                            label={'Title'}
-                                            onChange={props.handleChange('title')}
-                                            value={this.state.title}
-                                            onFocus={() => this.handleOnFocus('title')}
-                                            onBlur={() => !props.errors.title && this.handleOnBlur('title')}
-                                        />
-                                        <div
-                                            className={'error-message'}>{this.state.titleTouched && props.errors.title}</div>
-                                    </div>
-                                    <div className={'editpost-field'}>
-                                        <TrendzMultilineInput
-                                            placeholder={'Description'}
-                                            label={'Description'}
-                                            onChange={props.handleChange('description')}
-                                            value={this.state.description}
-                                            onFocus={() => this.handleOnFocus('description')}
-                                            onBlur={() => !props.errors.description && this.handleOnBlur('description')}
-                                        />
-                                        <div
-                                            className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>
-                                    </div>
-                                    <div className={'editpost-field'}>
-                                        <TrendzInput
-                                            width='775px'
-                                            placeholder={'Link'}
-                                            label={'Link'}
-                                            onChange={props.handleChange('link')}
-                                            value={this.state.description}
-                                            onFocus={() => this.handleOnFocus('link')}
-                                            onBlur={() => !props.errors.link && this.handleOnBlur('link')}
-                                        />
-                                        <div
-                                            className={'error-message'}>{this.state.linkTouched && props.errors.link}</div>
-                                    </div>
-                                </div>
-                                <div className={'editpost-footer'}>
-                                    <div>
-
-                                        {
-                                            this.state.errorMessage !== '' &&
-                                            <div className={'error-message'}>{this.state.errorMessage}</div>
-                                        }
-                                        {
-                                            this.state.successMessage !== '' &&
-                                            <div className={'success-message'}>{this.state.successMessage}</div>
-                                        }
-
-                                    </div>
-                                    <TrendzButton
-                                        title={'Submit'}
-                                        onClick={() => props.values.title === ''  && props.values.description === '' ?
-                                            this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
-                                        disabled={!!(props.errors.title  || props.errors.description )}
-                                    />
-                                    <div style={{
-                                        height: 20,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        marginTop: 10
-                                    }}>
-
-                                    </div>
-                                    <TrendzButton
-                                        title={'Cancel'}
-                                        onClick={()=>this.handleCancel() }
-                                    />
-                                </div>
-                            </div>
-                        )}
-                    </Formik>
                 </div>
-            </div>
-        )
+            )
+        }
+        else{
+            return( <div>Loading...</div>)
+        }
     }
 
 
