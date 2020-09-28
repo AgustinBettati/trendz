@@ -9,6 +9,7 @@ public class PostCreateDTO {
     @NotNull(message = "Title cannot be empty")
     private String title;
 
+    @Size(max = 40000, message = "Description can be up to 40000 characters long")
     private String description;
 
     private String link;

@@ -48,7 +48,7 @@ public class TestGetPostsFromTopic {
         headers.add("Authorization", "Bearer " + jwtToken);
 
         //post new topics
-        TopicCreateDTO topic1 = new TopicCreateDTO("Topic1", "description");
+        TopicCreateDTO topic1 = new TopicCreateDTO("Topic 1", "description");
 
 
         HttpEntity<TopicCreateDTO> topicEntity1 = new HttpEntity<>(topic1, headers);
@@ -61,9 +61,9 @@ public class TestGetPostsFromTopic {
 
 
         // posts for topic#1
-        PostCreateDTO post1 = new PostCreateDTO("Post1","description","testUrl",response1.getBody().getId());
-        PostCreateDTO post2 = new PostCreateDTO("Post2","description","testUrl",response1.getBody().getId());
-        PostCreateDTO post3 = new PostCreateDTO("Post3","description","testUrl",response1.getBody().getId());
+        PostCreateDTO post1 = new PostCreateDTO("Post 1","description","testUrl",response1.getBody().getId());
+        PostCreateDTO post2 = new PostCreateDTO("Post 2","description","testUrl",response1.getBody().getId());
+        PostCreateDTO post3 = new PostCreateDTO("Post 3","description","testUrl",response1.getBody().getId());
 
         HttpEntity<PostCreateDTO> postEntity1 = new HttpEntity<>(post1, headers);
         HttpEntity<PostCreateDTO> postEntity2 = new HttpEntity<>(post2, headers);
@@ -85,9 +85,9 @@ public class TestGetPostsFromTopic {
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
 
-        Assert.assertEquals("Post1", response.getBody().get(0).getTitle());
-        Assert.assertEquals("Post2", response.getBody().get(1).getTitle());
-        Assert.assertEquals("Post3", response.getBody().get(2).getTitle());
+        Assert.assertEquals("Post 1", response.getBody().get(0).getTitle());
+        Assert.assertEquals("Post 2", response.getBody().get(1).getTitle());
+        Assert.assertEquals("Post 3", response.getBody().get(2).getTitle());
 
     }
 
