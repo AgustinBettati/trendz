@@ -9,6 +9,7 @@ import facultad.trendz.exception.post.PostNotFoundException;
 import facultad.trendz.model.Post;
 import facultad.trendz.repository.PostRepository;
 import facultad.trendz.repository.TopicRepository;
+import facultad.trendz.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +21,20 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final TopicRepository topicRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, TopicRepository topicRepository) {
+    public PostService(PostRepository postRepository, TopicRepository topicRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
         this.topicRepository = topicRepository;
+        this.userRepository=userRepository;
     }
 
-    public PostResponseDTO savePost(PostCreateDTO postCreateDTO) {
+    public PostResponseDTO savePost(PostCreateDTO postCreateDTO, Long userId) {
         final Post post = new Post(postCreateDTO.getTitle(), postCreateDTO.getDescription(),
-                postCreateDTO.getLink(), new Date(), topicRepository.getTopicById(postCreateDTO.getTopicId()));
+                postCreateDTO.getLink(), new Date(), topicRepository.getTopicById(postCreateDTO.getTopicId()),userRepository.findById(userId).get());
         postRepository.save(post);
-        return new PostResponseDTO(post.getId(), post.getTitle(), post.getDescription(), post.getLink(), post.getDate(), post.getTopic().getId());
+        return new PostResponseDTO(post.getId(), post.getTitle(), post.getDescription(), post.getLink(), post.getDate(), post.getTopic().getId(),userId);
     }
 
     public void validatePostTitle(String title) {
@@ -64,7 +67,9 @@ public class PostService {
                 editedPost.getDescription(),
                 editedPost.getLink(),
                 editedPost.getDate() ,
-                editedPost.getTopic().getId());
+                editedPost.getTopic().getId(),
+                editedPost.getUser().getId()
+        );
     }
 
     public PostGetDTO getPost(Long postId){
@@ -75,7 +80,10 @@ public class PostService {
                 post.get().getTitle(),
                 post.get().getDescription(),
                 post.get().getLink(),
-                post.get().getDate() );
+                post.get().getDate(),
+                post.get().getUser().getId(),
+                post.get().getUser().getUsername()
+        );
 
 
 

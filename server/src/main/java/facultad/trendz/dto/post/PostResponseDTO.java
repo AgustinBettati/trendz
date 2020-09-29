@@ -10,15 +10,17 @@ public class PostResponseDTO {
     private String link;
     private Date date;
     private Long topicId;
+    private Long userId;
 
 
-    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId){
+    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId){
         this.id = id;
         this.title = title;
         this.description = description;
         this.link=link;
         this.topicId=topicId;
         this.date=date;
+        this.userId=userId;
     }
 
     public PostResponseDTO() {}
@@ -69,5 +71,13 @@ public class PostResponseDTO {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
