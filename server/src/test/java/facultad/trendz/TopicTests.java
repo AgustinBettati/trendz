@@ -1,6 +1,11 @@
 package facultad.trendz;
 
 import facultad.trendz.dto.*;
+import facultad.trendz.dto.post.PostCreateDTO;
+import facultad.trendz.dto.post.PostGetDTO;
+import facultad.trendz.dto.post.PostResponseDTO;
+import facultad.trendz.dto.topic.TopicCreateDTO;
+import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.*;
 import facultad.trendz.dto.user.JwtResponseDTO;
 import facultad.trendz.repository.TopicRepository;
@@ -106,9 +111,9 @@ public class TopicTests {
         headers.add("Authorization", "Bearer " + jwtToken);
 
         //post new topics
-        TopicCreateDTO topic1 = new TopicCreateDTO("Topic1", "description");
-        TopicCreateDTO topic2 = new TopicCreateDTO("Topic2", "description");
-        TopicCreateDTO topic3 = new TopicCreateDTO("Topic3", "description");
+        TopicCreateDTO topic1 = new TopicCreateDTO("T1", "description");
+        TopicCreateDTO topic2 = new TopicCreateDTO("T2", "description");
+        TopicCreateDTO topic3 = new TopicCreateDTO("T3", "description");
 
         HttpEntity<TopicCreateDTO> topicEntity1 = new HttpEntity<>(topic1, headers);
         HttpEntity<TopicCreateDTO> topicEntity2 = new HttpEntity<>(topic2, headers);
@@ -123,44 +128,24 @@ public class TopicTests {
 
         //add different amount of posts to each topic
 
-        //4 posts por topic#3
-        PostCreateDTO post1 = new PostCreateDTO("Post1","description","testUrl",response3.getBody().getId());
-        PostCreateDTO post2 = new PostCreateDTO("Post2","description","testUrl",response3.getBody().getId());
-        PostCreateDTO post3 = new PostCreateDTO("Post3","description","testUrl",response3.getBody().getId());
-        PostCreateDTO post4 = new PostCreateDTO("Post4","description","testUrl",response3.getBody().getId());
+        int topic1Amount = 15;
+        int topic2Amount = 14;
+        int topic3Amount = 13;
 
-        //3 posts por topic#1
-        PostCreateDTO post5 = new PostCreateDTO("Post5","description","testUrl",response1.getBody().getId());
-        PostCreateDTO post6 = new PostCreateDTO("Post6","description","testUrl",response1.getBody().getId());
-        PostCreateDTO post7 = new PostCreateDTO("Post7","description","testUrl",response1.getBody().getId());
+        //15 posts por topic#3
+        for (int i = 0; i < topic1Amount; i++) {
+            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response3.getBody().getId()),jwtToken);
+        }
 
-        //2 post por topic#2
-        PostCreateDTO post8 = new PostCreateDTO("Post8","description","testUrl",response2.getBody().getId());
-        PostCreateDTO post9 = new PostCreateDTO("Post9","description","testUrl",response2.getBody().getId());
+        //14 posts for topic#1
+        for (int i = topic1Amount; i < topic1Amount + topic2Amount; i++) {
+            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response1.getBody().getId()),jwtToken);
+        }
 
-        HttpEntity<PostCreateDTO> postEntity1 = new HttpEntity<>(post1, headers);
-        HttpEntity<PostCreateDTO> postEntity2 = new HttpEntity<>(post2, headers);
-        HttpEntity<PostCreateDTO> postEntity3 = new HttpEntity<>(post3, headers);
-        HttpEntity<PostCreateDTO> postEntity4 = new HttpEntity<>(post4, headers);
-        HttpEntity<PostCreateDTO> postEntity5 = new HttpEntity<>(post5, headers);
-        HttpEntity<PostCreateDTO> postEntity6 = new HttpEntity<>(post6, headers);
-        HttpEntity<PostCreateDTO> postEntity7 = new HttpEntity<>(post7, headers);
-        HttpEntity<PostCreateDTO> postEntity8 = new HttpEntity<>(post8, headers);
-        HttpEntity<PostCreateDTO> postEntity9 = new HttpEntity<>(post9, headers);
-
-        final String postsUrl = "http://localhost:" + randomServerPort + "/post";
-        URI postsUri = new URI(postsUrl);
-
-        restTemplate.postForEntity(postsUri,postEntity1,PostResponseDTO.class);
-        restTemplate.postForEntity(postsUri,postEntity2,PostResponseDTO.class);
-        restTemplate.postForEntity(postsUri,postEntity3,PostResponseDTO.class);
-        restTemplate.postForEntity(postsUri,postEntity4,PostResponseDTO.class);
-        restTemplate.postForEntity(postsUri,postEntity5,PostResponseDTO.class);
-        restTemplate.postForEntity(postsUri,postEntity6,PostResponseDTO.class);
-        restTemplate.postForEntity(postsUri,postEntity7,PostResponseDTO.class);
-        restTemplate.postForEntity(postsUri,postEntity8,PostResponseDTO.class);
-        restTemplate.postForEntity(postsUri,postEntity9,PostResponseDTO.class);
-
+        //13 posts for topic#2
+        for (int i = topic1Amount + topic2Amount; i < topic1Amount + topic2Amount + topic3Amount; i++) {
+            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response2.getBody().getId()),jwtToken);
+        }
 
         HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(headers);
         //WHEN
@@ -168,9 +153,9 @@ public class TopicTests {
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
 
-        Assert.assertEquals("Topic3", response.getBody().get(0).getTitle()); //topic#3 with 4 posts
-        Assert.assertEquals("Topic1", response.getBody().get(1).getTitle()); //topic#1 with 3 posts
-        Assert.assertEquals("Topic2", response.getBody().get(2).getTitle()); //topic#2 with 2 post
+        Assert.assertEquals("T3", response.getBody().get(0).getTitle()); //topic#3 with 15 posts
+        Assert.assertEquals("T1", response.getBody().get(1).getTitle()); //topic#1 with 14 posts
+        Assert.assertEquals("T2", response.getBody().get(2).getTitle()); //topic#2 with 13 posts
 
     }
 
@@ -235,6 +220,58 @@ public class TopicTests {
         }
     }
 
+  @Test
+  public void testGetPostsByTopic() throws URISyntaxException {
+    //GIVEN
+    RestTemplate restTemplate = new RestTemplate();
+    ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+    String jwtToken = loginResponse.getBody().getToken();
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", "Bearer " + jwtToken);
+
+    //post new topics
+    TopicCreateDTO topic1 = new TopicCreateDTO("Topic1", "description");
+
+
+    HttpEntity<TopicCreateDTO> topicEntity1 = new HttpEntity<>(topic1, headers);
+
+    final String topicsUrl = "http://localhost:" + randomServerPort + "/topic";
+    URI topicsUri = new URI(topicsUrl);
+
+    ResponseEntity<TopicResponseDTO> response1 = restTemplate.postForEntity(topicsUri, topicEntity1, TopicResponseDTO.class);
+
+
+
+    // posts for topic#1
+    PostCreateDTO post1 = new PostCreateDTO("Post1","description","testUrl",response1.getBody().getId());
+    PostCreateDTO post2 = new PostCreateDTO("Post2","description","testUrl",response1.getBody().getId());
+    PostCreateDTO post3 = new PostCreateDTO("Post3","description","testUrl",response1.getBody().getId());
+
+    HttpEntity<PostCreateDTO> postEntity1 = new HttpEntity<>(post1, headers);
+    HttpEntity<PostCreateDTO> postEntity2 = new HttpEntity<>(post2, headers);
+    HttpEntity<PostCreateDTO> postEntity3 = new HttpEntity<>(post3, headers);
+
+    final String postsUrl = "http://localhost:" + randomServerPort + "/post";
+    URI postsUri = new URI(postsUrl);
+
+    restTemplate.postForEntity(postsUri,postEntity1,PostResponseDTO.class);
+    restTemplate.postForEntity(postsUri,postEntity2,PostResponseDTO.class);
+    restTemplate.postForEntity(postsUri,postEntity3,PostResponseDTO.class);
+
+    final String topicsUrl2 = "http://localhost:" + randomServerPort + "/topicposts/" +response1.getBody().getId();
+    URI topicsUri2 = new URI(topicsUrl2);
+
+    HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(headers);
+    //WHEN
+    ResponseEntity<List<PostGetDTO>> response = restTemplate.exchange(topicsUri2, HttpMethod.GET, entity, new ParameterizedTypeReference<List<PostGetDTO>>() {});
+    //THEN
+    Assert.assertEquals(200, response.getStatusCodeValue());
+
+    Assert.assertEquals("Post1", response.getBody().get(0).getTitle());
+    Assert.assertEquals("Post2", response.getBody().get(1).getTitle());
+    Assert.assertEquals("Post3", response.getBody().get(2).getTitle());
+
+  }
 
     private ResponseEntity<JwtResponseDTO> loginUser(String email, String password) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
@@ -244,5 +281,19 @@ public class TopicTests {
         LoginDTO loginDTO = new LoginDTO(email, password);
         HttpEntity<LoginDTO> loginRequest = new HttpEntity<>(loginDTO, loginHeaders);
         return restTemplate.postForEntity(loginUri, loginRequest, JwtResponseDTO.class);
+    }
+
+    private void addPostToTopic(PostCreateDTO post, String jwt) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwt);
+
+        HttpEntity<PostCreateDTO> postEntity = new HttpEntity<>(post, headers);
+
+        final String postsUrl = "http://localhost:" + randomServerPort + "/post";
+        URI postsUri = new URI(postsUrl);
+
+        restTemplate.postForEntity(postsUri,postEntity, PostResponseDTO.class);
     }
 }

@@ -1,9 +1,10 @@
 package facultad.trendz;
 
-import facultad.trendz.dto.PostCreateDTO;
-import facultad.trendz.dto.PostResponseDTO;
-import facultad.trendz.dto.TopicCreateDTO;
-import facultad.trendz.dto.TopicResponseDTO;
+import facultad.trendz.dto.post.PostCreateDTO;
+import facultad.trendz.dto.post.PostEditDTO;
+import facultad.trendz.dto.post.PostResponseDTO;
+import facultad.trendz.dto.topic.TopicCreateDTO;
+import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.JwtResponseDTO;
 import facultad.trendz.dto.user.LoginDTO;
 import facultad.trendz.model.Post;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
@@ -76,14 +78,157 @@ public class PostTests {
         Long bodyId = topicResponse.getBody().getId();
 
         try {
-        //WHEN trying to create a new post with an already used title
+            //WHEN trying to create a new post with an already used title
             postPost(jwtToken, "usedPostTitle", "test description", "testLink.com", bodyId);
 
-        //THEN
+            //THEN
             Assert.fail();
         } catch (HttpClientErrorException e) {
             Assert.assertEquals(409, e.getRawStatusCode());
             Assert.assertTrue(e.getResponseBodyAsString().contains("Title usedPostTitle already in use"));
+        }
+    }
+
+    public void testPostEdit() throws URISyntaxException {
+        //GIVEN
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+
+        String jwtToken = loginResponse.getBody().getToken();
+
+        //post new Topic
+        ResponseEntity<TopicResponseDTO> topicResponse = postTopic(jwtToken, "testTopic", "test description");
+
+        //post new Post
+        ResponseEntity<PostResponseDTO> postResponse = postPost(jwtToken, "testTitle", "test description", "testLink.com", topicResponse.getBody().getId());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken);
+
+        PostEditDTO editedPost = new PostEditDTO("newTitle", "New description", "newLink.com");
+        HttpEntity<PostEditDTO> postEditEntity = new HttpEntity<>(editedPost, headers);
+        final String postEditUrl = String.format("http://localhost:%d/post/%d", randomServerPort, postResponse.getBody().getId());
+        URI postEditUri = new URI(postEditUrl);
+
+        //WHEN
+        ResponseEntity<PostResponseDTO> response = restTemplate.exchange(postEditUri, HttpMethod.PUT, postEditEntity, PostResponseDTO.class);
+
+        //THEN
+        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getId()); //keeps same id as original post
+        Assert.assertEquals("newTitle", response.getBody().getTitle()); //title is edited to new title
+        Assert.assertEquals("New description", response.getBody().getDescription()); // description is edited to new description
+        Assert.assertEquals("newLink.com", response.getBody().getLink()); // link is edited to new link
+
+        Optional<Post> post = postRepository.findById(response.getBody().getId()); // Post also updated on db
+        Assert.assertTrue(post.isPresent());
+        Assert.assertEquals("newTitle", post.get().getTitle());
+        Assert.assertEquals("New description", post.get().getDescription());
+        Assert.assertEquals("newLink.com", post.get().getLink());
+    }
+
+    @Test
+    public void testPostEditSingleValue() throws URISyntaxException {
+        //GIVEN
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+
+        String jwtToken = loginResponse.getBody().getToken();
+
+        //post new Topic
+        ResponseEntity<TopicResponseDTO> topicResponse = postTopic(jwtToken, "testTopic2", "test description");
+
+        //post new Post
+        ResponseEntity<PostResponseDTO> postResponse = postPost(jwtToken, "testTitle2", "test description", "testLink.com", topicResponse.getBody().getId());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken);
+
+        PostEditDTO editedPost = new PostEditDTO("newTitle2", null, null);
+        HttpEntity<PostEditDTO> postEditEntity = new HttpEntity<>(editedPost, headers);
+        final String postEditUrl = String.format("http://localhost:%d/post/%d", randomServerPort, postResponse.getBody().getId());
+        URI postEditUri = new URI(postEditUrl);
+
+        //WHEN
+        ResponseEntity<PostResponseDTO> response = restTemplate.exchange(postEditUri, HttpMethod.PUT, postEditEntity, PostResponseDTO.class);
+
+        //THEN
+        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getId()); //keeps same id as original post
+        Assert.assertEquals("newTitle2", response.getBody().getTitle()); //title is edited to new title
+        Assert.assertEquals("test description", response.getBody().getDescription()); // description remains unchanged
+        Assert.assertEquals("testLink.com", response.getBody().getLink()); // link remains unchanged
+
+        Optional<Post> post = postRepository.findById(response.getBody().getId()); // Post also updated on db
+        Assert.assertTrue(post.isPresent());
+        Assert.assertEquals("newTitle2", post.get().getTitle());
+        Assert.assertEquals("test description", post.get().getDescription());
+        Assert.assertEquals("testLink.com", post.get().getLink());
+    }
+
+    @Test
+    public void testPostEditWithInvalidTitle() throws URISyntaxException {
+        //GIVEN
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+
+        String jwtToken = loginResponse.getBody().getToken();
+
+        //post new Topic
+        ResponseEntity<TopicResponseDTO> topicResponse = postTopic(jwtToken, "testTopic3", "test description");
+
+        //post new Post
+        ResponseEntity<PostResponseDTO> postResponse = postPost(jwtToken, "testTitle3", "test description", "testLink.com", topicResponse.getBody().getId());
+        //post another Post
+        postPost(jwtToken, "usedTestTitle", "test description", "testLink.com", topicResponse.getBody().getId());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken);
+
+        PostEditDTO editedPost = new PostEditDTO("usedTestTitle", "description", "link");
+        HttpEntity<PostEditDTO> postEditEntity = new HttpEntity<>(editedPost, headers);
+        final String postEditUrl = String.format("http://localhost:%d/post/%d", randomServerPort, postResponse.getBody().getId());
+        URI postEditUri = new URI(postEditUrl);
+
+        try {
+        //WHEN editing post with an already used title
+            restTemplate.exchange(postEditUri, HttpMethod.PUT, postEditEntity, PostResponseDTO.class);
+        //THEN
+            Assert.fail();
+        } catch (HttpClientErrorException e) {
+            Assert.assertEquals(409, e.getRawStatusCode());
+            Assert.assertTrue(e.getResponseBodyAsString().contains("Title usedTestTitle already in use"));
+        }
+    }
+
+    @Test
+    public void testPostEditWithInvalidId() throws URISyntaxException {
+        //GIVEN
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+
+        String jwtToken = loginResponse.getBody().getToken();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken);
+
+        PostEditDTO editedPost = new PostEditDTO("newTitle", "description", "link");
+        HttpEntity<PostEditDTO> postEditEntity = new HttpEntity<>(editedPost, headers);
+        final String postEditUrl = String.format("http://localhost:%d/post/%d", randomServerPort, Long.MAX_VALUE);
+        URI postEditUri = new URI(postEditUrl);
+
+        try {
+        //WHEN
+            restTemplate.exchange(postEditUri, HttpMethod.PUT, postEditEntity, PostResponseDTO.class);
+        //THEN
+            Assert.fail();
+        } catch (HttpClientErrorException e) {
+            Assert.assertEquals(404, e.getRawStatusCode());
+            Assert.assertTrue(e.getResponseBodyAsString().contains("Requested post not found"));
         }
     }
 

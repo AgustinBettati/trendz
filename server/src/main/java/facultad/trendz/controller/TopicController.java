@@ -1,8 +1,9 @@
 package facultad.trendz.controller;
 
 import facultad.trendz.dto.MessageResponseDTO;
-import facultad.trendz.dto.TopicCreateDTO;
-import facultad.trendz.dto.TopicResponseDTO;
+import facultad.trendz.dto.post.PostGetDTO;
+import facultad.trendz.dto.topic.TopicCreateDTO;
+import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -54,6 +55,15 @@ public class TopicController {
     public ResponseEntity<MessageResponseDTO> deleteTopic(@PathVariable Long topicId){
         topicService.deleteTopic(topicId);
         final MessageResponseDTO body = new MessageResponseDTO("Topic deleted");
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body,status);
+    }
+
+
+
+    @GetMapping("/topicposts/{topicId}")
+    public ResponseEntity<List<PostGetDTO>> getTopicPosts(@PathVariable Long topicId){
+        List<PostGetDTO> body=topicService.getTopicPosts(topicId);
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body,status);
     }

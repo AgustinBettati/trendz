@@ -1,4 +1,4 @@
-package facultad.trendz.exception;
+package facultad.trendz.exception.topic;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

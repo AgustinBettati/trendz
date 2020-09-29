@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import './Home.css';
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
-import glasses from '../../assets/glasses.png';
 import ReactPaginate from "react-paginate";
 import {parseJwt} from "../Routing/utils";
 import {Icon} from "react-icons-kit";
@@ -59,11 +58,15 @@ class Home extends Component<Props, State> {
     }
 
     renderTopics = (currentPage: number) => {
-        return this.state.topics.slice(currentPage*5, currentPage*5+5)
+        return this.state.topics.slice(currentPage*8, currentPage*8+8)
     }
 
     handlePageClick = (data: {selected: number}) => {
         this.setState({currentPage: data.selected})
+    }
+
+    handleTopicSelection = (topic: Topic) => {
+        this.props.history.push('/main/topic', {topic: topic})
     }
 
     render() {
@@ -103,26 +106,31 @@ class Home extends Component<Props, State> {
                     {
                         this.state.topics.length &&
                         this.renderTopics(this.state.currentPage).map((topic) => (
-                            <div className={'topic-card'}>
-                                <div className={'topic-header'}>
-                                    {topic.title}
-                                    {
-                                        parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') &&
-                                        <Icon
-                                            icon={trash}
-                                            onClick={() => this.handleDelete(topic.id)}
-                                            size={20}
-                                            className={'delete-icon'}
-                                        />
-                                    }
-                                </div>
-                                <div className={'topic-divider'}/>
-                                <div className={'topic-body'}>
-                                    {topic.description}
-                                </div>
-                                <div className={'topic-footer'}>
-                                    {/* onClick to navigate to topic */}
-                                    <img src={glasses} alt={''} onClick={() => null}/>
+                            <div className={'card-wrapper'}>
+                                <div className={'topic-card'} onClick={() => this.handleTopicSelection(topic)}>
+                                    <div className={'topic-header'}>
+                                        {topic.title}
+                                        {
+                                            parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') &&
+                                            <Icon
+                                                icon={trash}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    this.handleDelete(topic.id);
+                                                }}
+                                                size={20}
+                                                className={'delete-icon'}
+                                            />
+                                        }
+                                    </div>
+                                    <div className={'topic-divider'}/>
+                                    <div className={'topic-body'}>
+                                        {
+                                            topic.description ?
+                                                topic.description :
+                                                'No description provided'
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         ))
@@ -131,8 +139,8 @@ class Home extends Component<Props, State> {
                 <div className={'home-footer'}>
                     <ReactPaginate
                         onPageChange={this.handlePageClick}
-                        pageCount={this.state.topics.length/5}
-                        pageRangeDisplayed={5}
+                        pageCount={this.state.topics.length/8}
+                        pageRangeDisplayed={8}
                         marginPagesDisplayed={2}
                         previousLabel={"<"}
                         nextLabel={">"}
