@@ -1,15 +1,14 @@
 package facultad.trendz.dto;
 
-public class UserDeletedDTO {
+public class MessageResponseDTO {
 
     private String message;
 
-    public UserDeletedDTO(String message) {
+    public MessageResponseDTO(String message) {
         this.message = message;
     }
 
-
-    public UserDeletedDTO() {
+    public MessageResponseDTO() {
     }
 
     public String getMessage() {

@@ -6,9 +6,9 @@ import logo from '../../assets/TrendzLogo.png';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {registerUser} from "../../api/UserApi";
-import {NavLink} from "react-router-dom";
+import {NavLink,RouteComponentProps} from "react-router-dom";
 
-export type Props = {}
+export type Props =  RouteComponentProps<any>
 
 export type State = {
     errorMessage: string,
@@ -44,6 +44,7 @@ export class Register extends Component<Props, State> {
         registerUser(email, username, password, 'user')
             .then(() => {
                 this.setState({errorMessage: '', successMessage: 'User successfully registered'});
+                this.props.history.push('/');
             })
             .catch((err) => {
                 this.setState({successMessage: '', errorMessage: err.message});

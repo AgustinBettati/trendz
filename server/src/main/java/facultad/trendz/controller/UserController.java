@@ -3,11 +3,7 @@ package facultad.trendz.controller;
 import facultad.trendz.config.jwt.JwtUtils;
 import facultad.trendz.config.model.MyUserDetails;
 import facultad.trendz.dto.*;
-import facultad.trendz.exception.UsernameExistsException;
-import facultad.trendz.dto.JwtResponseDTO;
-import facultad.trendz.dto.LoginDTO;
-import facultad.trendz.dto.UserCreateDTO;
-import facultad.trendz.dto.UserResponseDTO;
+import facultad.trendz.dto.user.*;
 import facultad.trendz.model.User;
 import facultad.trendz.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +15,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,11 +71,11 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/user")
-    public ResponseEntity<?> deleteUser()  {
+    public ResponseEntity<MessageResponseDTO> deleteUser()  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long id = ((MyUserDetails)authentication.getPrincipal()).getId();
          userService.deleteUser(id);
-        UserDeletedDTO dto= new UserDeletedDTO("User Deleted");
+        MessageResponseDTO dto= new MessageResponseDTO("User Deleted");
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(dto, status);
     }
@@ -95,6 +89,18 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         JwtResponseDTO body = new JwtResponseDTO(jwtUtils.generateJwtToken(authentication));
 
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body, status);
+    }
+
+    @PutMapping("/user")
+    public ResponseEntity<MessageResponseDTO> editProfile(@RequestBody ProfileEditDTO profileEditDTO, Authentication authentication){
+
+        MyUserDetails userDetails = (MyUserDetails)authentication.getPrincipal();
+
+        userService.editUser(profileEditDTO, userDetails.getId());
+
+        MessageResponseDTO body = new MessageResponseDTO("Profiled edited successfully");
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body, status);
     }

@@ -4,11 +4,11 @@ import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {getUserData} from "../../api/UserApi";
+import {editUserData, getUserData} from "../../api/UserApi";
 import {parseJwt} from "../Routing/utils";
-import {NavLink} from "react-router-dom";
+import {NavLink, RouteComponentProps} from "react-router-dom";
 
-export type Props = {}
+export type Props = RouteComponentProps<any>
 
 export type State = {
     username: string,
@@ -71,6 +71,20 @@ export class EditProfile extends Component<Props, State> {
             .catch(() => this.setState({username: 'Unknown', email: 'Unknown'}))
     }
 
+    handleEdit = (username: string, oldPassword: string, newPassword: string) => {
+
+        editUserData(username === this.state.username ? null : username,
+            oldPassword === '' ? null : oldPassword,
+            newPassword === '' ? null : newPassword)
+            .then(() => {
+                this.setState({errorMessage: '', successMessage: 'User edited successfully'});
+                this.props.history.push('/main/profile');
+            })
+            .catch((e) => {
+                this.setState({successMessage: '', errorMessage: e.message});
+            })
+    }
+
     handleOnFocus = (prop: string) => {
         this.setState({errorMessage: '', successMessage: ''})
         switch (prop){
@@ -106,10 +120,6 @@ export class EditProfile extends Component<Props, State> {
         }
     }
 
-    handleEdit = (values: object) => {
-        console.log(values)
-    }
-
     render() {
         return (
             <div className={"main-container"}>
@@ -121,7 +131,7 @@ export class EditProfile extends Component<Props, State> {
                                 <div className={'edit-title'}>Edit Profile</div>
                                 <Formik
                                     initialValues={{username: this.state.username, oldPassword: '', newPassword: '', confirmNewPassword: ''}}
-                                    onSubmit={values => this.handleEdit(values)}
+                                    onSubmit={values => this.handleEdit(values.username,values.oldPassword,values.newPassword)}
                                     validationSchema={registerSchema}
                                 >
                                     {(props) => (
@@ -187,7 +197,7 @@ export class EditProfile extends Component<Props, State> {
                                             <div className={'edit-footer'}>
                                                 <TrendzButton
                                                     title={'Save changes'}
-                                                    onClick={() => props.values.username === '' || props.values.username === this.state.username ?
+                                                    onClick={() => props.values.username === '' || (props.values.username === this.state.username && props.values.newPassword === '' && props.values.oldPassword === '' && props.values.confirmNewPassword === '') ?
                                                         this.setState({errorMessage: 'Please, complete or change fields before submitting'}) : props.handleSubmit()}
                                                     disabled={!!(props.errors.username || props.errors.oldPassword || props.errors.newPassword || props.errors.confirmNewPassword)}
                                                 />

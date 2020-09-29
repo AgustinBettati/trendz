@@ -4,3 +4,9 @@ export type User = {
   surname: string;
   email: string;
 }
+
+export type Topic = {
+  id: number,
+  title: string,
+  description: string
+}

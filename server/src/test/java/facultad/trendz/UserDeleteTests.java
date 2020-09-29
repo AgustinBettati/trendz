@@ -1,6 +1,7 @@
 package facultad.trendz;
 
-import facultad.trendz.dto.*;
+import facultad.trendz.dto.MessageResponseDTO;
+import facultad.trendz.dto.user.*;
 import facultad.trendz.repository.UserRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -60,7 +60,7 @@ public class UserDeleteTests {
         deleteHeader.add("Authorization","Bearer "+responseEntity.getBody().getToken());
         HttpEntity<JwtResponseDTO> httpEntity=new HttpEntity<>(deleteHeader);
         //when
-        ResponseEntity<UserDeletedDTO> responseEntity1= restTemplate.exchange(deleteUri, HttpMethod.DELETE,httpEntity, UserDeletedDTO.class);
+        ResponseEntity<MessageResponseDTO> responseEntity1= restTemplate.exchange(deleteUri, HttpMethod.DELETE,httpEntity, MessageResponseDTO.class);
         //then
         Assert.assertEquals(200,responseEntity1.getStatusCodeValue());
         Assert.assertTrue(responseEntity1.getBody().getMessage().contains("User Deleted"));

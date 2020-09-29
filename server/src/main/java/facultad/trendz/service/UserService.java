@@ -1,13 +1,15 @@
 package facultad.trendz.service;
 
-import facultad.trendz.dto.UserCreateDTO;
-import facultad.trendz.dto.UserResponseDTO;
-import facultad.trendz.exception.EmailExistsException;
-import facultad.trendz.exception.UsernameExistsException;
+import facultad.trendz.dto.user.ProfileEditDTO;
+import facultad.trendz.dto.user.UserCreateDTO;
+import facultad.trendz.dto.user.UserResponseDTO;
+import facultad.trendz.exception.user.EmailExistsException;
+import facultad.trendz.exception.user.IncorrectPasswordException;
+import facultad.trendz.exception.user.UsernameExistsException;
 import facultad.trendz.model.ERole;
 import facultad.trendz.model.Role;
 import facultad.trendz.model.User;
-import facultad.trendz.exception.UserNotFoundException;
+import facultad.trendz.exception.user.UserNotFoundException;
 import facultad.trendz.repository.RoleRepository;
 import facultad.trendz.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +62,7 @@ public class UserService {
         userRepository.delete(user.get());
     }
 
-    public void validateUsername(String username) throws UsernameExistsException {
+    public void validateUsername(String username) {
         if (userRepository.existsByUsername(username))
             throw new UsernameExistsException("Username " + username + " already taken");
     }
@@ -76,5 +78,30 @@ public class UserService {
         if (!user.isPresent()) throw new UserNotFoundException();
 
         return new UserResponseDTO(user.get().getId(), user.get().getEmail(), user.get().getUsername(), user.get().getRole());
+    }
+
+    public void editUser(ProfileEditDTO profileEditDTO, Long userId) {
+        final Optional<User> user = userRepository.findById(userId);
+        if (!user.isPresent()) throw new UserNotFoundException();
+
+        String oldPassword = profileEditDTO.getOldPassword();
+        String newPassword = profileEditDTO.getNewPassword();
+
+        if (oldPassword != null){
+            if (passwordEncoder.matches(oldPassword, user.get().getPassword())) {
+                if (newPassword != null)
+                    user.get().setPassword(passwordEncoder.encode(newPassword));
+            } else throw new IncorrectPasswordException();
+        }
+
+        String newUsername = profileEditDTO.getUsername();
+
+        if (newUsername != null){
+            if(!userRepository.existsByUsername(newUsername)) {
+                user.get().setUsername(newUsername);
+            } else throw new UsernameExistsException(String.format("Username %s already taken",newUsername));
+        }
+
+        userRepository.save(user.get());
     }
 }
