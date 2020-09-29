@@ -114,7 +114,10 @@ class Home extends Component<Props, State> {
                                             parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') &&
                                             <Icon
                                                 icon={trash}
-                                                onClick={() => this.handleDelete(topic.id)}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    this.handleDelete(topic.id);
+                                                }}
                                                 size={20}
                                                 className={'delete-icon'}
                                             />
