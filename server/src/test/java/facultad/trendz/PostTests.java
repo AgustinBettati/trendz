@@ -2,6 +2,7 @@ package facultad.trendz;
 
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostEditDTO;
+import facultad.trendz.dto.post.PostGetDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
@@ -15,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
@@ -274,7 +277,7 @@ public class PostTests {
 
     @Test
     public void testGetPost() throws URISyntaxException {
-        /*//GIVEN
+        //GIVEN
         ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
 
         String jwtToken = loginResponse.getBody().getToken();
@@ -282,19 +285,27 @@ public class PostTests {
         //post new Topic
         ResponseEntity<TopicResponseDTO> topicResponse = postTopic(jwtToken, "testTopic4", "test description");
 
-        //WHEN
+        //post new post
         ResponseEntity<PostResponseDTO> postResponse = postPost(jwtToken, "testTitle4", "test description", "testLink.com", topicResponse.getBody().getId());
 
-        //THEN
-        Assert.assertEquals(201, postResponse.getStatusCodeValue());
-        Assert.assertEquals("testTitle4", postResponse.getBody().getTitle());
-        Assert.assertEquals("test description", postResponse.getBody().getDescription());
-        Assert.assertEquals("testLink.com", postResponse.getBody().getLink());
+        RestTemplate restTemplate = new RestTemplate();
 
-        Optional<Post> post = postRepository.findById(postResponse.getBody().getId());
-        Assert.assertTrue(post.isPresent());
-        Assert.assertEquals("testTitle4", post.get().getTitle());
-        Assert.assertEquals("test description", post.get().getDescription());
-        Assert.assertEquals("testLink.com", post.get().getLink());*/
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken);
+
+
+        HttpEntity<PostCreateDTO> getEntity = new HttpEntity<>(headers);
+
+        final String url = "http://localhost:" + randomServerPort + "/post/"+postResponse.getBody().getId();
+        URI uri = new URI(url);
+
+
+
+        ResponseEntity<PostGetDTO> response = restTemplate.exchange(uri, HttpMethod.GET, getEntity, new ParameterizedTypeReference<PostGetDTO>() {});
+        //THEN
+        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assert.assertEquals("testTitle4", response.getBody().getTitle());
+        Assert.assertEquals("test description", response.getBody().getDescription());
+        Assert.assertEquals("testLink.com", response.getBody().getLink());
     }
 }
