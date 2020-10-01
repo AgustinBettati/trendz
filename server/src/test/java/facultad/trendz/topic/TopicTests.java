@@ -1,4 +1,4 @@
-package facultad.trendz;
+package facultad.trendz.topic;
 
 import facultad.trendz.dto.*;
 import facultad.trendz.dto.post.PostCreateDTO;

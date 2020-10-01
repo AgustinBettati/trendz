@@ -37,14 +37,18 @@ class OnStartLoader implements ApplicationRunner {
         roleRepository.save(new Role(ERole.ROLE_USER, 2L));
 
         Role role = roleRepository.getByEnumRole(ERole.ROLE_ADMIN);
+        Role userRole = roleRepository.getByEnumRole(ERole.ROLE_USER);
         userRepository.save(new User("agustinbettati@gmail.com", "AgustinBettati", passwordEncoder.encode("password"), role));
         userRepository.save(new User("marcoskhabie@gmail.com", "MarcosKhabie", passwordEncoder.encode("password"), role));
         userRepository.save(new User("gonzalodeachaval@gmail.com", "GonzaloDeAchaval", passwordEncoder.encode("password"), role));
         userRepository.save(new User("florvimberg@gmail.com", "FlorenciaVimberg", passwordEncoder.encode("password"), role));
         userRepository.save(new User("admin@gmail.com", "admin", passwordEncoder.encode("admin"), role));
+        userRepository.save(new User("user@gmail.com", "user", passwordEncoder.encode("user"), userRole));
         userRepository.save(new User("1@gmail.com", "1", passwordEncoder.encode("1"), role));
         userRepository.save(new User("2@gmail.com", "2", passwordEncoder.encode("2"), role));
         userRepository.save(new User("3@gmail.com", "3", passwordEncoder.encode("3"), role));
+
+
         topicRepository.save(new Topic("Movies","Here we talk about recent theatrical releases", new Date()));
         topicRepository.save(new Topic("Recipes","Here we share our favourite recipes :)", new Date()));
         topicRepository.save(new Topic("Books","Post about your new favourite book here!", new Date()));
@@ -57,6 +61,8 @@ class OnStartLoader implements ApplicationRunner {
         topicRepository.save(new Topic("Movies10","Here we talk about recent theatrical releases", new Date()));
         topicRepository.save(new Topic("Movies11","Here we talk about recent theatrical releases", new Date()));
         topicRepository.save(new Topic("Movies12","Here we talk about recent theatrical releases", new Date()));
+
+
         postRepository.save(new Post("Star Wars","Han Solo was the best","alink",new Date(),topicRepository.getTopicById(Long.valueOf(1)),userRepository.findByEmail("1@gmail.com")));
         postRepository.save(new Post("Star Trek","Loved This Movie","https://es.wikipedia.org/wiki/Star_Trek",new Date(),topicRepository.getTopicById(Long.valueOf(1)),userRepository.findByEmail("1@gmail.com")));
         postRepository.save(new Post("Twilight","My daughter loved the werewolfs","alink",new Date(),topicRepository.getTopicById(Long.valueOf(1)),userRepository.findByEmail("1@gmail.com")));

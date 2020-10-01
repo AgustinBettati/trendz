@@ -1,6 +1,5 @@
-package facultad.trendz;
+package facultad.trendz.topic;
 
-import facultad.trendz.dto.*;
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostGetDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
@@ -21,7 +20,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;

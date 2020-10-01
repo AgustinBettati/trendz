@@ -1,4 +1,4 @@
-package facultad.trendz;
+package facultad.trendz.user;
 
 import facultad.trendz.dto.*;
 import facultad.trendz.dto.user.*;
@@ -214,7 +214,7 @@ public class UserProfileTests {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
 
-        ProfileEditDTO body = new ProfileEditDTO("1", "testPassword", "newPassword"); // username '1' already in use
+        ProfileEditDTO body = new ProfileEditDTO("admin", "testPassword", "newPassword"); // username 'admin' already in use
 
         HttpEntity<ProfileEditDTO> entity = new HttpEntity<>(body, headers);
 
@@ -231,7 +231,7 @@ public class UserProfileTests {
         } catch (HttpClientErrorException e) {
 
             Assert.assertEquals(409, e.getRawStatusCode());
-            Assert.assertTrue(e.getResponseBodyAsString().contains("Username 1 already taken"));
+            Assert.assertTrue(e.getResponseBodyAsString().contains("Username admin already taken"));
         }
     }
 

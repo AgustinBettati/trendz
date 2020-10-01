@@ -19,7 +19,7 @@ public class User {
     @ManyToOne
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Post> posts;
 
     public User() {
