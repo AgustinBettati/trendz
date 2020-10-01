@@ -47,6 +47,7 @@ public class PostController {
         return new ResponseEntity<>(body, status);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @postService.getPostAuthor(#postId).equals(authentication.getName())")
     @PutMapping("/post/{postId}")
     public ResponseEntity<PostResponseDTO> editPost(@Valid @RequestBody PostEditDTO postEdit, @PathVariable Long postId,Authentication authentication) {
         final PostResponseDTO body = postService.editPost(postEdit, postId);
