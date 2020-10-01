@@ -1,4 +1,4 @@
-package facultad.trendz;
+package facultad.trendz.post;
 
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostEditDTO;
@@ -29,7 +29,7 @@ import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PostTests {
+public class PostCreateAndEditTests {
 
     @LocalServerPort
     int randomServerPort;
