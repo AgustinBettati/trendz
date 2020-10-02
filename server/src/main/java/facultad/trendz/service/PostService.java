@@ -44,32 +44,32 @@ public class PostService {
 
     public PostResponseDTO editPost(PostEditDTO postEdit, Long postId) {
         final Optional<Post> post = postRepository.findById(postId);
-        if (!post.isPresent()) throw new PostNotFoundException();
+        return post.map(post1 -> {
 
-        String newTitle = postEdit.getTitle();
-        String newDescription = postEdit.getDescription();
-        String newLink = postEdit.getLink();
+            String newTitle = postEdit.getTitle();
+            String newDescription = postEdit.getDescription();
+            String newLink = postEdit.getLink();
 
-        if(!newTitle.equals(post.get().getTitle())) {
-            if (postRepository.existsByTitle(newTitle)) {
-                throw new PostExistsException(String.format("Title %s already in use", newTitle));
-            } else post.get().setTitle(newTitle);
-        }
+            if (!newTitle.equals(post1.getTitle())) {
+                if (postRepository.existsByTitle(newTitle)) {
+                    throw new PostExistsException(String.format("Title %s already in use", newTitle));
+                } else post1.setTitle(newTitle);
+            }
 
-        if (newDescription != null) post.get().setDescription(newDescription);
+            if (newDescription != null) post1.setDescription(newDescription);
 
-        if (newLink != null) post.get().setLink(newLink);
+            if (newLink != null) post1.setLink(newLink);
 
-        Post editedPost = postRepository.save(post.get());
+            Post editedPost = postRepository.save(post1);
 
-        return new PostResponseDTO(editedPost.getId(),
-                editedPost.getTitle(),
-                editedPost.getDescription(),
-                editedPost.getLink(),
-                editedPost.getDate() ,
-                editedPost.getTopic().getId(),
-                editedPost.getUser().getId()
-        );
+            return new PostResponseDTO(editedPost.getId(),
+                    editedPost.getTitle(),
+                    editedPost.getDescription(),
+                    editedPost.getLink(),
+                    editedPost.getDate(),
+                    editedPost.getTopic().getId(),
+                    editedPost.getUser().getId());
+        }).orElseThrow(PostNotFoundException::new);
     }
 
     public PostGetDTO getPost(Long postId){
@@ -84,10 +84,16 @@ public class PostService {
                 post.get().getUser().getId(),
                 post.get().getUser().getUsername()
         );
-
-
-
     }
 
+    public String getPostAuthor(Long postId){
+        final Optional<Post> post= postRepository.findById(postId);
+        return post.map(post1 ->
+                post1.getUser().getUsername()
+        ).orElseThrow(PostNotFoundException::new);
+    }
 
+    public void deletePost(Long postId) {
+        postRepository.delete(postRepository.findById(postId).orElseThrow(PostNotFoundException::new));
+    }
 }

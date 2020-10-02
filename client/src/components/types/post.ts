@@ -3,4 +3,6 @@ export type Post = {
     description: string;
     link: string;
     topicId: number;
+    userId:number;
+    username: string;
 }

@@ -24,7 +24,7 @@ public class Post {
     @JoinColumn(name="topic_id", nullable=false)
     private Topic topic;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
