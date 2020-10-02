@@ -115,7 +115,7 @@ class Topic extends Component<Props, State> {
                                                 {post.title}
                                             </div>
                                             <div className={'post-author'}>
-                                                {'by ' + post.author}
+                                                {'by ' + post.username}
                                             </div>
                                         </div>
                                         <div className={'post-topic'}>
