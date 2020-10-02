@@ -4,6 +4,7 @@ import {RouteComponentProps, withRouter} from "react-router-dom";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import {parseJwt} from "../Routing/utils";
 import Modal from "react-modal";
+import {deletePost} from "../../api/PostApi";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -36,7 +37,8 @@ class Post extends Component<Props, State> {
     }
 
     handleConfirm = () => {
-
+        deletePost(this.props.location.state.post.id).then(() =>
+            this.props.history.push('/main/topic', {topic : this.props.location.state.topic}))
     }
 
     handleDelete = () => {
@@ -69,7 +71,8 @@ class Post extends Component<Props, State> {
                         <span className={'topic-subtitle'}>{this.props.location.state.post.link}</span>
                     </div>
                     {
-                        parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') &&
+                        (parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') ||
+                            parseJwt(localStorage.getItem('token')).userId == this.props.location.state.post.userId) &&
                         <TrendzButton
                             title={'Delete post'}
                             onClick={() => this.handleDelete()}

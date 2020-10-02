@@ -70,7 +70,7 @@ class Topic extends Component<Props, State> {
     }
 
     handlePostSelection = (post: any) => {
-        this.props.history.push('/main/post', {post: post})
+        this.props.history.push('/main/post', {post: post, topic : this.props.location.state.topic})
     }
 
     render() {
