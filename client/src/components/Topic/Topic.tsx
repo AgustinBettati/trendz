@@ -6,6 +6,7 @@ import ReactPaginate from "react-paginate";
 import {parseJwt} from "../Routing/utils";
 import Modal from "react-modal";
 import {deleteTopic} from "../../api/TopicApi";
+import { getTopicPosts} from "../../api/TopicApi";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -40,11 +41,12 @@ class Topic extends Component<Props, State> {
     };
 
     componentDidMount() {
+        this.getPosts()
 
     }
 
-    getTopics() {
-
+    getPosts() {
+        getTopicPosts(this.props.location.state.topic.id).then(res => this.setState({posts: res}))
     }
 
     handleCancel = () => {
