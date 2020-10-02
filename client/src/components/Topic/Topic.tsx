@@ -67,6 +67,10 @@ class Topic extends Component<Props, State> {
         this.setState({currentPage: data.selected})
     }
 
+    handlePostSelection = (post: any) => {
+        this.props.history.push('/main/post', {post: post})
+    }
+
     render() {
         return (
             <div className={'topic-container'}>
@@ -106,7 +110,7 @@ class Topic extends Component<Props, State> {
                         this.state.posts.length &&
                         this.renderPosts(this.state.currentPage).map((post) => (
                             <div className={'post-card-wrapper'}>
-                                <div className={'post-card'}>
+                                <div className={'post-card'} onClick={() => this.handlePostSelection(post)}>
                                     <div className={'post-card-header'}>
                                         <div className={'post-card-title'}>
                                             <div className={'post-title'}>
