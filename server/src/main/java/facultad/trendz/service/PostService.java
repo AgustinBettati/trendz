@@ -1,5 +1,6 @@
 package facultad.trendz.service;
 
+import facultad.trendz.config.model.MyUserDetails;
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostEditDTO;
 import facultad.trendz.dto.post.PostGetDTO;
@@ -11,6 +12,7 @@ import facultad.trendz.repository.PostRepository;
 import facultad.trendz.repository.TopicRepository;
 import facultad.trendz.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -86,12 +88,22 @@ public class PostService {
         );
     }
 
-    public String getPostAuthor(Long postId){
+    public Long getPostAuthor(Long postId){
         final Optional<Post> post= postRepository.findById(postId);
         return post.map(post1 ->
-                post1.getUser().getUsername()
+                post1.getUser().getId()
         ).orElseThrow(PostNotFoundException::new);
     }
+
+    public boolean postAuthorVerification(Long postId, Authentication authentication){
+        final Optional<Post> post= postRepository.findById(postId);
+        if (post==null){ throw  new PostNotFoundException();}
+        MyUserDetails myUserDetails=(MyUserDetails)authentication.getPrincipal();
+        if(post.get().getUser().getId()==myUserDetails.getId()) return true;
+        return false;
+
+    }
+
 
     public void deletePost(Long postId) {
         postRepository.delete(postRepository.findById(postId).orElseThrow(PostNotFoundException::new));

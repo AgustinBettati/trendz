@@ -39,13 +39,13 @@ class OnStartLoader implements ApplicationRunner {
         Role role = roleRepository.getByEnumRole(ERole.ROLE_ADMIN);
         Role userRole = roleRepository.getByEnumRole(ERole.ROLE_USER);
         userRepository.save(new User("agustinbettati@gmail.com", "AgustinBettati", passwordEncoder.encode("password"), role));
-        userRepository.save(new User("marcoskhabie@gmail.com", "MarcosKhabie", passwordEncoder.encode("password"), role));
+        userRepository.save(new User("marcoskhabie@gmail.com", "MarcosKhabie", passwordEncoder.encode("password"), userRole));
         userRepository.save(new User("gonzalodeachaval@gmail.com", "GonzaloDeAchaval", passwordEncoder.encode("password"), role));
         userRepository.save(new User("florvimberg@gmail.com", "FlorenciaVimberg", passwordEncoder.encode("password"), role));
         userRepository.save(new User("admin@gmail.com", "admin", passwordEncoder.encode("admin"), role));
         userRepository.save(new User("user@gmail.com", "user", passwordEncoder.encode("user"), userRole));
-        userRepository.save(new User("1@gmail.com", "Agustin", passwordEncoder.encode("1"), role));
-        userRepository.save(new User("2@gmail.com", "Florencia", passwordEncoder.encode("2"), role));
+        userRepository.save(new User("1@gmail.com", "Agustin", passwordEncoder.encode("1"), userRole));
+        userRepository.save(new User("2@gmail.com", "Florencia", passwordEncoder.encode("2"), userRole));
         userRepository.save(new User("3@gmail.com", "Mark", passwordEncoder.encode("3"), role));
 
 

@@ -6,6 +6,7 @@ import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostEditDTO;
 import facultad.trendz.dto.post.PostGetDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
+import facultad.trendz.repository.PostRepository;
 import facultad.trendz.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -47,7 +48,7 @@ public class PostController {
         return new ResponseEntity<>(body, status);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @postService.getPostAuthor(#postId).equals(authentication.getName())")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @postService.postAuthorVerification(#postId,#authentication)")
     @PutMapping("/post/{postId}")
     public ResponseEntity<PostResponseDTO> editPost(@Valid @RequestBody PostEditDTO postEdit, @PathVariable Long postId,Authentication authentication) {
         final PostResponseDTO body = postService.editPost(postEdit, postId);
@@ -62,7 +63,7 @@ public class PostController {
         return new ResponseEntity<>(body,status);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @postService.getPostAuthor(#postId).equals(authentication.getName())")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @postService.postAuthorVerification(#postId,#authentication)")
     @DeleteMapping("/post/{postId}")
     public ResponseEntity<MessageResponseDTO> deletePost(Authentication authentication, @PathVariable Long postId){
         postService.deletePost(postId);
