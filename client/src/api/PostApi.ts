@@ -29,5 +29,12 @@ export function getPostData(postId: number): Promise<any> {
     });
 }
 
+export function deletePost(postId: number) {
+    return request({
+        url: API_BASE_URL + "/post/" + postId,
+        method: 'DELETE',
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json'}
+    })
+}
 
 
