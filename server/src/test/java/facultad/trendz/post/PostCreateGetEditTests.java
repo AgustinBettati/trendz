@@ -32,7 +32,7 @@ import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PostCreateAndEditTests {
+public class PostCreateGetEditTests {
 
     @LocalServerPort
     int randomServerPort;
@@ -307,5 +307,32 @@ public class PostCreateAndEditTests {
         Assert.assertEquals("testTitle4", response.getBody().getTitle());
         Assert.assertEquals("test description", response.getBody().getDescription());
         Assert.assertEquals("testLink.com", response.getBody().getLink());
+    }
+
+    @Test
+    public void testGetNonExistentPost() throws URISyntaxException {
+        //GIVEN
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+
+        String jwtToken = loginResponse.getBody().getToken();
+
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtToken);
+
+
+        HttpEntity<PostCreateDTO> getEntity = new HttpEntity<>(headers);
+
+        final String url = "http://localhost:" + randomServerPort + "/post/"+99;
+        URI uri = new URI(url);
+
+        try{ResponseEntity<PostGetDTO> response = restTemplate.exchange(uri, HttpMethod.GET, getEntity, new ParameterizedTypeReference<PostGetDTO>() {});}
+        catch (HttpClientErrorException e){
+            Assert.assertEquals("404",e.getMessage().substring(0,3) );
+
+        }
+
     }
 }
