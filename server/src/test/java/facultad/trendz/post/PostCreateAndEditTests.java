@@ -283,10 +283,10 @@ public class PostCreateAndEditTests {
         String jwtToken = loginResponse.getBody().getToken();
 
         //post new Topic
-        ResponseEntity<TopicResponseDTO> topicResponse = postTopic(jwtToken, "testTopic4", "test description");
+        ResponseEntity<TopicResponseDTO> topicResponse = postTopic(jwtToken, "testTopic6", "test description");
 
         //post new post
-        ResponseEntity<PostResponseDTO> postResponse = postPost(jwtToken, "testTitle4", "test description", "testLink.com", topicResponse.getBody().getId());
+        ResponseEntity<PostResponseDTO> postResponse = postPost(jwtToken, "testTitle6", "test description", "testLink.com", topicResponse.getBody().getId());
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -304,7 +304,7 @@ public class PostCreateAndEditTests {
         ResponseEntity<PostGetDTO> response = restTemplate.exchange(uri, HttpMethod.GET, getEntity, new ParameterizedTypeReference<PostGetDTO>() {});
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
-        Assert.assertEquals("testTitle4", response.getBody().getTitle());
+        Assert.assertEquals("testTitle6", response.getBody().getTitle());
         Assert.assertEquals("test description", response.getBody().getDescription());
         Assert.assertEquals("testLink.com", response.getBody().getLink());
     }
