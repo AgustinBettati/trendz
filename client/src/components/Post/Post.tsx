@@ -5,6 +5,7 @@ import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import {parseJwt} from "../Routing/utils";
 import Modal from "react-modal";
 import {deletePost} from "../../api/PostApi";
+import {MdThumbDown, MdThumbUp} from 'react-icons/md';
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -20,14 +21,14 @@ class Post extends Component<Props, State> {
         this.state = {
             showModal: false,
             comments: [
-                {id: 0, author: 'Jhon Mark', body: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'}
+                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
+                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
+                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
+                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
+                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
+                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
+                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
+                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'}
             ]
         }
     };
@@ -67,18 +68,66 @@ class Post extends Component<Props, State> {
                 </Modal>
                 <div className={'post-header-wrapper'}>
                     <div className={'header-text'}>
-                        <span className={'topic-title'}>{this.props.location.state.post.title}</span>
-                        <span className={'topic-subtitle'}>{this.props.location.state.post.link}</span>
+                        <span className={'topic-subtitle'}>
+                            {'This post belongs to the topic: ' + this.props.location.state.topic.title}
+                        </span>
+                        <span className={'post-header-title'}>{this.props.location.state.post.title}</span>
+                        {
+                            this.props.location.state.post.link &&
+                            <a href={this.props.location.state.post.link} target={'_blank'}>{this.props.location.state.post.link}</a>
+                        }
                     </div>
-                    {
-                        (parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') ||
-                            parseJwt(localStorage.getItem('token')).userId == this.props.location.state.post.userId) &&
-                        <TrendzButton
-                            title={'Delete post'}
-                            onClick={() => this.handleDelete()}
-                            color={'#DF6052'}
-                        />
-                    }
+                    <div className={'post-buttons-container'}>
+                        {
+                            parseJwt(localStorage.getItem('token')).userId == this.props.location.state.post.userId &&
+                            <TrendzButton
+                                title={'Edit post'}
+                                onClick={() => null}
+                                color={'#00B090'}
+                            />
+                        }
+                        {
+                            (parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') ||
+                                parseJwt(localStorage.getItem('token')).userId == this.props.location.state.post.userId) &&
+                            <TrendzButton
+                                title={'Delete post'}
+                                onClick={() => this.handleDelete()}
+                                color={'#DF6052'}
+                            />
+                        }
+                    </div>
+                </div>
+                <div className={'post-body-wrapper'}>
+                    <div className={'body-container'}>
+                        {this.props.location.state.post.description}
+                    </div>
+                    <div className={'body-footer'}>
+                        <div className={'like-container'}>
+                            <MdThumbUp size={20} color={'#00B090'} className={'like-icon'}/>
+                            <span className={'like-value'}>295</span>
+                        </div>
+                        <div className={'like-container'}>
+                            <MdThumbDown size={20} color={'#C13D3D'} className={'like-icon'}/>
+                            <span className={'like-value'}>24</span>
+                        </div>
+                    </div>
+                </div>
+                <div className={'post-comments-wrapper'}>
+                    <div className={'post-comments-title'}>
+                        {'Comments (' + this.state.comments.length + ')'}
+                    </div>
+                    <div className={'post-comments-container'}>
+                        {
+                            this.state.comments.map((comment, index) => (
+                                <div key={index} className={'comment-card'}>
+                                    <div className={'comment-header'}>
+                                        {comment.author + ' - ' + comment.date}
+                                    </div>
+                                    <div className={'comment-body'}>{comment.body}</div>
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
         )

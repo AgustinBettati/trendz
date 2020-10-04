@@ -110,9 +110,9 @@ class Topic extends Component<Props, State> {
                 <div className={'posts-container'}>
                     {
                         this.state.posts.length &&
-                        this.renderPosts(this.state.currentPage).map((post) => (
-                            <div className={'post-card-wrapper'}>
-                                <div className={'post-card'} onClick={() => this.handlePostSelection(post)}>
+                        this.renderPosts(this.state.currentPage).map((post, index) => (
+                            <div className={'post-card-wrapper'} key={index}>
+                                <div className={'post-card'}>
                                     <div className={'post-card-header'}>
                                         <div className={'post-card-title'}>
                                             <div className={'post-title'}>
@@ -130,8 +130,8 @@ class Topic extends Component<Props, State> {
                                         {post.description}
                                     </div>
                                     <div className={'post-card-footer'}>
-                                        <a href={post.link}>{post.link}</a>
-                                        <div className={'read-more'}>Read more</div>
+                                        <a href={post.link} target={'_blank'}>{post.link}</a>
+                                        <div className={'read-more'} onClick={() => this.handlePostSelection(post)}>Read more</div>
                                     </div>
                                 </div>
                             </div>
