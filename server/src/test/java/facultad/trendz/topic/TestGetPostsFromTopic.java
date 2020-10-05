@@ -1,11 +1,11 @@
 package facultad.trendz.topic;
 
+import facultad.trendz.TestUtils;
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostGetDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
-import facultad.trendz.dto.user.*;
 import facultad.trendz.dto.user.JwtResponseDTO;
 import facultad.trendz.repository.TopicRepository;
 import org.junit.Assert;
@@ -28,7 +28,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TestGetPostsFromTopic {
+public class TestGetPostsFromTopic extends TestUtils {
 
     @LocalServerPort
     int randomServerPort;
@@ -40,7 +40,7 @@ public class TestGetPostsFromTopic {
     public void testGetPostsByTopic() throws URISyntaxException {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin", randomServerPort);
         String jwtToken = loginResponse.getBody().getToken();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
@@ -89,17 +89,4 @@ public class TestGetPostsFromTopic {
 
     }
 
-
-
-
-
-    private ResponseEntity<JwtResponseDTO> loginUser(String email, String password) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
-        final String loginUrl = "http://localhost:" + randomServerPort + "/login";
-        URI loginUri = new URI(loginUrl);
-        HttpHeaders loginHeaders = new HttpHeaders();
-        LoginDTO loginDTO = new LoginDTO(email, password);
-        HttpEntity<LoginDTO> loginRequest = new HttpEntity<>(loginDTO, loginHeaders);
-        return restTemplate.postForEntity(loginUri, loginRequest, JwtResponseDTO.class);
-    }
 }

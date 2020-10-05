@@ -1,5 +1,6 @@
 package facultad.trendz.user;
 
+import facultad.trendz.TestUtils;
 import facultad.trendz.dto.*;
 import facultad.trendz.dto.user.*;
 import facultad.trendz.model.ERole;
@@ -26,7 +27,7 @@ import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserProfileTests {
+public class UserProfileTests extends TestUtils {
 
     @LocalServerPort
     int randomServerPort;
@@ -44,7 +45,7 @@ public class UserProfileTests {
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<UserResponseDTO> registerResponse = registerUser(
-                "testUsername08", "testEmail08@gmail.com", "testPassword", "user"); // Post new user
+                "testUsername08", "testEmail08@gmail.com", "testPassword", "user", randomServerPort); // Post new user
 
         ResponseEntity<JwtResponseDTO> loginResponse = loginUser("testEmail08@gmail.com", "testPassword"); // Login with new User to get JWT
 
@@ -75,7 +76,7 @@ public class UserProfileTests {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
 
-        registerUser("testUsername09", "testEmail09@gmail.com", "testPassword", "user"); // Post new user
+        registerUser("testUsername09", "testEmail09@gmail.com", "testPassword", "user", randomServerPort); // Post new user
 
         ResponseEntity<JwtResponseDTO> loginResponse = loginUser("testEmail09@gmail.com", "testPassword"); // Login with new User to get JWT
 
@@ -108,7 +109,7 @@ public class UserProfileTests {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<UserResponseDTO> registerResponse = registerUser("testUsername12", "testEmail12@gmail.com", "testPassword", "user");
+        ResponseEntity<UserResponseDTO> registerResponse = registerUser("testUsername12", "testEmail12@gmail.com", "testPassword", "user", randomServerPort);
         ResponseEntity<JwtResponseDTO> loginResponse = loginUser("testEmail12@gmail.com", "testPassword");
 
         Long userId = registerResponse.getBody().getId();
@@ -141,7 +142,7 @@ public class UserProfileTests {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<UserResponseDTO> registerResponse = registerUser("testUsername13", "testEmail13@gmail.com", "testPassword", "user");
+        ResponseEntity<UserResponseDTO> registerResponse = registerUser("testUsername13", "testEmail13@gmail.com", "testPassword", "user", randomServerPort);
         ResponseEntity<JwtResponseDTO> loginResponse = loginUser("testEmail13@gmail.com", "testPassword");
 
         Long userId = registerResponse.getBody().getId();
@@ -174,7 +175,7 @@ public class UserProfileTests {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<UserResponseDTO> registerResponse = registerUser("testUsername14", "testEmail14@gmail.com", "testPassword", "user");
+        ResponseEntity<UserResponseDTO> registerResponse = registerUser("testUsername14", "testEmail14@gmail.com", "testPassword", "user", randomServerPort);
         ResponseEntity<JwtResponseDTO> loginResponse = loginUser("testEmail14@gmail.com", "testPassword");
 
         Long userId = registerResponse.getBody().getId();
@@ -207,7 +208,7 @@ public class UserProfileTests {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
 
-        registerUser("testUsername15", "testEmail15@gmail.com", "testPassword", "user");
+        registerUser("testUsername15", "testEmail15@gmail.com", "testPassword", "user", randomServerPort);
         ResponseEntity<JwtResponseDTO> loginResponse = loginUser("testEmail15@gmail.com", "testPassword");
 
         String jwtToken = loginResponse.getBody().getToken();
@@ -240,7 +241,7 @@ public class UserProfileTests {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
 
-        registerUser("testUsername16", "testEmail16@gmail.com", "testPassword", "user");
+        registerUser("testUsername16", "testEmail16@gmail.com", "testPassword", "user", randomServerPort);
         ResponseEntity<JwtResponseDTO> loginResponse = loginUser("testEmail16@gmail.com", "testPassword");
 
         String jwtToken = loginResponse.getBody().getToken();
@@ -267,15 +268,7 @@ public class UserProfileTests {
         }
     }
 
-    private ResponseEntity<UserResponseDTO> registerUser(String username, String email, String password, String role) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
-        final String registerUrl = "http://localhost:" + randomServerPort + "/user";
-        URI registerUri = new URI(registerUrl);
-        HttpHeaders registerHeaders = new HttpHeaders();
-        UserCreateDTO userCreateDTO = new UserCreateDTO(email, username, password, role);
-        HttpEntity<UserCreateDTO> registerRequest = new HttpEntity<>(userCreateDTO, registerHeaders);
-        return restTemplate.postForEntity(registerUri, registerRequest, UserResponseDTO.class);
-    }
+
 
     private ResponseEntity<JwtResponseDTO> loginUser(String email, String password) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
