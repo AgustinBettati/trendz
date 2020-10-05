@@ -73,6 +73,11 @@ class Topic extends Component<Props, State> {
         this.props.history.push('/main/post', {post: post, topic : this.props.location.state.topic})
     }
 
+    handlePostLinkClick = (link: string, e: any) => {
+        e.stopPropagation();
+        window.open(link, '_blank');
+    }
+
     render() {
         return (
             <div className={'topic-container'}>
@@ -112,7 +117,7 @@ class Topic extends Component<Props, State> {
                         this.state.posts.length &&
                         this.renderPosts(this.state.currentPage).map((post, index) => (
                             <div className={'post-card-wrapper'} key={index}>
-                                <div className={'post-card'}>
+                                <div className={'post-card'} onClick={() => this.handlePostSelection(post)}>
                                     <div className={'post-card-header'}>
                                         <div className={'post-card-title'}>
                                             <div className={'post-title'}>
@@ -130,8 +135,10 @@ class Topic extends Component<Props, State> {
                                         {post.description}
                                     </div>
                                     <div className={'post-card-footer'}>
-                                        <a href={post.link} target={'_blank'}>{post.link}</a>
-                                        <div className={'read-more'} onClick={() => this.handlePostSelection(post)}>Read more</div>
+                                        <div className={'post-link'} onClick={(e) => this.handlePostLinkClick(post.link, e)}>
+                                            {post.link}
+                                        </div>
+                                        <div className={'read-more'}>Read more</div>
                                     </div>
                                 </div>
                             </div>
