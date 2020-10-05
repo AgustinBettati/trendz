@@ -2,6 +2,7 @@ package facultad.trendz.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -19,6 +20,8 @@ public class Post {
 
     private Date date;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    private List<Comment> comments;
 
     @ManyToOne()
     @JoinColumn(name="topic_id", nullable=false)
@@ -84,5 +87,17 @@ public class Post {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(Comment comment){
+        comments.add(comment);
     }
 }
