@@ -96,11 +96,10 @@ public class PostService {
     }
 
     public boolean postAuthorVerification(Long postId, Authentication authentication){
-        final Optional<Post> post= postRepository.findById(postId);
-        if (post==null){ throw  new PostNotFoundException();}
-        MyUserDetails myUserDetails=(MyUserDetails)authentication.getPrincipal();
-        if(post.get().getUser().getId()==myUserDetails.getId()) return true;
-        return false;
+        final Optional<Post> post = postRepository.findById(postId);
+        if (!post.isPresent()) throw new PostNotFoundException();
+        MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
+        return post.get().getUser().getId().equals(myUserDetails.getId());
 
     }
 
