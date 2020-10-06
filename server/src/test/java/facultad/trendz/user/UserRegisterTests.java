@@ -1,4 +1,4 @@
-package facultad.trendz;
+package facultad.trendz.user;
 
 import facultad.trendz.dto.user.UserCreateDTO;
 import facultad.trendz.dto.user.UserResponseDTO;

@@ -58,7 +58,7 @@ public class TopicService {
        List<Post> posts = topicRepository.getTopicById(topicId).getPosts();
         List<PostGetDTO> postsInfo = new ArrayList<>(posts.size());
         for (Post post : posts) {
-            postsInfo.add(new PostGetDTO(post.getId(), post.getTitle(), post.getDescription(),post.getLink(), post.getDate()));
+            postsInfo.add(new PostGetDTO(post.getId(), post.getTitle(), post.getDescription(), post.getLink(), post.getDate(),post.getUser().getId(),post.getUser().getUsername()));
         }
         return postsInfo;
 

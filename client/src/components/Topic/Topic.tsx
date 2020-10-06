@@ -6,6 +6,7 @@ import ReactPaginate from "react-paginate";
 import {parseJwt} from "../Routing/utils";
 import Modal from "react-modal";
 import {deleteTopic} from "../../api/TopicApi";
+import { getTopicPosts} from "../../api/TopicApi";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -40,11 +41,12 @@ class Topic extends Component<Props, State> {
     };
 
     componentDidMount() {
+        this.getPosts()
 
     }
 
-    getTopics() {
-
+    getPosts() {
+        getTopicPosts(this.props.location.state.topic.id).then(res => this.setState({posts: res}))
     }
 
     handleCancel = () => {
@@ -65,6 +67,15 @@ class Topic extends Component<Props, State> {
 
     handlePageClick = (data: {selected: number}) => {
         this.setState({currentPage: data.selected})
+    }
+
+    handlePostSelection = (post: any) => {
+        this.props.history.push('/main/post', {post: post, topic : this.props.location.state.topic})
+    }
+
+    handlePostLinkClick = (link: string, e: any) => {
+        e.stopPropagation();
+        window.open(link, '_blank');
     }
 
     render() {
@@ -104,16 +115,16 @@ class Topic extends Component<Props, State> {
                 <div className={'posts-container'}>
                     {
                         this.state.posts.length &&
-                        this.renderPosts(this.state.currentPage).map((post) => (
-                            <div className={'post-card-wrapper'}>
-                                <div className={'post-card'}>
+                        this.renderPosts(this.state.currentPage).map((post, index) => (
+                            <div className={'post-card-wrapper'} key={index}>
+                                <div className={'post-card'} onClick={() => this.handlePostSelection(post)}>
                                     <div className={'post-card-header'}>
                                         <div className={'post-card-title'}>
                                             <div className={'post-title'}>
                                                 {post.title}
                                             </div>
                                             <div className={'post-author'}>
-                                                {'by ' + post.author}
+                                                {'by ' + post.username}
                                             </div>
                                         </div>
                                         <div className={'post-topic'}>
@@ -124,7 +135,9 @@ class Topic extends Component<Props, State> {
                                         {post.description}
                                     </div>
                                     <div className={'post-card-footer'}>
-                                        <a href={post.link}>{post.link}</a>
+                                        <div className={'post-link'} onClick={(e) => this.handlePostLinkClick(post.link, e)}>
+                                            {post.link}
+                                        </div>
                                         <div className={'read-more'}>Read more</div>
                                     </div>
                                 </div>
