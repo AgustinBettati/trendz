@@ -4,17 +4,35 @@ import {RouteComponentProps, withRouter} from "react-router-dom";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import {parseJwt} from "../Routing/utils";
 import Modal from "react-modal";
-import {deletePost} from "../../api/PostApi";
+import {createPost, deletePost} from "../../api/PostApi";
 import {MdThumbDown, MdThumbUp} from 'react-icons/md';
+import logo from '../../assets/TrendzLogo.png';
+import {Formik} from 'formik';
+import * as yup from 'yup';
+
 
 export type Props = RouteComponentProps<any> & {}
 
 export type State = {
     comments: any[],
-    showModal: boolean
+    showModal: boolean,
+    errorMessage: string,
+    successMessage: string,
+    commentTouched: boolean,
+
 }
+const postCommentSchema = yup.object({
+    comment: yup.string().required('Comment cannot be empty').max(10000,"Comment can be up to 10000 characters long").min(1,"Title must be at least 1 character long"),
+
+})
 
 class Post extends Component<Props, State> {
+
+
+
+
+
+
 
     constructor(props: Props) {
         super(props);
@@ -29,9 +47,49 @@ class Post extends Component<Props, State> {
                 {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
                 {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
                 {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'}
-            ]
+            ],
+            errorMessage: '',
+            successMessage: '',
+            commentTouched: false,
+
         }
     };
+
+    handlePostComment = (comment: string) => {/*
+        createPost(title, description, link,1,"post")
+            .then((res) => {
+                this.setState({errorMessage: '', successMessage: 'Post succesfully created'});
+            })
+            .catch(() => {
+                this.setState({successMessage: '', errorMessage:'Title already in use'});
+            })*/
+    }
+
+    private handleCommentCancel() {
+        //this.props.history.push('/main/home');
+    }
+
+    handleOnFocus = (prop: string) => {
+        this.setState({errorMessage: '', successMessage: ''})
+        switch (prop){
+            case 'comment':
+                this.setState({commentTouched: true});
+                break;
+
+        }
+    }
+
+
+    handleOnBlur = (prop: string) => {
+        switch (prop){
+            case 'comment':
+                this.setState({commentTouched: false});
+                break;
+
+        }
+    }
+
+
 
     handleCancel = () => {
         this.setState({showModal: false})
@@ -113,18 +171,44 @@ class Post extends Component<Props, State> {
                     </div>
                 </div>
                 <div className={'post-comments-wrapper'}>
-                    <div className={'post-comments-title'}>
-                        {'Add new comment'}
+                    <div className={'post-comments-title'}>New Comment
                     </div>
-                    <div  className={'comment-card'}>
-                        <div className={'comment-header'}>Username
-                        </div>
+                    <Formik
+                        initialValues={{comment: ''}}
+                        onSubmit={values => this.handlePostComment(values.comment)}
+                        validationSchema={postCommentSchema}
+
+                    >{(props) => (
+                        <div>
+
                         <div className={'comment-body'}>
-                            <textarea style={{width: "1125px"}}  placeholder={'Your comment here..'}>
+                            <textarea style={{width: "1125px"}}  placeholder={'Your comment here..'}
+                                      onChange={props.handleChange('comment')}
+                                      value={props.values.comment}
+                                      onFocus={() => this.handleOnFocus('comment')}
+                                      onBlur={() => !props.errors.comment && this.handleOnBlur('comment')}>
 
                             </textarea>
+                            <div className={'error-message'}>{this.state.commentTouched && props.errors.comment}</div>
                         </div>
-                    </div>
+
+                            <div className={'post-buttons-container'}>
+                            <TrendzButton
+                                title={'Add comment'}
+                                onClick={() => props.values.comment === '' ?
+                                    this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
+                                disabled={!!(props.errors.comment  )}
+                            />
+
+                            <TrendzButton
+                                title={'Cancel'}
+                                onClick={()=>this.handleCancel() }
+                            />
+                        </div>
+                        </div>
+
+                    )}
+                </Formik>
                     <div className={'post-comments-title'}>
                         {'Comments (' + this.state.comments.length + ')'}
                     </div>

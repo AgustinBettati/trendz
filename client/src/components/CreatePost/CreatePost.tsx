@@ -152,6 +152,7 @@ class CreatePost extends Component<Props, State> {
                                         }
 
                                     </div>
+
                                     <TrendzButton
                                         title={'Submit'}
                                         onClick={() => props.values.title === ''  && props.values.description === '' ?
