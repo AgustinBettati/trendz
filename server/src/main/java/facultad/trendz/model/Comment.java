@@ -16,6 +16,8 @@ public class Comment {
 
     private Date date;
 
+    private Date editDate;
+
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
@@ -72,5 +74,13 @@ public class Comment {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public Date getEditDate() {
+        return editDate;
+    }
+
+    public void setEditDate(Date editDate) {
+        this.editDate = editDate;
     }
 }
