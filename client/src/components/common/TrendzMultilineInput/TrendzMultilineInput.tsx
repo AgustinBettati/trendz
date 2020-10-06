@@ -10,7 +10,9 @@ type    MultilineProps = {
     password?: boolean,
     onChange?: any,
     onFocus?: any,
-    onBlur?: any
+    onBlur?: any,
+    rows?:any,
+    cols:any,
 }
 
 export const TrendzMultilineInput = (props: MultilineProps) => (
@@ -23,8 +25,8 @@ export const TrendzMultilineInput = (props: MultilineProps) => (
             value={props.value}
             onFocus={props.onFocus}
             onBlur={props.onBlur}
-            rows={5}
-            cols={77}
+            rows={props.rows}
+            cols={props.cols}
 
 
         />

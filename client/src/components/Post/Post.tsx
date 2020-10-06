@@ -114,6 +114,18 @@ class Post extends Component<Props, State> {
                 </div>
                 <div className={'post-comments-wrapper'}>
                     <div className={'post-comments-title'}>
+                        {'Add new comment'}
+                    </div>
+                    <div  className={'comment-card'}>
+                        <div className={'comment-header'}>Username
+                        </div>
+                        <div className={'comment-body'}>
+                            <textarea style={{width: "1125px"}}  placeholder={'Your comment here..'}>
+
+                            </textarea>
+                        </div>
+                    </div>
+                    <div className={'post-comments-title'}>
                         {'Comments (' + this.state.comments.length + ')'}
                     </div>
                     <div className={'post-comments-container'}>
