@@ -78,4 +78,80 @@ public class CommentTests extends TestUtils {
             Assert.assertTrue(e.getResponseBodyAsString().contains("Requested post not found"));
         }
     }
+
+    @Test
+    public void editComment() throws URISyntaxException {
+        //GIVEN
+
+        //login with user to create new post
+        ResponseEntity<JwtResponseDTO> response = loginUser("admin@gmail.com", "admin", randomServerPort);
+        String adminJwt = response.getBody().getToken();
+
+        ResponseEntity<TopicResponseDTO> topicResponse = postTopic(adminJwt, "testEditComment Topic 2", "description", randomServerPort);
+
+        Long topicId = topicResponse.getBody().getId();
+
+        ResponseEntity<PostResponseDTO> postResponse = postPost(adminJwt, "testEditComment Post 2", "description", "testurl.com", topicId, randomServerPort);
+
+        //add comment with regular user
+        ResponseEntity<JwtResponseDTO> userResponse = loginUser("user@gmail.com", "user", randomServerPort);
+        String userJwt = userResponse.getBody().getToken();
+
+        CommentCreateDTO comment = new CommentCreateDTO("test comment");
+
+        ResponseEntity<CommentResponseDTO> commentResponse = addCommentToPost(comment, postResponse.getBody().getId(), userJwt, randomServerPort);
+
+        //WHEN
+        ResponseEntity<CommentResponseDTO> editCommentResponse = editComment("edited test comment", userJwt, randomServerPort, commentResponse.getBody().getId());
+
+        //THEN
+        Assert.assertEquals(200, editCommentResponse.getStatusCodeValue());
+        Assert.assertEquals("edited test comment", editCommentResponse.getBody().getContent());
+        Assert.assertEquals(commentResponse.getBody().getId(), editCommentResponse.getBody().getId());
+        Assert.assertEquals(postResponse.getBody().getId(), editCommentResponse.getBody().getPostId());
+        Assert.assertEquals("user", editCommentResponse.getBody().getUsername());
+        Assert.assertNotNull(editCommentResponse.getBody().getEditDate());
+
+        Optional<Comment> foundComment = commentRepository.findById(editCommentResponse.getBody().getId());
+
+        Assert.assertTrue(foundComment.isPresent());
+        Assert.assertEquals("edited test comment", foundComment.get().getContent());
+        Assert.assertEquals(commentResponse.getBody().getId(), foundComment.get().getId());
+        Assert.assertEquals(postResponse.getBody().getId(), foundComment.get().getPost().getId());
+        Assert.assertEquals("user", foundComment.get().getUser().getUsername());
+        Assert.assertNotNull(foundComment.get().getEditDate());
+    }
+
+    @Test
+    public void editCommentWithInvalidUser() throws URISyntaxException {
+        //GIVEN
+
+        //login with user to create new post
+        ResponseEntity<JwtResponseDTO> response = loginUser("admin@gmail.com", "admin", randomServerPort);
+        String adminJwt = response.getBody().getToken();
+
+        ResponseEntity<TopicResponseDTO> topicResponse = postTopic(adminJwt, "testEditComment Topic 3", "description", randomServerPort);
+
+        Long topicId = topicResponse.getBody().getId();
+
+        ResponseEntity<PostResponseDTO> postResponse = postPost(adminJwt, "testEditComment Post 3", "description", "testurl.com", topicId, randomServerPort);
+
+        CommentCreateDTO comment = new CommentCreateDTO("test comment");
+
+        ResponseEntity<CommentResponseDTO> commentResponse = addCommentToPost(comment, postResponse.getBody().getId(), adminJwt, randomServerPort);
+        Long commentId = commentResponse.getBody().getId();
+
+        ResponseEntity<JwtResponseDTO> userResponse = loginUser("user@gmail.com", "user", randomServerPort);
+        String userJwt = userResponse.getBody().getToken();
+
+
+        try {
+        //WHEN
+            editComment("edited test comment", userJwt, randomServerPort, commentId);
+        //THEN
+            Assert.fail();
+        } catch (HttpClientErrorException e){
+            Assert.assertEquals(401, e.getRawStatusCode());
+        }
+    }
 }
