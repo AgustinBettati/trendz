@@ -7,8 +7,11 @@ import Modal from "react-modal";
 import {createPost, deletePost} from "../../api/PostApi";
 import {MdThumbDown, MdThumbUp} from 'react-icons/md';
 import logo from '../../assets/TrendzLogo.png';
-import {Formik} from 'formik';
+import {Formik, useFormikContext} from 'formik';
 import * as yup from 'yup';
+import {createComment} from "../../api/CommentApi";
+import {FormikContextType} from "formik/dist/types";
+import { useField } from 'formik';
 
 
 export type Props = RouteComponentProps<any> & {}
@@ -55,19 +58,19 @@ class Post extends Component<Props, State> {
         }
     };
 
-    handlePostComment = (comment: string) => {/*
-        createPost(title, description, link,1,"post")
+    handlePostComment = (comment: string) => {
+        createComment(comment,this.props.location.state.topic.id)
             .then((res) => {
-                this.setState({errorMessage: '', successMessage: 'Post succesfully created'});
+                this.setState({errorMessage: '', successMessage: 'Comment succesfully created'});
+                //refresh comments
+                 useFormikContext().setFieldValue('comment', '')
             })
             .catch(() => {
-                this.setState({successMessage: '', errorMessage:'Title already in use'});
-            })*/
+                this.setState({successMessage: '', errorMessage:'Ooops! something went wrong!'});
+            })
     }
 
-    private handleCommentCancel() {
-        //this.props.history.push('/main/home');
-    }
+
 
     handleOnFocus = (prop: string) => {
         this.setState({errorMessage: '', successMessage: ''})
@@ -202,7 +205,7 @@ class Post extends Component<Props, State> {
 
                             <TrendzButton
                                 title={'Cancel'}
-                                onClick={()=>this.handleCancel() }
+                                onClick={()=>props.resetForm() }
                             />
                         </div>
                         </div>
