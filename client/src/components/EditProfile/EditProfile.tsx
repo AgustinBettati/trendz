@@ -80,8 +80,12 @@ export class EditProfile extends Component<Props, State> {
                 this.setState({errorMessage: '', successMessage: 'User edited successfully'});
                 this.props.history.push('/main/profile');
             })
-            .catch((e) => {
-                this.setState({successMessage: '', errorMessage: e.message});
+            .catch((err) => {
+                if (err.status === 409)
+                    this.setState({successMessage: '', errorMessage: 'Username already in use'});
+                else if (err.status === 401)
+                    this.setState({successMessage: '', errorMessage: 'Incorrect password'});
+                else this.setState({successMessage: '', errorMessage: 'Error'});
             })
     }
 

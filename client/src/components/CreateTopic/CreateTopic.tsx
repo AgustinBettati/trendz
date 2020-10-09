@@ -43,7 +43,9 @@ class CreateTopic extends Component<Props, State> {
                 this.props.history.push('/main/home');
             })
             .catch((err) => {
-                this.setState({successMessage: '', errorMessage: err.message});
+                if (err.status === 409)
+                    this.setState({successMessage: '', errorMessage: 'Title already in use'});
+                else this.setState({successMessage: '', errorMessage: 'Error'});
             })
     }
 
