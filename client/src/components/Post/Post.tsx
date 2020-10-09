@@ -4,14 +4,11 @@ import {RouteComponentProps, withRouter} from "react-router-dom";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import {parseJwt} from "../Routing/utils";
 import Modal from "react-modal";
-import {createPost, deletePost} from "../../api/PostApi";
+import {deletePost} from "../../api/PostApi";
 import {MdThumbDown, MdThumbUp} from 'react-icons/md';
-import logo from '../../assets/TrendzLogo.png';
-import {Formik, useFormikContext, withFormik} from 'formik';
+import {Formik} from 'formik';
 import * as yup from 'yup';
 import {createComment} from "../../api/CommentApi";
-import {FormikContextType} from "formik/dist/types";
-import { useField } from 'formik';
 
 
 export type Props = RouteComponentProps<any> & {}
@@ -25,32 +22,66 @@ export type State = {
 
 }
 const postCommentSchema = yup.object({
-    comment: yup.string().required('Comment cannot be empty').max(10000,"Comment can be up to 10000 characters long").min(1,"Title must be at least 1 character long"),
+    comment: yup.string().required('Comment cannot be empty').max(10000, "Comment can be up to 10000 characters long").min(1, "Title must be at least 1 character long"),
 
 })
 
 
 class Post extends Component<Props, State> {
 
-
-
-
-
-
-
     constructor(props: Props) {
         super(props);
         this.state = {
             showModal: false,
             comments: [
-                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'},
-                {id: 0, author: 'Jhon Mark', body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', date: '20/20/20 18:00 Hs'}
+                {
+                    id: 0,
+                    author: 'Jhon Mark',
+                    body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.',
+                    date: '20/20/20 18:00 Hs'
+                },
+                {
+                    id: 0,
+                    author: 'Jhon Mark',
+                    body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.',
+                    date: '20/20/20 18:00 Hs'
+                },
+                {
+                    id: 0,
+                    author: 'Jhon Mark',
+                    body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.',
+                    date: '20/20/20 18:00 Hs'
+                },
+                {
+                    id: 0,
+                    author: 'Jhon Mark',
+                    body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.',
+                    date: '20/20/20 18:00 Hs'
+                },
+                {
+                    id: 0,
+                    author: 'Jhon Mark',
+                    body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.',
+                    date: '20/20/20 18:00 Hs'
+                },
+                {
+                    id: 0,
+                    author: 'Jhon Mark',
+                    body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.',
+                    date: '20/20/20 18:00 Hs'
+                },
+                {
+                    id: 0,
+                    author: 'Jhon Mark',
+                    body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.',
+                    date: '20/20/20 18:00 Hs'
+                },
+                {
+                    id: 0,
+                    author: 'Jhon Mark',
+                    body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.',
+                    date: '20/20/20 18:00 Hs'
+                }
             ],
             errorMessage: '',
             successMessage: '',
@@ -59,29 +90,24 @@ class Post extends Component<Props, State> {
         }
     };
 
-
     handlePostComment = (comment: string) => {
-        createComment(comment,this.props.location.state.topic.id)
+        createComment(comment, this.props.location.state.topic.id)
             .then((res) => {
                 this.setState({errorMessage: '', successMessage: 'Comment succesfully created'});
                 //refresh comments
 
 
-
-
             })
             .catch((e) => {
-                this.setState({successMessage: '', errorMessage:'Ooops! something went wrong!'});
+                this.setState({successMessage: '', errorMessage: 'Ooops! something went wrong!'});
                 console.log(e)
             })
 
     }
 
-
-
     handleOnFocus = (prop: string) => {
         this.setState({errorMessage: '', successMessage: ''})
-        switch (prop){
+        switch (prop) {
             case 'comment':
                 this.setState({commentTouched: true});
                 break;
@@ -89,9 +115,8 @@ class Post extends Component<Props, State> {
         }
     }
 
-
     handleOnBlur = (prop: string) => {
-        switch (prop){
+        switch (prop) {
             case 'comment':
                 this.setState({commentTouched: false});
                 break;
@@ -100,14 +125,13 @@ class Post extends Component<Props, State> {
     }
 
 
-
     handleCancel = () => {
         this.setState({showModal: false})
     }
 
     handleConfirm = () => {
         deletePost(this.props.location.state.post.id).then(() =>
-            this.props.history.push('/main/topic', {topic : this.props.location.state.topic}))
+            this.props.history.push('/main/topic', {topic: this.props.location.state.topic}))
     }
 
     handleDelete = () => {
@@ -142,7 +166,8 @@ class Post extends Component<Props, State> {
                         <span className={'post-header-title'}>{this.props.location.state.post.title}</span>
                         {
                             this.props.location.state.post.link &&
-                            <a href={this.props.location.state.post.link} target={'_blank'}>{this.props.location.state.post.link}</a>
+                            <a href={this.props.location.state.post.link}
+                               target={'_blank'}>{this.props.location.state.post.link}</a>
                         }
                     </div>
                     <div className={'post-buttons-container'}>
@@ -185,51 +210,42 @@ class Post extends Component<Props, State> {
                     </div>
                     <Formik
                         initialValues={{comment: ''}}
-                        onSubmit={(values )=> {this.handlePostComment(values.comment)}}
+                        onSubmit={(values) => {
+                            this.handlePostComment(values.comment)
+                        }}
                         validationSchema={postCommentSchema}
 
                     >{(props) => (
                         <div>
 
-                        <div className={'comment-body'}>
-                            <textarea style={{width: "100%"}}  placeholder={'Your comment here..'}
+                            <div className={'comment-body'}>
+                            <textarea style={{width: "100%"}} placeholder={'Your comment here..'}
                                       onChange={props.handleChange('comment')}
                                       value={props.values.comment}
                                       onFocus={() => this.handleOnFocus('comment')}
                                       onBlur={() => !props.errors.comment && this.handleOnBlur('comment')}>
 
                             </textarea>
-                            <div className={'error-message'}>{this.state.errorMessage}</div>
-                            <div className={'success-message'}> {this.state.successMessage}</div>
-                        </div>
-
-
-
-
-
-
-
+                                <div className={'error-message'}>{this.state.errorMessage}</div>
+                                <div className={'success-message'}> {this.state.successMessage}</div>
+                            </div>
                             <div className={'post-buttons-container'}>
-                            <TrendzButton
-                                title={'Add comment'}
-                                onClick={() =>{
-                                    props.handleSubmit();
-                                    props.resetForm()
-                                }}
-                                disabled={(props.values.comment==''  )}
-
-                            />
-
-
-                            <TrendzButton
-                                title={'Cancel'}
-                                onClick={()=>props.resetForm() }
-                            />
+                                <TrendzButton
+                                    title={'Add comment'}
+                                    onClick={() => {
+                                        props.handleSubmit();
+                                        props.resetForm()
+                                    }}
+                                    disabled={(props.values.comment == '')}
+                                />
+                                <TrendzButton
+                                    title={'Cancel'}
+                                    onClick={() => props.resetForm()}
+                                />
+                            </div>
                         </div>
-                        </div>
-
                     )}
-                </Formik>
+                    </Formik>
                     <div className={'post-comments-title'}>
                         {'Comments (' + this.state.comments.length + ')'}
                     </div>
