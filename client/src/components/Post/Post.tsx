@@ -22,7 +22,7 @@ export type State = {
 
 }
 const postCommentSchema = yup.object({
-    comment: yup.string().required('Comment cannot be empty').max(10000, "Comment can be up to 10000 characters long").min(1, "Title must be at least 1 character long"),
+    comment: yup.string().max(10000, "Comment can be up to 10000 characters long"),
 
 })
 
@@ -94,7 +94,7 @@ class Post extends Component<Props, State> {
         createComment(comment, this.props.location.state.topic.id)
             .then((res) => {
                 this.setState({errorMessage: '', successMessage: 'Comment succesfully created'});
-                //refresh comments
+                //TODO refresh comments
 
 
             })
