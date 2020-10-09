@@ -7,7 +7,7 @@ import Modal from "react-modal";
 import {createPost, deletePost} from "../../api/PostApi";
 import {MdThumbDown, MdThumbUp} from 'react-icons/md';
 import logo from '../../assets/TrendzLogo.png';
-import {Formik, useFormikContext} from 'formik';
+import {Formik, useFormikContext, withFormik} from 'formik';
 import * as yup from 'yup';
 import {createComment} from "../../api/CommentApi";
 import {FormikContextType} from "formik/dist/types";
@@ -28,6 +28,7 @@ const postCommentSchema = yup.object({
     comment: yup.string().required('Comment cannot be empty').max(10000,"Comment can be up to 10000 characters long").min(1,"Title must be at least 1 character long"),
 
 })
+
 
 class Post extends Component<Props, State> {
 
@@ -58,18 +59,19 @@ class Post extends Component<Props, State> {
         }
     };
 
+
     handlePostComment = (comment: string) => {
         createComment(comment,this.props.location.state.topic.id)
             .then((res) => {
                 this.setState({errorMessage: '', successMessage: 'Comment succesfully created'});
                 //refresh comments
-                 useFormikContext().resetForm();
-                 console.log(this.state.successMessage)
+                window.location.reload();
+
 
             })
             .catch((e) => {
                 this.setState({successMessage: '', errorMessage:'Ooops! something went wrong!'});
-                console.log('holi todo bien')
+                console.log(e)
             })
 
     }
