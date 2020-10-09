@@ -65,7 +65,8 @@ class Post extends Component<Props, State> {
             .then((res) => {
                 this.setState({errorMessage: '', successMessage: 'Comment succesfully created'});
                 //refresh comments
-                window.location.reload();
+
+
 
 
             })
@@ -184,7 +185,7 @@ class Post extends Component<Props, State> {
                     </div>
                     <Formik
                         initialValues={{comment: ''}}
-                        onSubmit={values => this.handlePostComment(values.comment)}
+                        onSubmit={(values )=> {this.handlePostComment(values.comment)}}
                         validationSchema={postCommentSchema}
 
                     >{(props) => (
@@ -199,7 +200,7 @@ class Post extends Component<Props, State> {
 
                             </textarea>
                             <div className={'error-message'}>{this.state.errorMessage}</div>
-                            <div className={'success-message'}> {this.state.commentTouched && this.state.successMessage !== ''}</div>
+                            <div className={'success-message'}> {this.state.successMessage}</div>
                         </div>
 
 
@@ -211,11 +212,14 @@ class Post extends Component<Props, State> {
                             <div className={'post-buttons-container'}>
                             <TrendzButton
                                 title={'Add comment'}
-                                onClick={() => props.values.comment === '' ?
-                                    this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
-                                disabled={!!(props.errors.comment  )}
+                                onClick={() =>{
+                                    props.handleSubmit();
+                                    props.resetForm()
+                                }}
+                                disabled={(props.values.comment==''  )}
 
                             />
+
 
                             <TrendzButton
                                 title={'Cancel'}
