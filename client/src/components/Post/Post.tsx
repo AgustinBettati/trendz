@@ -63,11 +63,15 @@ class Post extends Component<Props, State> {
             .then((res) => {
                 this.setState({errorMessage: '', successMessage: 'Comment succesfully created'});
                 //refresh comments
-                 useFormikContext().setFieldValue('comment', '')
+                 useFormikContext().resetForm();
+                 console.log(this.state.successMessage)
+
             })
-            .catch(() => {
+            .catch((e) => {
                 this.setState({successMessage: '', errorMessage:'Ooops! something went wrong!'});
+                console.log('holi todo bien')
             })
+
     }
 
 
@@ -124,7 +128,7 @@ class Post extends Component<Props, State> {
                     </div>
                     <div className={'modal-buttons'}>
                         <TrendzButton title={'Confirm'} onClick={this.handleConfirm.bind(this)}/>
-                        <TrendzButton title={'Cancel'} color={'#DF6052'} onClick={this.handleCancel.bind(this)}/>
+                        <TrendzButton title={'Cancel'} color={'#df6052'} onClick={this.handleCancel.bind(this)}/>
                     </div>
                 </Modal>
                 <div className={'post-header-wrapper'}>
@@ -192,8 +196,15 @@ class Post extends Component<Props, State> {
                                       onBlur={() => !props.errors.comment && this.handleOnBlur('comment')}>
 
                             </textarea>
-                            <div className={'error-message'}>{this.state.commentTouched && props.errors.comment}</div>
+                            <div className={'error-message'}>{this.state.errorMessage}</div>
+                            <div className={'success-message'}> {this.state.commentTouched && this.state.successMessage !== ''}</div>
                         </div>
+
+
+
+
+
+
 
                             <div className={'post-buttons-container'}>
                             <TrendzButton
@@ -201,6 +212,7 @@ class Post extends Component<Props, State> {
                                 onClick={() => props.values.comment === '' ?
                                     this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
                                 disabled={!!(props.errors.comment  )}
+
                             />
 
                             <TrendzButton

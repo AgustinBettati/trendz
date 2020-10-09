@@ -46,6 +46,7 @@ class CreatePost extends Component<Props, State> {
                  .catch(() => {
                      this.setState({successMessage: '', errorMessage:'Title already in use'});
                  })
+
     }
 
     private handleCancel() {
