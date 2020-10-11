@@ -71,12 +71,14 @@ class EditPost extends Component<Props, State> {
 
     handleEditPost = (title: string, description: string, link: string) => {
         editPost(title, description, link,1,"post")
-            .then((res) => {
-                this.setState({errorMessage: '', successMessage: 'Post succesfully edited'});
+            .then(() => {
+                this.setState({errorMessage: '', successMessage: 'Post successfully edited'});
                 this.props.history.push('/main/home');
             })
-            .catch(() => {
-                this.setState({successMessage: '', errorMessage:'Title already in use'});
+            .catch((err) => {
+                if (err.status === 409)
+                    this.setState({successMessage: '', errorMessage: 'Title already in use'});
+                else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
             })
     }
 

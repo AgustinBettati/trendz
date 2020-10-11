@@ -47,7 +47,11 @@ export class Register extends Component<Props, State> {
                 this.props.history.push('/');
             })
             .catch((err) => {
-                this.setState({successMessage: '', errorMessage: err.message});
+                if (err.status === 409)
+                    this.setState({successMessage: '', errorMessage: err.message});
+                else if (err.status === 401)
+                    this.setState({successMessage: '', errorMessage: 'Invalid Credentials'});
+                else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
             })
     }
 
