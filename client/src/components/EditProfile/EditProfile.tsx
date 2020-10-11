@@ -85,7 +85,7 @@ export class EditProfile extends Component<Props, State> {
                     this.setState({successMessage: '', errorMessage: 'Username already in use'});
                 else if (err.status === 401)
                     this.setState({successMessage: '', errorMessage: 'Incorrect password'});
-                else this.setState({successMessage: '', errorMessage: 'Error'});
+                else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
             })
     }
 

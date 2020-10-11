@@ -47,7 +47,7 @@ class Login extends Component<Props, State> {
                     this.setState({successMessage: '', errorMessage: 'Email not found'});
                 else if (err.status === 401)
                     this.setState({successMessage: '', errorMessage: 'Invalid Credentials'});
-                else this.setState({successMessage: '', errorMessage: 'Error'});
+                else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
             })
     }
 

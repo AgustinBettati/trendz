@@ -78,7 +78,7 @@ class EditPost extends Component<Props, State> {
             .catch((err) => {
                 if (err.status === 409)
                     this.setState({successMessage: '', errorMessage: 'Title already in use'});
-                else this.setState({successMessage: '', errorMessage: 'Error'});
+                else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
             })
     }
 
