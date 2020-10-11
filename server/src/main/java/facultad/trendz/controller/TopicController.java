@@ -6,7 +6,6 @@ import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,11 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @Controller
-public class TopicController {
+public class TopicController implements ControllerUtils{
 
     private final TopicService topicService;
 
@@ -32,11 +30,8 @@ public class TopicController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/topic")
     public ResponseEntity<Object> createTopic(@Valid @RequestBody TopicCreateDTO topic, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            final HttpStatus status = HttpStatus.BAD_REQUEST;
-            String error = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(", "));
-            return new ResponseEntity<>(error, status);
-        }
+        if (bindingResult.hasErrors()) return getInvalidDTOResponse(bindingResult);
+
         topicService.validateTopicTitle(topic.getTitle());
         final TopicResponseDTO body = topicService.saveTopic(topic);
         final HttpStatus status = HttpStatus.CREATED;

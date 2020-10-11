@@ -1,12 +1,10 @@
 package facultad.trendz.controller;
 
 import facultad.trendz.config.model.MyUserDetails;
-import facultad.trendz.dto.MessageResponseDTO;
 import facultad.trendz.dto.comment.CommentCreateDTO;
 import facultad.trendz.dto.comment.CommentResponseDTO;
 import facultad.trendz.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,11 +14,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @Controller
-public class CommentController {
+public class CommentController implements ControllerUtils{
 
     private final CommentService commentService;
 
@@ -47,13 +44,6 @@ public class CommentController {
 
         final CommentResponseDTO body = commentService.editComment(commentId, comment);
         final HttpStatus status = HttpStatus.OK;
-        return new ResponseEntity<>(body, status);
-    }
-
-    private ResponseEntity<Object> getInvalidDTOResponse(BindingResult bindingResult) {
-        final HttpStatus status = HttpStatus.BAD_REQUEST;
-        String error = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(", "));
-        MessageResponseDTO body = new MessageResponseDTO(error);
         return new ResponseEntity<>(body, status);
     }
 
