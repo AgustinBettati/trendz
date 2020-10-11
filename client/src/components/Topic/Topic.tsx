@@ -7,13 +7,15 @@ import {parseJwt} from "../Routing/utils";
 import Modal from "react-modal";
 import {deleteTopic} from "../../api/TopicApi";
 import { getTopicPosts} from "../../api/TopicApi";
+import {TopicType} from "../types/types";
 
 export type Props = RouteComponentProps<any> & {}
 
 export type State = {
     posts: any[],
     showModal: boolean,
-    currentPage: number
+    currentPage: number,
+    topic: TopicType
 }
 
 class Topic extends Component<Props, State> {
@@ -21,6 +23,11 @@ class Topic extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
+            topic: {
+                id: -1,
+                title: '',
+                description: ''
+            },
             showModal: false,
             posts: [
                 {id: 0, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
@@ -41,12 +48,13 @@ class Topic extends Component<Props, State> {
     };
 
     componentDidMount() {
-        this.getPosts()
-
-    }
-
-    getPosts() {
-        getTopicPosts(this.props.location.state.topic.id).then(res => this.setState({posts: res}))
+        this.props.location.state && this.setState({topic: this.props.location.state.topic})
+        getTopicPosts(this.props.match.params.id).then(res => this.setState({posts: res}))
+        // with get topic by id endpoint
+        // this.props.location.state ? this.setState({topic: this.props.location.state.topic}) :
+        //     getTopicData(this.props.match.params.id)
+        //         .then((res) => this.setState({topic: res}))
+        //         .catch((err) => this.setState({topicErrorMessage: err}))
     }
 
     handleCancel = () => {
@@ -54,7 +62,7 @@ class Topic extends Component<Props, State> {
     }
 
     handleConfirm = () => {
-        deleteTopic(this.props.location.state.topic.id).then(() => this.props.history.push('/main/home'))
+        deleteTopic(this.state.topic.id).then(() => this.props.history.push('/main/home'))
     }
 
     handleDelete = () => {
@@ -70,7 +78,7 @@ class Topic extends Component<Props, State> {
     }
 
     handlePostSelection = (post: any) => {
-        this.props.history.push('/main/post', {post: post, topic : this.props.location.state.topic})
+        this.props.history.push('/main/post/' + post.id, {post: post, topic : this.state.topic})
     }
 
     handlePostLinkClick = (link: string, e: any) => {
@@ -89,7 +97,7 @@ class Topic extends Component<Props, State> {
                     overlayClassName={'overlay'}
                 >
                     <div className={'modal-text'}>
-                        <span>{'You are about to delete ' + this.props.location.state.topic.title + ' topic.'}</span>
+                        <span>{'You are about to delete ' + this.state.topic.title + ' topic.'}</span>
                         <span>This action is irreversible, </span>
                         <span>do you wish to continue?</span>
                     </div>
@@ -100,8 +108,8 @@ class Topic extends Component<Props, State> {
                 </Modal>
                 <div className={'topic-header-wrapper'}>
                     <div className={'header-text'}>
-                        <span className={'topic-title'}>{this.props.location.state.topic.title}</span>
-                        <span className={'topic-subtitle'}>{this.props.location.state.topic.description}</span>
+                        <span className={'topic-title'}>{this.state.topic.title}</span>
+                        <span className={'topic-subtitle'}>{this.state.topic.description}</span>
                     </div>
                     {
                         parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') &&
@@ -128,7 +136,7 @@ class Topic extends Component<Props, State> {
                                             </div>
                                         </div>
                                         <div className={'post-topic'}>
-                                            {this.props.location.state.topic.title}
+                                            {this.state.topic.title}
                                         </div>
                                     </div>
                                     <div className={'post-card-body'}>

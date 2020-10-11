@@ -1,9 +1,8 @@
 import {API_BASE_URL} from '../constants/constants'
 import {request} from './APIUtils'
-import {Post} from '../components/types/post'
+import {PostType} from "../components/types/types";
 
-
-export function createPost(title: string, description: string, link: string, topicId: number, role:string): Promise<Post[]> {
+export function createPost(title: string, description: string, link: string, topicId: number, role:string): Promise<PostType[]> {
     return request({
         url: API_BASE_URL + "/post",
         method: 'POST',
@@ -12,7 +11,7 @@ export function createPost(title: string, description: string, link: string, top
     });
 }
 
-export function editPost(title: string, description: string, link: string, postId: number, role:string): Promise<Post[]> {
+export function editPost(title: string, description: string, link: string, postId: number, role:string): Promise<PostType[]> {
     return request({
         url: API_BASE_URL + "/post/" + postId,
         method: 'PUT',

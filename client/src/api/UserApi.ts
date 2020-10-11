@@ -1,15 +1,15 @@
 import {API_BASE_URL} from '../constants/constants'
 import {request} from './APIUtils'
-import {User} from '../components/types/types'
+import {UserType} from '../components/types/types'
 
-export function getAllUsers(): Promise<User[]> {
+export function getAllUsers(): Promise<UserType[]> {
     return request({
         url: API_BASE_URL + "/user",
         method: 'GET'
     });
 }
 
-export function registerUser(email: string, username: string, password: string, role: string): Promise<User[]> {
+export function registerUser(email: string, username: string, password: string, role: string): Promise<UserType[]> {
     return request({
         url: API_BASE_URL + "/user",
         method: 'POST',

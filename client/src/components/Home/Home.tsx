@@ -7,12 +7,12 @@ import {parseJwt} from "../Routing/utils";
 import {MdDelete} from 'react-icons/md';
 import Modal from "react-modal";
 import {deleteTopic, getTopics} from "../../api/TopicApi";
-import {Topic} from "../types/types";
+import {TopicType} from "../types/types";
 
 export type Props = RouteComponentProps<any> & {}
 
 export type State = {
-    topics: Topic[],
+    topics: TopicType[],
     showModal: boolean,
     selectedTopic: number
     currentPage: number
@@ -64,8 +64,8 @@ class Home extends Component<Props, State> {
         this.setState({currentPage: data.selected})
     }
 
-    handleTopicSelection = (topic: Topic) => {
-        this.props.history.push('/main/topic', {topic: topic})
+    handleTopicSelection = (topic: TopicType) => {
+        this.props.history.push('/main/topic/' + topic.id, {topic: topic})
     }
 
     render() {
