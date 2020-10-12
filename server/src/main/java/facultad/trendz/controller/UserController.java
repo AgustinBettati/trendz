@@ -7,7 +7,6 @@ import facultad.trendz.dto.user.*;
 import facultad.trendz.model.User;
 import facultad.trendz.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,11 +20,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @Controller
-public class UserController {
+public class UserController implements ControllerUtils{
     private final UserService userService;
     private AuthenticationManager authenticationManager;
     private JwtUtils jwtUtils;
@@ -57,11 +55,8 @@ public class UserController {
     @PostMapping(value = "/user")
     public ResponseEntity<Object> createUser(@Valid @RequestBody UserCreateDTO user, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
-            final HttpStatus status = HttpStatus.BAD_REQUEST;
-            String error = bindingResult.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(", "));
-            return new ResponseEntity<>(error, status);
-        }
+        if (bindingResult.hasErrors()) return getInvalidDTOResponse(bindingResult);
+
         userService.validateEmail(user.getEmail());
         userService.validateUsername(user.getUsername());
         final UserResponseDTO body = userService.saveUser(user);
