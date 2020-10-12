@@ -77,7 +77,7 @@ class Post extends Component<Props, State> {
 
     handleConfirm = () => {
         deletePost(this.props.location.state ? this.props.location.state.post.id : this.props.match.params.id)
-            .then(() => this.props.history.push('/main/topic', {topic: this.state.topic}))
+            .then(() => this.handleTopicNavigation())
     }
 
     handleDelete = () => {
