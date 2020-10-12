@@ -89,7 +89,12 @@ class Login extends Component<Props, State> {
                         validationSchema={loginSchema}
                     >
                         {(props) => (
-                            <div className={'form-container'}>
+                            <div className={'form-container'} onKeyDown={(e) => {
+                                if(e.key === 'Enter') {
+                                    props.values.email === ''  && props.values.password === '' ?
+                                        this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()
+                                }
+                            }}>
                                 <div className={'login-body'}>
                                     <div className={'login-field'}>
                                         <TrendzInput

@@ -1,5 +1,7 @@
 package facultad.trendz;
 
+import facultad.trendz.dto.comment.CommentCreateDTO;
+import facultad.trendz.dto.comment.CommentResponseDTO;
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
@@ -10,6 +12,7 @@ import facultad.trendz.dto.user.UserCreateDTO;
 import facultad.trendz.dto.user.UserResponseDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -87,5 +90,34 @@ public abstract class TestUtils {
         URI postsUri = new URI(postsUrl);
 
         restTemplate.postForEntity(postsUri,postEntity, PostResponseDTO.class);
+    }
+
+    public ResponseEntity<CommentResponseDTO> addCommentToPost(CommentCreateDTO comment, Long postId, String jwt, int randomServerPort) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwt);
+
+        HttpEntity<CommentCreateDTO> commentEntity = new HttpEntity<>(comment, headers);
+
+        final String commentUrl = String.format("http://localhost:%d/post/%d/comment",randomServerPort, postId);
+        URI commentUri = new URI(commentUrl);
+
+        return restTemplate.postForEntity(commentUri,commentEntity, CommentResponseDTO.class);
+    }
+
+    public ResponseEntity<CommentResponseDTO> editComment(String comment, String jwt, int randomServerPort, Long commentId) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwt);
+
+        CommentCreateDTO editedComment = new CommentCreateDTO(comment);
+        HttpEntity<CommentCreateDTO> commentEditEntity = new HttpEntity<>(editedComment, headers);
+
+        final String commentEditUrl = String.format("http://localhost:%d/comment/%d", randomServerPort, commentId);
+        URI commentEditUri = new URI(commentEditUrl);
+
+        return restTemplate.exchange(commentEditUri, HttpMethod.PUT, commentEditEntity, CommentResponseDTO.class);
     }
 }
