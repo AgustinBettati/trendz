@@ -19,6 +19,9 @@ const AppHeader = ({history}: any) => {
             </NavLink>
             <div className={"app-options"}>
                 <div style={{display: 'flex', flexDirection: 'row', height: '100%'}}>
+                    <div className={"app-option"}>
+                    <input placeholder={"Search...."} style={{width: "100%", height:"30%"}} ></input>
+                        </div>
                 </div>
             </div>
             <NavLink to={"/main/profile"} className={"profile"}>Profile</NavLink>
