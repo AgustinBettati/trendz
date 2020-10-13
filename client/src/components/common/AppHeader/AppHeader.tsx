@@ -12,12 +12,13 @@ const AppHeader = ({history}: any) => {
 
     return (
         <header className={"app-header"}>
+            <NavLink to={"/main/home"} >
             <div className={"app-branding"}>
-                <img src={logo} alt={''}/>
+                    <img  src={logo} alt={''}/>
             </div>
+            </NavLink>
             <div className={"app-options"}>
                 <div style={{display: 'flex', flexDirection: 'row', height: '100%'}}>
-                    <NavLink to={"/main/home"} className={"app-option"}>Home</NavLink>
                     <NavLink to={"/main/profile"} className={"app-option"}>Profile</NavLink>
                 </div>
                 <div className={'logout'} onClick={() => handleLogout()}>Logout</div>

@@ -19,6 +19,7 @@
     justify-content: center;
     border-right: 2px solid #1EA083;
     padding: 0 10px;
+
 }
 
 .app-branding img{
@@ -51,6 +52,10 @@
 }
 
 .app-option:hover{
+    background-color: #1EA083;
+}
+
+.app-branding:hover{
     background-color: #1EA083;
 }
 
