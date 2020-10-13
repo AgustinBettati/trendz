@@ -63,7 +63,10 @@ class Post extends Component<Props, State> {
                 {id: 0, editDate: null, username: 'Jhon Mark', content: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', creationDate: '20/20/20 18:00 Hs'},
                 {id: 0, editDate: null, username: 'Jhon Mark', content: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', creationDate: '20/20/20 18:00 Hs'},
                 {id: 0, editDate: null, username: 'Jhon Mark', content: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.', creationDate: '20/20/20 18:00 Hs'}
-            ]
+            ],
+            errorMessage: '',
+            successMessage: '',
+            commentTouched: false
         }
     };
 
@@ -263,11 +266,13 @@ class Post extends Component<Props, State> {
     private getOnClick(props: any & { submitForm: () => Promise<any> }) {
         return () => {
             this.handlePostComment(props.values.comment);
-            var commentArray= {id: 0,
-                author: this.props.location.state.username,
-                body: props.values.comment,
-                date: this.getCurrentDate('/')}
-            var comments= this.state.comments;
+            let commentArray = {
+                id: 0,
+                username: parseJwt(localStorage.getItem('token')).mail,
+                content: props.values.comment,
+                creationDate: this.getCurrentDate('/')
+            };
+            let comments = this.state.comments;
             comments.push(commentArray);
             props.resetForm();
 
