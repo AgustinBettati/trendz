@@ -157,6 +157,8 @@ class EditPost extends Component<Props, State> {
                                                 value={props.values.description}
                                                 onFocus={() => this.handleOnFocus('description')}
                                                 onBlur={() => !props.errors.description && this.handleOnBlur('description')}
+                                                rows={5}
+                                                cols={77}
                                             />
                                             <div
                                                 className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>

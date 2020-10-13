@@ -48,6 +48,7 @@ class CreatePost extends Component<Props, State> {
                          this.setState({successMessage: '', errorMessage: 'Title already in use'});
                      else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
                  })
+
     }
 
     private handleCancel() {
@@ -121,6 +122,8 @@ class CreatePost extends Component<Props, State> {
                                             value={props.values.description}
                                             onFocus={() => this.handleOnFocus('description')}
                                             onBlur={() => !props.errors.description && this.handleOnBlur('description')}
+                                            rows={5}
+                                            cols={77}
                                         />
                                         <div
                                             className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>
@@ -152,6 +155,7 @@ class CreatePost extends Component<Props, State> {
                                         }
 
                                     </div>
+
                                     <TrendzButton
                                         title={'Submit'}
                                         onClick={() => props.values.title === ''  && props.values.description === '' ?
