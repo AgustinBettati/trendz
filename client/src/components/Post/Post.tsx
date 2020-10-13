@@ -6,7 +6,7 @@ import {parseJwt} from "../Routing/utils";
 import Modal from "react-modal";
 import {deletePost} from "../../api/PostApi";
 import {MdThumbDown, MdThumbUp} from 'react-icons/md';
-import {Formik} from 'formik';
+import {Formik,} from 'formik';
 import * as yup from 'yup';
 import {createComment} from "../../api/CommentApi";
 
@@ -19,6 +19,7 @@ export type State = {
     errorMessage: string,
     successMessage: string,
     commentTouched: boolean,
+    comment: string,
 
 }
 const postCommentSchema = yup.object({
@@ -75,17 +76,12 @@ class Post extends Component<Props, State> {
                     author: 'Jhon Mark',
                     body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.',
                     date: '20/20/20 18:00 Hs'
-                },
-                {
-                    id: 0,
-                    author: 'Jhon Mark',
-                    body: 'This is the body for a comment post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.',
-                    date: '20/20/20 18:00 Hs'
                 }
             ],
             errorMessage: '',
             successMessage: '',
             commentTouched: false,
+            comment: ''
 
         }
     };
@@ -210,9 +206,7 @@ class Post extends Component<Props, State> {
                     </div>
                     <Formik
                         initialValues={{comment: ''}}
-                        onSubmit={(values) => {
-                            this.handlePostComment(values.comment)
-                        }}
+                        onSubmit={(values) => {}}
                         validationSchema={postCommentSchema}
 
                     >{(props) => (
@@ -232,10 +226,7 @@ class Post extends Component<Props, State> {
                             <div className={'post-buttons-container'}>
                                 <TrendzButton
                                     title={'Add comment'}
-                                    onClick={() => {
-                                        props.handleSubmit();
-                                        props.resetForm()
-                                    }}
+                                    onClick={this.getOnClick(props)}
                                     disabled={(props.values.comment == '')}
                                 />
                                 <TrendzButton
@@ -264,6 +255,22 @@ class Post extends Component<Props, State> {
                 </div>
             </div>
         )
+    }
+
+    private getOnClick(props: any & { submitForm: () => Promise<any> }) {
+        return () => {
+            this.handlePostComment(props.values.comment);
+            var commentArray= {id: 0,
+                author: 'Jhon Mark',
+                body: props.values.comment,
+                date: '20/20/20 18:00 Hs'}
+            var comments= this.state.comments;
+            comments.push(commentArray);
+            this.setState({comments: comments});
+            props.resetForm();
+            this.setState({comment:props.values.comment});
+
+        };
     }
 }
 
