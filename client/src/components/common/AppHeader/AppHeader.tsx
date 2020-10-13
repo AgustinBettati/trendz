@@ -19,10 +19,10 @@ const AppHeader = ({history}: any) => {
             </NavLink>
             <div className={"app-options"}>
                 <div style={{display: 'flex', flexDirection: 'row', height: '100%'}}>
-                    <NavLink to={"/main/profile"} className={"app-option"}>Profile</NavLink>
                 </div>
-                <div className={'logout'} onClick={() => handleLogout()}>Logout</div>
             </div>
+            <NavLink to={"/main/profile"} className={"profile"}>Profile</NavLink>
+            <div className={'logout'} onClick={() => handleLogout()}>Logout</div>
         </header>
     )
 }
