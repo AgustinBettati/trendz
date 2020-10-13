@@ -260,16 +260,26 @@ class Post extends Component<Props, State> {
         return () => {
             this.handlePostComment(props.values.comment);
             var commentArray= {id: 0,
-                author: 'Jhon Mark',
+                author: this.props.location.state.username,
                 body: props.values.comment,
-                date: '20/20/20 18:00 Hs'}
+                date: this.getCurrentDate('/')}
             var comments= this.state.comments;
             comments.push(commentArray);
             props.resetForm();
-            this.setState({comment:props.values.comment});
 
         };
     }
+
+     private getCurrentDate(separator=''){
+
+        let newDate = new Date()
+        let date = newDate.getDate();
+        let month = newDate.getMonth() + 1;
+        let year = newDate.getFullYear();
+
+        return `${year}${separator}${month<10?`0${month}`:`${month}`}${separator}${date}`
+    }
 }
+
 
 export default withRouter(Post);
