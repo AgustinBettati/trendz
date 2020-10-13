@@ -12,6 +12,7 @@ import facultad.trendz.dto.user.UserCreateDTO;
 import facultad.trendz.dto.user.UserResponseDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -103,5 +104,20 @@ public abstract class TestUtils {
         URI commentUri = new URI(commentUrl);
 
         return restTemplate.postForEntity(commentUri,commentEntity, CommentResponseDTO.class);
+    }
+
+    public ResponseEntity<CommentResponseDTO> editComment(String comment, String jwt, int randomServerPort, Long commentId) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwt);
+
+        CommentCreateDTO editedComment = new CommentCreateDTO(comment);
+        HttpEntity<CommentCreateDTO> commentEditEntity = new HttpEntity<>(editedComment, headers);
+
+        final String commentEditUrl = String.format("http://localhost:%d/comment/%d", randomServerPort, commentId);
+        URI commentEditUri = new URI(commentEditUrl);
+
+        return restTemplate.exchange(commentEditUri, HttpMethod.PUT, commentEditEntity, CommentResponseDTO.class);
     }
 }

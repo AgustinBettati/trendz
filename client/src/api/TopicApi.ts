@@ -25,6 +25,7 @@ export function deleteTopic(id: number): Promise<any> {
         headers: {'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json'}
     });
 }
+
 export function getTopicPosts(id: number): Promise<any> {
     return request({
         url: API_BASE_URL + "/topicposts/"+id,

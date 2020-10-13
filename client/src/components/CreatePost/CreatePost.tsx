@@ -40,11 +40,13 @@ class CreatePost extends Component<Props, State> {
 
     handleSubmitPost = (title: string, description: string, link: string) => {
              createPost(title, description, link,1,"post")
-                 .then((res) => {
-                     this.setState({errorMessage: '', successMessage: 'Post succesfully created'});
+                 .then(() => {
+                     this.setState({errorMessage: '', successMessage: 'Post successfully created'});
                  })
-                 .catch(() => {
-                     this.setState({successMessage: '', errorMessage:'Title already in use'});
+                 .catch((err) => {
+                     if (err.status === 409)
+                         this.setState({successMessage: '', errorMessage: 'Title already in use'});
+                     else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
                  })
 
     }
