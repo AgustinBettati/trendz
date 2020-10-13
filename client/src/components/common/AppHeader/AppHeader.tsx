@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, withRouter} from 'react-router-dom';
 import './AppHeader.css';
 import logo from '../../../assets/TrendzLogo.png';
+import {MdSearch} from 'react-icons/md';
 
 const AppHeader = ({history}: any) => {
 
@@ -20,6 +21,7 @@ const AppHeader = ({history}: any) => {
             <div className={"app-options"}>
                 <div style={{display: 'flex', flexDirection: 'row', height: '100%'}}>
                     <div className={"app-option"}>
+                        <MdSearch size={20} color={'white'}/>
                     <input placeholder={"Search...."} style={{width: "100%", height:"30%"}} ></input>
                         </div>
                 </div>
