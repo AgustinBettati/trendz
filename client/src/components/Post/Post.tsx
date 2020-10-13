@@ -19,7 +19,7 @@ export type State = {
     errorMessage: string,
     successMessage: string,
     commentTouched: boolean,
-    comment: string,
+
 
 }
 const postCommentSchema = yup.object({
@@ -81,7 +81,6 @@ class Post extends Component<Props, State> {
             errorMessage: '',
             successMessage: '',
             commentTouched: false,
-            comment: ''
 
         }
     };
@@ -266,7 +265,6 @@ class Post extends Component<Props, State> {
                 date: '20/20/20 18:00 Hs'}
             var comments= this.state.comments;
             comments.push(commentArray);
-            this.setState({comments: comments});
             props.resetForm();
             this.setState({comment:props.values.comment});
 
