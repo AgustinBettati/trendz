@@ -5,11 +5,12 @@ import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import {parseJwt} from "../Routing/utils";
 import Modal from "react-modal";
 import {deletePost, getPostData} from "../../api/PostApi";
-import {MdThumbDown, MdThumbUp} from 'react-icons/md';
+import {MdThumbDown, MdThumbUp, MdDelete} from 'react-icons/md';
 import {PostType, TopicType} from "../types/types";
 import {Formik,} from 'formik';
 import * as yup from 'yup';
 import {createComment} from "../../api/CommentApi";
+
 
 
 export type Props = RouteComponentProps<any> & {}
@@ -24,6 +25,11 @@ export type State = {
     errorMessage: string,
     successMessage: string,
     commentTouched: boolean,
+    showDeleteCommentModal: boolean,
+    commentToDelete: string,
+    commentToDeleteId: number,
+    showDeleteComment:boolean,
+    hoverIndex:number
 
 
 }
@@ -31,6 +37,8 @@ const postCommentSchema = yup.object({
     comment: yup.string().max(10000, "Comment can be up to 10000 characters long"),
 
 })
+
+
 
 
 class Post extends Component<Props, State> {
@@ -66,7 +74,12 @@ class Post extends Component<Props, State> {
             ],
             errorMessage: '',
             successMessage: '',
-            commentTouched: false
+            commentTouched: false,
+            showDeleteCommentModal: false,
+            commentToDelete:'',
+            commentToDeleteId:-1,
+            showDeleteComment:false,
+            hoverIndex:-1,
         }
     };
 
@@ -127,9 +140,24 @@ class Post extends Component<Props, State> {
         this.setState({showModal: false})
     }
 
+    setIsShown= (index:number ) => {
+        this.setState({showDeleteComment:!this.state.showDeleteComment, hoverIndex:index})
+    }
+
+    handleCancelDeleteComment = () => {
+        this.setState({showDeleteCommentModal: false})
+    }
+
     handleConfirm = () => {
         deletePost(this.props.location.state ? this.props.location.state.post.id : this.props.match.params.id)
             .then(() => this.handleTopicNavigation())
+    }
+
+
+    handleConfirmDeleteComment = () => {
+       /* deletePost(this.props.location.state ? this.props.location.state.post.id : this.props.match.params.id)
+            .then(() => this.handleTopicNavigation())*/
+
     }
 
     handleDelete = () => {
@@ -158,6 +186,23 @@ class Post extends Component<Props, State> {
                     <div className={'modal-buttons'}>
                         <TrendzButton title={'Confirm'} onClick={this.handleConfirm.bind(this)}/>
                         <TrendzButton title={'Cancel'} color={'#df6052'} onClick={this.handleCancel.bind(this)}/>
+                    </div>
+                </Modal>
+                <Modal
+                    isOpen={this.state.showDeleteCommentModal}
+                    onRequestClose={this.handleCancelDeleteComment.bind(this)}
+                    shouldCloseOnOverlayClick={true}
+                    className={'modal'}
+                    overlayClassName={'overlay'}
+                >
+                    <div className={'modal-text'}>
+                        <span>{'You are about to delete ' + this.state.commentToDelete + '.'}</span>
+                        <span>This action is irreversible, </span>
+                        <span>do you wish to continue?</span>
+                    </div>
+                    <div className={'modal-buttons'}>
+                        <TrendzButton title={'Confirm'} onClick={this.handleConfirmDeleteComment.bind(this)}/>
+                        <TrendzButton title={'Cancel'} color={'#df6052'} onClick={this.handleCancelDeleteComment}/>
                     </div>
                 </Modal>
                 <div className={'post-header-wrapper'}>
@@ -248,12 +293,23 @@ class Post extends Component<Props, State> {
                     <div className={'post-comments-container'}>
                         {
                             this.state.comments.map((comment, index) => (
-                                <div key={index} className={'comment-card'}>
+                                <div key={index} className={'comment-card'}
+                                     onMouseEnter={() => this.setIsShown(index)}
+                                     onMouseLeave={() => this.setIsShown(-1)}>
                                     <div className={'comment-header'}>
                                         {comment.username + ' - ' + comment.creationDate + ' '}
                                         {comment.editDate && <span style={{color: '#818181'}}>edited</span>}
                                     </div>
                                     <div className={'comment-body'}>{comment.content}</div>
+                                    { (parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') ||
+                                        parseJwt(localStorage.getItem('token')).userId == this.state.post.userId) && this.state.showDeleteComment && this.state.hoverIndex==index &&
+                                        <div>
+                                        <button onClick={() => this.setState({showDeleteCommentModal: true,commentToDelete: comment.content,commentToDeleteId:comment.id})}>
+                                            <MdDelete></MdDelete>
+
+                                        </button>
+                                    </div>
+                                    }
                                 </div>
                             ))
                         }
