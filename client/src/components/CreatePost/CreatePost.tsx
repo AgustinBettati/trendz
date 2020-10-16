@@ -54,7 +54,8 @@ class CreatePost extends Component<Props, State> {
     }
 
     private handleCancel() {
-        this.props.history.push('/main/home');
+        let topic = this.props.location.state.topic;
+        this.props.history.push('/main/topic/' + topic.id, {topic: topic});
     }
 
     handleOnFocus = (prop: string) => {
