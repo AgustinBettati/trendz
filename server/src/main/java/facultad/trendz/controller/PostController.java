@@ -4,8 +4,8 @@ import facultad.trendz.config.model.MyUserDetails;
 import facultad.trendz.dto.MessageResponseDTO;
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostEditDTO;
-import facultad.trendz.dto.post.PostGetDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
+import facultad.trendz.dto.post.SimplePostResponseDTO;
 import facultad.trendz.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +37,7 @@ public class PostController implements ControllerUtils {
         MyUserDetails userDetails = (MyUserDetails)authentication.getPrincipal();
 
         postService.validatePostTitle(post.getTitle());
-        final PostResponseDTO body = postService.savePost(post,userDetails.getId());
+        final SimplePostResponseDTO body = postService.savePost(post,userDetails.getId());
         final HttpStatus status = HttpStatus.CREATED;
         return new ResponseEntity<>(body, status);
     }
@@ -51,8 +51,8 @@ public class PostController implements ControllerUtils {
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<PostGetDTO> getPost(@PathVariable Long postId) {
-        final PostGetDTO body = postService.getPost(postId);
+    public ResponseEntity<PostResponseDTO> getPost(@PathVariable Long postId) {
+        final PostResponseDTO body = postService.getPost(postId);
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body,status);
     }

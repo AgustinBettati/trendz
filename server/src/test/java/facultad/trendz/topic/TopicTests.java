@@ -3,8 +3,8 @@ package facultad.trendz.topic;
 import facultad.trendz.TestUtils;
 import facultad.trendz.dto.*;
 import facultad.trendz.dto.post.PostCreateDTO;
-import facultad.trendz.dto.post.PostGetDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
+import facultad.trendz.dto.post.SimplePostResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.JwtResponseDTO;
@@ -263,7 +263,7 @@ public class TopicTests extends TestUtils {
 
     HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(headers);
     //WHEN
-    ResponseEntity<List<PostGetDTO>> response = restTemplate.exchange(topicsUri2, HttpMethod.GET, entity, new ParameterizedTypeReference<List<PostGetDTO>>() {});
+    ResponseEntity<List<SimplePostResponseDTO>> response = restTemplate.exchange(topicsUri2, HttpMethod.GET, entity, new ParameterizedTypeReference<List<SimplePostResponseDTO>>() {});
     //THEN
     Assert.assertEquals(200, response.getStatusCodeValue());
 
