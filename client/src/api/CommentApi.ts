@@ -11,5 +11,13 @@ export function createComment(content: string,postId: number): Promise<any> {
         headers:{'Authorization': 'Bearer '+ localStorage.getItem('token'),'Content-Type': 'application/json'}
     });
 }
+export function deleteComment(commentId: number) {
+    return request({
+        url: API_BASE_URL + "/comment/" + commentId,
+        method: 'DELETE',
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json'}
+    })
+}
+
 
 

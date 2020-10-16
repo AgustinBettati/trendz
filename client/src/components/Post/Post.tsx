@@ -9,7 +9,7 @@ import {MdThumbDown, MdThumbUp, MdDelete} from 'react-icons/md';
 import {PostType, TopicType} from "../types/types";
 import {Formik,} from 'formik';
 import * as yup from 'yup';
-import {createComment} from "../../api/CommentApi";
+import {createComment, deleteComment} from "../../api/CommentApi";
 
 
 
@@ -155,8 +155,9 @@ class Post extends Component<Props, State> {
 
 
     handleConfirmDeleteComment = () => {
-       /* deletePost(this.props.location.state ? this.props.location.state.post.id : this.props.match.params.id)
-            .then(() => this.handleTopicNavigation())*/
+       deleteComment(this.state.commentToDeleteId)
+            .then(() => this.handleTopicNavigation())
+        //should refresh comments
 
     }
 
