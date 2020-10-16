@@ -1,6 +1,7 @@
 package facultad.trendz.service;
 
 import facultad.trendz.config.model.MyUserDetails;
+import facultad.trendz.dto.MessageResponseDTO;
 import facultad.trendz.dto.comment.CommentCreateDTO;
 import facultad.trendz.dto.comment.CommentResponseDTO;
 import facultad.trendz.exception.comment.CommentNotFoundException;
@@ -42,7 +43,7 @@ public class CommentService {
                 );
         commentRepository.save(comment);
 
-        return new CommentResponseDTO(comment.getId(), user.getUsername(), postId, comment.getContent(), comment.getDate(), comment.getEditDate());
+        return new CommentResponseDTO(comment.getId(), user.getUsername(), postId, comment.getContent(), comment.getDate(), comment.getEditDate(), comment.isDeleted());
     }
 
     public boolean commentAuthorVerification(Long commentId, Authentication authentication) {
@@ -64,7 +65,17 @@ public class CommentService {
                     foundComment.getPost().getId(),
                     foundComment.getContent(),
                     foundComment.getDate(),
-                    foundComment.getEditDate());
+                    foundComment.getEditDate(),
+                    foundComment.isDeleted());
+        }).orElseThrow(CommentNotFoundException::new);
+    }
+
+    public MessageResponseDTO deleteComment(Long commentId) {
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        return comment.map(foundComment -> {
+            foundComment.setDeleted(true);
+            commentRepository.save(foundComment);
+            return new MessageResponseDTO("Comment deleted successfully");
         }).orElseThrow(CommentNotFoundException::new);
     }
 }

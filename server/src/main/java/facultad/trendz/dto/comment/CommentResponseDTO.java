@@ -10,14 +10,16 @@ public class CommentResponseDTO {
     private String content;
     private Date creationDate;
     private Date editDate;
+    private boolean deleted;
 
-    public CommentResponseDTO(Long id, String username, Long postId, String content, Date creationDate, Date editDate) {
+    public CommentResponseDTO(Long id, String username, Long postId, String content, Date creationDate, Date editDate, boolean deleted) {
         this.id = id;
         this.username = username;
         this.postId = postId;
         this.content = content;
         this.creationDate = creationDate;
         this.editDate = editDate;
+        this.deleted = deleted;
     }
 
     public CommentResponseDTO() {
@@ -69,5 +71,13 @@ public class CommentResponseDTO {
 
     public void setEditDate(Date editDate) {
         this.editDate = editDate;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
