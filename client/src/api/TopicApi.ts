@@ -33,3 +33,11 @@ export function getTopicPosts(id: number): Promise<any> {
         headers: {'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json'}
     });
 }
+
+export function getTopic(id: number): Promise<any> {
+    return request({
+        url: API_BASE_URL + "/topic/"+id,
+        method: 'GET',
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json'}
+    });
+}
