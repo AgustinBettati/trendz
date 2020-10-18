@@ -176,7 +176,7 @@ class Post extends Component<Props, State> {
                 this.setState({comments: newComments, editErrorMessage: ''})
                 this.handleCancelEdit()
             })
-            .catch(() => this.setState({editErrorMessage: 'An error occurred editing your post'}))
+            .catch(() => this.setState({editErrorMessage: 'An error occurred editing your comment!'}))
     }
 
     formatter = (value: number, unit: string, suffix: string) => {
@@ -324,8 +324,7 @@ class Post extends Component<Props, State> {
                                                 />
                                         }
                                         {
-                                            (parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') ||
-                                                parseJwt(localStorage.getItem('token')).userId == this.state.post.userId) && this.state.hoverIndex==index &&
+                                            (parseJwt(localStorage.getItem('token')).userId == comment.userId) && this.state.hoverIndex==index &&
                                             <MdModeEdit
                                                 color={'black'}
                                                 size={20}
