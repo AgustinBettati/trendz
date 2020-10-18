@@ -120,7 +120,8 @@ public class PostService {
                         comment.getContent(),
                         comment.getDate(),
                         comment.getEditDate(),
-                        comment.isDeleted()))
+                        comment.isDeleted(),
+                        comment.getUser().getId()))
                 .collect(Collectors.toList());
     }
 }

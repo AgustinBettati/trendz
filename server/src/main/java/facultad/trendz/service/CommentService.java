@@ -43,7 +43,7 @@ public class CommentService {
                 );
         commentRepository.save(comment);
 
-        return new CommentResponseDTO(comment.getId(), user.getUsername(), postId, comment.getContent(), comment.getDate(), comment.getEditDate(), comment.isDeleted());
+        return new CommentResponseDTO(comment.getId(), user.getUsername(), postId, comment.getContent(), comment.getDate(), comment.getEditDate(), comment.isDeleted(), comment.getUser().getId());
     }
 
     public boolean commentAuthorVerification(Long commentId, Authentication authentication) {
@@ -66,7 +66,8 @@ public class CommentService {
                     foundComment.getContent(),
                     foundComment.getDate(),
                     foundComment.getEditDate(),
-                    foundComment.isDeleted());
+                    foundComment.isDeleted(),
+                    foundComment.getUser().getId());
         }).orElseThrow(CommentNotFoundException::new);
     }
 
