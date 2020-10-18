@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PostService {
@@ -75,6 +72,9 @@ public class PostService {
 
             Post editedPost = postRepository.save(post1);
 
+            List<Comment> comments = editedPost.getComments();
+            comments.removeIf(Comment::isDeleted);
+
             return new PostResponseDTO(editedPost.getId(),
                     editedPost.getTitle(),
                     editedPost.getDescription(),
@@ -82,22 +82,27 @@ public class PostService {
                     editedPost.getDate(),
                     editedPost.getTopic().getId(),
                     editedPost.getUser().getId(),
-                    commentListToDTO(editedPost.getComments()),
+                    commentListToDTO(comments),
                     editedPost.getUser().getUsername());
         }).orElseThrow(PostNotFoundException::new);
     }
 
     public PostResponseDTO getPost(Long postId){
         final Optional<Post> post= postRepository.findById(postId);
-        return post.map(foundPost -> new PostResponseDTO(postId,
-                foundPost.getTitle(),
-                foundPost.getDescription(),
-                foundPost.getLink(),
-                foundPost.getDate(),
-                foundPost.getTopic().getId(),
-                foundPost.getUser().getId(),
-                commentListToDTO(foundPost.getComments()),
-                foundPost.getUser().getUsername())).orElseThrow(PostNotFoundException::new);
+        return post.map(foundPost -> {
+            List<Comment> foundComments = foundPost.getComments();
+            foundComments.removeIf(Comment::isDeleted);
+
+            return new PostResponseDTO(postId,
+                    foundPost.getTitle(),
+                    foundPost.getDescription(),
+                    foundPost.getLink(),
+                    foundPost.getDate(),
+                    foundPost.getTopic().getId(),
+                    foundPost.getUser().getId(),
+                    commentListToDTO(foundComments),
+                    foundPost.getUser().getUsername());
+        }).orElseThrow(PostNotFoundException::new);
     }
 
     public boolean postAuthorVerification(Long postId, Authentication authentication){
