@@ -9,6 +9,8 @@ import {MdThumbDown, MdThumbUp, MdDelete, MdModeEdit} from 'react-icons/md';
 import {PostType, TopicType} from "../types/types";
 import {Formik,} from 'formik';
 import * as yup from 'yup';
+import TimeAgo from 'react-timeago'
+
 import {createComment, deleteComment, editComment} from "../../api/CommentApi";
 import {getTopic} from "../../api/TopicApi";
 
@@ -177,6 +179,12 @@ class Post extends Component<Props, State> {
             .catch(() => this.setState({editErrorMessage: 'An error occurred editing your post'}))
     }
 
+    formatter = (value: number, unit: string, suffix: string) => {
+        if (unit === 'second') return 'Just now';
+        if (value > 1) return value + ' ' + unit + 's' + ' ' + suffix;
+        return value + ' ' + unit + ' ' + suffix
+    }
+
     render() {
         return (
             <div className={'post-container'}>
@@ -303,7 +311,8 @@ class Post extends Component<Props, State> {
                                      onMouseEnter={() => this.setIsShown(index)}
                                      onMouseLeave={() => this.setIsShown(-1)}>
                                     <div className={'comment-header'}>
-                                        {comment.username + ' - ' + comment.creationDate + ' '}
+                                        {comment.username + ' - '}
+                                        <TimeAgo date={comment.creationDate} formatter={this.formatter} />
                                         {comment.editDate && <span style={{color: '#818181', marginLeft: 5}}>edited</span>}
                                         {
                                             (parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') ||
