@@ -10,7 +10,7 @@ export function createComment(content: string, postId: number): Promise<any> {
     });
 }
 
-export function deleteComment(commentId: number) {
+export function deleteComment(commentId: number):Promise<any> {
     return request({
         url: API_BASE_URL + "/comment/" + commentId,
         method: 'DELETE',

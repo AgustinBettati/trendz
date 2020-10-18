@@ -136,7 +136,14 @@ class Post extends Component<Props, State> {
 
     handleConfirmDeleteComment = () => {
        deleteComment(this.state.commentToDeleteId)
-            .then(() => this.handleTopicNavigation())
+            .then(() => {
+                const newComments = [...this.state.comments]
+                console.log(newComments.length)
+                newComments.filter(comment=>comment.id!==this.state.commentToDeleteId)
+                this.setState( { comments: [...this.state.comments].filter(comment => comment.id !== this.state.commentToDeleteId), showDeleteCommentModal:false } )
+                console.log(newComments.length)
+            })
+
     }
 
     handleDelete = () => {
@@ -300,7 +307,7 @@ class Post extends Component<Props, State> {
                                         {comment.editDate && <span style={{color: '#818181', marginLeft: 5}}>edited</span>}
                                         {
                                             (parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') ||
-                                                parseJwt(localStorage.getItem('token')).userId == this.state.post.userId) && this.state.showDeleteComment && this.state.hoverIndex==index &&
+                                                parseJwt(localStorage.getItem('token')).userId == this.state.post.userId)  && this.state.hoverIndex==index &&
                                                 <MdDelete
                                                     color={'#DF6052'}
                                                     size={20}
