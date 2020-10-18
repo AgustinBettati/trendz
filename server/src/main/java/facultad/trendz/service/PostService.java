@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -72,9 +73,6 @@ public class PostService {
 
             Post editedPost = postRepository.save(post1);
 
-            List<Comment> comments = editedPost.getComments();
-            comments.removeIf(Comment::isDeleted);
-
             return new PostResponseDTO(editedPost.getId(),
                     editedPost.getTitle(),
                     editedPost.getDescription(),
@@ -82,27 +80,22 @@ public class PostService {
                     editedPost.getDate(),
                     editedPost.getTopic().getId(),
                     editedPost.getUser().getId(),
-                    commentListToDTO(comments),
+                    commentListToDTO(editedPost.getComments()),
                     editedPost.getUser().getUsername());
         }).orElseThrow(PostNotFoundException::new);
     }
 
     public PostResponseDTO getPost(Long postId){
         final Optional<Post> post= postRepository.findById(postId);
-        return post.map(foundPost -> {
-            List<Comment> foundComments = foundPost.getComments();
-            foundComments.removeIf(Comment::isDeleted);
-
-            return new PostResponseDTO(postId,
-                    foundPost.getTitle(),
-                    foundPost.getDescription(),
-                    foundPost.getLink(),
-                    foundPost.getDate(),
-                    foundPost.getTopic().getId(),
-                    foundPost.getUser().getId(),
-                    commentListToDTO(foundComments),
-                    foundPost.getUser().getUsername());
-        }).orElseThrow(PostNotFoundException::new);
+        return post.map(foundPost -> new PostResponseDTO(postId,
+                foundPost.getTitle(),
+                foundPost.getDescription(),
+                foundPost.getLink(),
+                foundPost.getDate(),
+                foundPost.getTopic().getId(),
+                foundPost.getUser().getId(),
+                commentListToDTO(foundPost.getComments()),
+                foundPost.getUser().getUsername())).orElseThrow(PostNotFoundException::new);
     }
 
     public boolean postAuthorVerification(Long postId, Authentication authentication){
@@ -113,22 +106,21 @@ public class PostService {
 
     }
 
-
     public void deletePost(Long postId) {
         postRepository.delete(postRepository.findById(postId).orElseThrow(PostNotFoundException::new));
     }
 
     private List<CommentResponseDTO> commentListToDTO(List<Comment> comments){
-        List<CommentResponseDTO> commentResponses = new ArrayList<>();
-        for (Comment comment : comments) {
-            commentResponses.add(new CommentResponseDTO(comment.getId(),
-                    comment.getUser().getUsername(),
-                    comment.getPost().getId(),
-                    comment.getContent(),
-                    comment.getDate(),
-                    comment.getEditDate(),
-                    comment.isDeleted()));
-        }
-        return commentResponses;
+        return comments.stream()
+                .filter(comment -> !comment.isDeleted())
+                .sorted(Comparator.comparing(Comment::getDate).reversed())
+                .map(comment -> new CommentResponseDTO(comment.getId(),
+                        comment.getUser().getUsername(),
+                        comment.getPost().getId(),
+                        comment.getContent(),
+                        comment.getDate(),
+                        comment.getEditDate(),
+                        comment.isDeleted()))
+                .collect(Collectors.toList());
     }
 }
