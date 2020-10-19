@@ -68,6 +68,10 @@ class Topic extends Component<Props, State> {
         this.props.history.push('/main/post/' + post.id, {post: post, topic : this.state.topic})
     }
 
+    handlePostCreation = () => {
+        this.props.history.push('/main/createPost', {topic : this.state.topic})
+    }
+
     handlePostLinkClick = (link: string, e: any) => {
         e.stopPropagation();
         window.open(link, '_blank');
@@ -98,14 +102,17 @@ class Topic extends Component<Props, State> {
                         <span className={'topic-title'}>{this.state.topic.title}</span>
                         <span className={'topic-subtitle'}>{this.state.topic.description}</span>
                     </div>
-                    {
+                    <div className={'topic-buttons-container'}>
+                        {
                         parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') &&
                         <TrendzButton
                             title={'Delete topic'}
                             onClick={() => this.handleDelete()}
                             color={'#DF6052'}
                         />
-                    }
+                        }
+                        <TrendzButton title={'Create Post'} onClick={() => this.handlePostCreation()}/>
+                    </div>
                 </div>
                 <div className={'posts-container'}>
                     {
