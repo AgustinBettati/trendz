@@ -17,9 +17,7 @@ const AppHeader = ({history}: any) => {
                 <div className={"app-options"}>
                     <div className={"app-branding"}>
                         <NavLink to={"/main/home"}>
-
                             <img src={logo} alt={''} style={{height: '100%'}}/>
-
                         </NavLink>
                     </div>
                     <div className={"searchbar-container"}>
