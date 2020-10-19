@@ -29,6 +29,8 @@ export type State = {
     showDeleteCommentModal: boolean,
     commentToDelete: string,
     commentToDeleteId: number,
+    commentToDeleteUserId: number,
+    deleteCommentErrorMessage:string,
     showDeleteComment:boolean,
     hoverIndex:number,
     toEditComment: number,
@@ -69,6 +71,8 @@ class Post extends Component<Props, State> {
             showDeleteCommentModal: false,
             commentToDelete:'',
             commentToDeleteId:-1,
+            commentToDeleteUserId:-1,
+            deleteCommentErrorMessage:'',
             showDeleteComment:false,
             hoverIndex:-1,
             toEditComment: -1,
@@ -139,12 +143,10 @@ class Post extends Component<Props, State> {
     handleConfirmDeleteComment = () => {
        deleteComment(this.state.commentToDeleteId)
             .then(() => {
-                const newComments = [...this.state.comments]
-                console.log(newComments.length)
-                newComments.filter(comment=>comment.id!==this.state.commentToDeleteId)
                 this.setState( { comments: [...this.state.comments].filter(comment => comment.id !== this.state.commentToDeleteId), showDeleteCommentModal:false } )
-                console.log(newComments.length)
+
             })
+           .catch(() => this.setState({deleteCommentErrorMessage: 'An error occurred deleting your comment!'}))
 
     }
 
@@ -217,9 +219,10 @@ class Post extends Component<Props, State> {
                     overlayClassName={'overlay'}
                 >
                     <div className={'modal-text'}>
-                        <span>{'You are about to delete ' + this.state.commentToDelete + '.'}</span>
+                        <span>{'You are about to delete your comment.'}</span>
                         <span>This action is irreversible, </span>
                         <span>do you wish to continue?</span>
+                        <div className={'error-message'}>{this.state.deleteCommentErrorMessage}</div>
                     </div>
                     <div className={'modal-buttons'}>
                         <TrendzButton title={'Confirm'} onClick={this.handleConfirmDeleteComment.bind(this)}/>
@@ -312,7 +315,9 @@ class Post extends Component<Props, State> {
                         {
                             this.state.comments.map((comment, index) => (
                                 <div key={index} className={'comment-card'}
-                                     onMouseEnter={() => this.setIsShown(index)}
+                                     onMouseEnter={() => {this.setIsShown(index)
+                                                          this.setState({commentToDeleteUserId:comment.userId})
+                                     }}
                                      onMouseLeave={() => this.setIsShown(-1)}>
                                     <div className={'comment-header'}>
                                         {comment.username + ' - '}
@@ -320,7 +325,7 @@ class Post extends Component<Props, State> {
                                         {comment.editDate && <span style={{color: '#818181', marginLeft: 5}}>edited</span>}
                                         {
                                             (parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') ||
-                                                parseJwt(localStorage.getItem('token')).userId == this.state.post.userId)  && this.state.hoverIndex==index &&
+                                                parseJwt(localStorage.getItem('token')).userId == this.state.commentToDeleteUserId)  && this.state.hoverIndex==index &&
                                                 <MdDelete
                                                     color={'#DF6052'}
                                                     size={20}
