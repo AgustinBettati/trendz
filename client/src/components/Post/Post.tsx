@@ -179,6 +179,10 @@ class Post extends Component<Props, State> {
             .catch(() => this.setState({editErrorMessage: 'An error occurred editing your comment!'}))
     }
 
+    handlePostEdit = () => {
+        this.props.history.push('/main/editPost', {post : this.state.post})
+    }
+
     formatter = (value: number, unit: string, suffix: string) => {
         if (unit === 'second') return 'Just now';
         if (value > 1) return value + ' ' + unit + 's' + ' ' + suffix;
@@ -238,7 +242,7 @@ class Post extends Component<Props, State> {
                             parseJwt(localStorage.getItem('token')).userId == this.state.post.userId &&
                             <TrendzButton
                                 title={'Edit post'}
-                                onClick={() => null}
+                                onClick={() => this.handlePostEdit()}
                                 color={'#00B090'}
                             />
                         }

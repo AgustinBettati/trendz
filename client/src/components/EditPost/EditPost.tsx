@@ -10,8 +10,6 @@ import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
 import {editPost} from "../../api/PostApi";
 import {getPostData} from "../../api/PostApi";
-import {parseJwt} from "../Routing/utils";
-import {getUserData} from "../../api/UserApi";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -52,7 +50,7 @@ class EditPost extends Component<Props, State> {
 
 
     componentDidMount() {
-        getPostData(1)
+        getPostData(this.props.location.state ? this.props.location.state.post.id : null)
             .then((res:any) => {
                 this.setState({title: res.title, description: res.description, link:res.link})
                 this.setState({
@@ -70,10 +68,11 @@ class EditPost extends Component<Props, State> {
 
 
     handleEditPost = (title: string, description: string, link: string) => {
-        editPost(title, description, link,1,"post")
+        let postId = this.props.location.state.post.id;
+        editPost(title, description, link, postId,"post")
             .then(() => {
                 this.setState({errorMessage: '', successMessage: 'Post successfully edited'});
-                this.props.history.push('/main/home');
+                this.props.history.push('/main/post/' + postId);
             })
             .catch((err) => {
                 if (err.status === 409)
@@ -83,7 +82,8 @@ class EditPost extends Component<Props, State> {
     }
 
     private handleCancel() {
-        this.props.history.push('/main/home');
+        this.props.location.state ? this.props.history.push('/main/post/' + this.props.location.state.post.id, {post: this.props.location.state.post}) :
+            this.props.history.push('/main/home');
     }
 
     handleOnFocus = (prop: string) => {
