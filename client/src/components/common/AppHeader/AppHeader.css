@@ -4,6 +4,10 @@
     width: 100%;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    place-items: center;
+    justify-content: center;
+    place-content: space-evenly;
 }
 
 .app-title {
@@ -18,7 +22,9 @@
     align-items: center;
     justify-content: center;
     border-right: 2px solid #1EA083;
-    padding: 0 10px;
+    padding: 0 20px;
+    height: 100%;
+    width: 12%;
 
 }
 
@@ -27,21 +33,35 @@
     width: 50px;
 }
 
-.app-options {
+.searchbar-container {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-end;
+    justify-content: inherit;
+    place-content: inherit;
     height: 100%;
     width: 100%;
 }
 
-.app-option {
+
+.app-options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    place-items: center;
+    justify-content: center;
+    place-content: space-evenly;
+    height: 100%;
+    width: 100%;
+}
+
+
+.logo-container {
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-right: 2px solid #1EA083;
+    justify-content: flex-end;
+    place-content: space-evenly;
     padding: 0 20px;
     text-decoration: none;
     color: #F4F4F4;
@@ -51,7 +71,32 @@
     cursor: pointer;
 }
 
-.app-option:hover{
+
+
+
+
+
+
+
+.searchbar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    place-content: space-evenly;
+    border-right: 2px solid #1EA083;
+    border-left: 2px solid #1EA083;
+    padding: 0 20px;
+    text-decoration: none;
+    color: #F4F4F4;
+    font-family: Bitter, sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+
+.searchbar:hover{
     background-color: #1EA083;
 }
 
@@ -91,5 +136,8 @@
 }
 
 .logout:hover{
+    background-color: #1EA083;
+}
+.profile:hover{
     background-color: #1EA083;
 }

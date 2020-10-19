@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, withRouter} from 'react-router-dom';
+import {NavLink, withRouter} from 'react-router-dom';
 import './AppHeader.css';
 import logo from '../../../assets/TrendzLogo.png';
 import {MdSearch} from 'react-icons/md';
@@ -12,23 +12,27 @@ const AppHeader = ({history}: any) => {
     }
 
     return (
-        <header className={"app-header"}>
-            <NavLink to={"/main/home"} >
-            <div className={"app-branding"}>
-                    <img  src={logo} alt={''}/>
-            </div>
-            </NavLink>
-            <div className={"app-options"}>
-                <div style={{display: 'flex', flexDirection: 'row', height: '100%'}}>
-                    <div className={"app-option"}>
-                        <MdSearch size={20} color={'white'}/>
-                    <input placeholder={"Search...."} style={{width: "100%", height:"30%"}} ></input>
+        <div style={{}}>
+            <header className={"app-header"}>
+                <div className={"app-options"}>
+                    <div className={"app-branding"}>
+                        <NavLink to={"/main/home"}>
+
+                            <img src={logo} alt={''} style={{height: '100%'}}/>
+
+                        </NavLink>
+                    </div>
+                    <div className={"searchbar-container"}>
+                        <div className={"searchbar"}>
+                            <MdSearch size={20} color={'white'}/>
+                            <input placeholder={"Search...."} style={{width: '500px', height: "30%",}}></input>
                         </div>
+                    </div>
+                    <NavLink to={"/main/profile"} className={"profile"}>Profile</NavLink>
+                    <div className={'logout'} onClick={() => handleLogout()}>Logout</div>
                 </div>
-            </div>
-            <NavLink to={"/main/profile"} className={"profile"}>Profile</NavLink>
-            <div className={'logout'} onClick={() => handleLogout()}>Logout</div>
-        </header>
+            </header>
+        </div>
     )
 }
 
