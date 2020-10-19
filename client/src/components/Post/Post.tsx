@@ -218,7 +218,7 @@ class Post extends Component<Props, State> {
                         <div>
 
                             <div className={'comment-body'}>
-                            <textarea style={{width: "100%"}} placeholder={'Your comment here..'}
+                            <textarea  placeholder={'Your comment here..'}
                                       onChange={props.handleChange('comment')}
                                       value={props.values.comment}
                                       onFocus={() => this.handleOnFocus('comment')}
