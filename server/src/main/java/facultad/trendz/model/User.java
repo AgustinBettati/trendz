@@ -43,6 +43,8 @@ public class User {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.downvotedPosts= new ArrayList<>();
+        this.upvotedPosts=new ArrayList<>();
     }
 
     public Long getId() {
@@ -99,5 +101,21 @@ public class User {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public List<Post> getUpvotedPosts() {
+        return upvotedPosts;
+    }
+
+    public void setUpvotedPosts(List<Post> upvotedPosts) {
+        this.upvotedPosts = upvotedPosts;
+    }
+
+    public List<Post> getDownvotedPosts() {
+        return downvotedPosts;
+    }
+
+    public void setDownvotedPosts(List<Post> downvotedPosts) {
+        this.downvotedPosts = downvotedPosts;
     }
 }

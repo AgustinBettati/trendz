@@ -58,6 +58,8 @@ public class Post {
         this.date = date;
         this.topic = topic;
         this.user = user;
+        this.upvotes=new ArrayList<>();
+        this.downvotes=new ArrayList<>();
     }
 
     public Post() {
@@ -131,5 +133,21 @@ public class Post {
 
     public void addComment(Comment comment){
         comments.add(comment);
+    }
+
+    public List<User> getUpvotes() {
+        return upvotes;
+    }
+
+    public void setUpvotes(List<User> upvotes) {
+        this.upvotes = upvotes;
+    }
+
+    public List<User> getDownvotes() {
+        return downvotes;
+    }
+
+    public void setDownvotes(List<User> downvotes) {
+        this.downvotes = downvotes;
     }
 }

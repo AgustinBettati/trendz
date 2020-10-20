@@ -2,14 +2,12 @@ package facultad.trendz.service;
 
 import facultad.trendz.config.model.MyUserDetails;
 import facultad.trendz.dto.comment.CommentResponseDTO;
-import facultad.trendz.dto.post.PostCreateDTO;
-import facultad.trendz.dto.post.PostEditDTO;
-import facultad.trendz.dto.post.PostResponseDTO;
-import facultad.trendz.dto.post.SimplePostResponseDTO;
+import facultad.trendz.dto.post.*;
 import facultad.trendz.exception.post.PostExistsException;
 import facultad.trendz.exception.post.PostNotFoundException;
 import facultad.trendz.model.Comment;
 import facultad.trendz.model.Post;
+import facultad.trendz.model.User;
 import facultad.trendz.repository.PostRepository;
 import facultad.trendz.repository.TopicRepository;
 import facultad.trendz.repository.UserRepository;
@@ -124,4 +122,25 @@ public class PostService {
                         comment.getUser().getId()))
                 .collect(Collectors.toList());
     }
-}
+
+    public UpvoteResponseDTO upvotePost(Long userId, Long postId) {
+        final Optional<Post> post = postRepository.findById(postId);
+        if (!post.isPresent()) throw new PostNotFoundException();
+        final Optional<User> user = userRepository.findById(userId);
+        post.get().getUpvotes().add(user.get());
+        user.get().getUpvotedPosts().add(post.get());
+        return new UpvoteResponseDTO(userId, user.get().getUsername(), postId, post.get().getTitle());
+    }
+    public DownvoteResponseDTO downvotePost(Long userId, Long postId) {
+        final Optional<Post> post = postRepository.findById(postId);
+        if (!post.isPresent()) throw new PostNotFoundException();
+        final Optional<User> user = userRepository.findById(userId);
+        post.get().getDownvotes().add(user.get());
+        user.get().getDownvotedPosts().add(post.get());
+        return new DownvoteResponseDTO(userId, user.get().getUsername(), postId, post.get().getTitle());
+    }
+
+
+    }
+
+
