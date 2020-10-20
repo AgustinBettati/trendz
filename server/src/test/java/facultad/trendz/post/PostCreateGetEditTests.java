@@ -3,7 +3,6 @@ package facultad.trendz.post;
 import facultad.trendz.TestUtils;
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostEditDTO;
-import facultad.trendz.dto.post.PostGetDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.JwtResponseDTO;
@@ -259,7 +258,7 @@ public class PostCreateGetEditTests extends TestUtils {
 
 
 
-        ResponseEntity<PostGetDTO> response = restTemplate.exchange(uri, HttpMethod.GET, getEntity, new ParameterizedTypeReference<PostGetDTO>() {});
+        ResponseEntity<PostResponseDTO> response = restTemplate.exchange(uri, HttpMethod.GET, getEntity, new ParameterizedTypeReference<PostResponseDTO>() {});
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
         Assert.assertEquals("testTitle6", response.getBody().getTitle());
@@ -286,7 +285,7 @@ public class PostCreateGetEditTests extends TestUtils {
         final String url = "http://localhost:" + randomServerPort + "/post/"+99;
         URI uri = new URI(url);
 
-        try{ResponseEntity<PostGetDTO> response = restTemplate.exchange(uri, HttpMethod.GET, getEntity, new ParameterizedTypeReference<PostGetDTO>() {});}
+        try{ResponseEntity<PostResponseDTO> response = restTemplate.exchange(uri, HttpMethod.GET, getEntity, new ParameterizedTypeReference<PostResponseDTO>() {});}
         catch (HttpClientErrorException e){
             Assert.assertEquals("404",e.getMessage().substring(0,3) );
 

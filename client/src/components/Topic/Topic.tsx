@@ -5,7 +5,7 @@ import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import ReactPaginate from "react-paginate";
 import {parseJwt} from "../Routing/utils";
 import Modal from "react-modal";
-import {deleteTopic} from "../../api/TopicApi";
+import {deleteTopic, getTopic} from "../../api/TopicApi";
 import { getTopicPosts} from "../../api/TopicApi";
 import {TopicType} from "../types/types";
 
@@ -15,7 +15,8 @@ export type State = {
     posts: any[],
     showModal: boolean,
     currentPage: number,
-    topic: TopicType
+    topic: TopicType,
+    topicErrorMessage: string
 }
 
 class Topic extends Component<Props, State> {
@@ -29,32 +30,18 @@ class Topic extends Component<Props, State> {
                 description: ''
             },
             showModal: false,
-            posts: [
-                {id: 0, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-                {id: 1, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-                {id: 2, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-                {id: 3, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-                {id: 4, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-                {id: 5, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-                {id: 6, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-                {id: 7, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-                {id: 8, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-                {id: 9, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-                {id: 10, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-                {id: 11, link: 'https://trello.com/c/pjHHwlbl/42-issue-0144-visualizacion-de-un-topic',title: 'This is the title of the post', author: 'Jhon Mark', description: 'This is the description for a humor post. asd asd asd asd sad asd as das das dasda sdasd asdasdasd asdasd asdas dasdasd asda sdas dasdasd asdas dasd asd as dasd asd asda.'},
-            ],
+            topicErrorMessage: '',
+            posts: [],
             currentPage: 0
         }
     };
 
     componentDidMount() {
-        this.props.location.state && this.setState({topic: this.props.location.state.topic})
+        this.props.location.state ? this.setState({topic: this.props.location.state.topic}) :
+             getTopic(this.props.match.params.id)
+                 .then((res) => this.setState({topic: res}))
+                 .catch((err) => this.setState({topicErrorMessage: err}))
         getTopicPosts(this.props.match.params.id).then(res => this.setState({posts: res}))
-        // with get topic by id endpoint
-        // this.props.location.state ? this.setState({topic: this.props.location.state.topic}) :
-        //     getTopicData(this.props.match.params.id)
-        //         .then((res) => this.setState({topic: res}))
-        //         .catch((err) => this.setState({topicErrorMessage: err}))
     }
 
     handleCancel = () => {

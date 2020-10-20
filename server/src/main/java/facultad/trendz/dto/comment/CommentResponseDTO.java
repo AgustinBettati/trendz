@@ -5,19 +5,23 @@ import java.util.Date;
 public class CommentResponseDTO {
 
     private Long id;
+    private Long userId;
     private String username;
     private Long postId;
     private String content;
     private Date creationDate;
     private Date editDate;
+    private boolean deleted;
 
-    public CommentResponseDTO(Long id, String username, Long postId, String content, Date creationDate, Date editDate) {
+    public CommentResponseDTO(Long id, String username, Long postId, String content, Date creationDate, Date editDate, boolean deleted, Long userId) {
         this.id = id;
         this.username = username;
         this.postId = postId;
         this.content = content;
         this.creationDate = creationDate;
         this.editDate = editDate;
+        this.deleted = deleted;
+        this.userId = userId;
     }
 
     public CommentResponseDTO() {
@@ -69,5 +73,21 @@ public class CommentResponseDTO {
 
     public void setEditDate(Date editDate) {
         this.editDate = editDate;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

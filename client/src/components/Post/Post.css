@@ -165,10 +165,53 @@
 }
 
 .comment-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-style: italic;
     font-size: 12px;
     font-family: Bitter, sans-serif;
     font-weight: bold;
     color: #00B090;
     margin-bottom: 5px;
+}
+
+.edit-comment{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 95%;
+}
+
+.edit-comment textarea{
+    width: 100%;
+    resize: none;
+}
+
+.edit-comment .save-button{
+    background-color: #00b090;
+    font-size: 16px;
+    font-family: Bitter, sans-serif;
+    font-weight: bold;
+    color: #F4F4F4;
+    border: none;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.edit-comment .cancel-button{
+    margin-left: 10px;
+    background-color: #DF6052;
+    font-size: 16px;
+    font-family: Bitter, sans-serif;
+    font-weight: bold;
+    color: #F4F4F4;
+    border: none;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.edit-comment button:hover{
+    cursor: pointer;
+    filter: brightness(0.9);
 }

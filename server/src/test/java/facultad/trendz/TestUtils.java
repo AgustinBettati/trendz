@@ -1,5 +1,6 @@
 package facultad.trendz;
 
+import facultad.trendz.dto.MessageResponseDTO;
 import facultad.trendz.dto.comment.CommentCreateDTO;
 import facultad.trendz.dto.comment.CommentResponseDTO;
 import facultad.trendz.dto.post.PostCreateDTO;
@@ -119,5 +120,19 @@ public abstract class TestUtils {
         URI commentEditUri = new URI(commentEditUrl);
 
         return restTemplate.exchange(commentEditUri, HttpMethod.PUT, commentEditEntity, CommentResponseDTO.class);
+    }
+
+    public ResponseEntity<MessageResponseDTO> deleteComment(Long commentId, String jwt, int randomServerPort) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwt);
+
+        HttpEntity<CommentCreateDTO> commentDeleteEntity = new HttpEntity<>(headers);
+
+        final String commentDeleteUrl = String.format("http://localhost:%d/comment/%d", randomServerPort, commentId);
+        URI commentDeleteUri = new URI(commentDeleteUrl);
+
+        return restTemplate.exchange(commentDeleteUri, HttpMethod.DELETE, commentDeleteEntity, MessageResponseDTO.class);
     }
 }
