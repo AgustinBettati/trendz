@@ -13,5 +13,6 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
     Topic getTopicById(Long id);
     List<Topic> findAllByDeletedIsFalse();
     Optional<Topic> findByIdAndDeletedIsFalse(Long id);
+    List<Topic> findByTitleIgnoreCaseContainingAndDeletedIsFalse(String title);
 
 }

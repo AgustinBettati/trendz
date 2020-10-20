@@ -110,6 +110,20 @@ public class PostService {
         postRepository.delete(postRepository.findById(postId).orElseThrow(PostNotFoundException::new));
     }
 
+    public List<SimplePostResponseDTO> findPostByTitle(String title){
+        return postRepository.findByTitleIgnoreCaseContaining(title)
+                .stream()
+                .map(post -> new SimplePostResponseDTO(post.getId(),
+                        post.getTitle(),
+                        post.getDescription(),
+                        post.getLink(),
+                        post.getDate(),
+                        post.getTopic().getId(),
+                        post.getUser().getId(),
+                        post.getUser().getUsername()))
+                .collect(Collectors.toList());
+    }
+
     private List<CommentResponseDTO> commentListToDTO(List<Comment> comments){
         return comments.stream()
                 .filter(comment -> !comment.isDeleted())
