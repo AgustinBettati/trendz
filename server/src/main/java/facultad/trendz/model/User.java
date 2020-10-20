@@ -1,6 +1,8 @@
 package facultad.trendz.model;
 
 import javax.persistence.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,6 +26,14 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Comment> comments;
+
+
+    @ManyToMany(mappedBy = "upvotes")
+    private List<Post> upvotedPosts = new ArrayList<>();
+
+
+    @ManyToMany(mappedBy = "downvotes")
+    private List<Post> downvotedPosts = new ArrayList<>();
 
     public User() {
     }

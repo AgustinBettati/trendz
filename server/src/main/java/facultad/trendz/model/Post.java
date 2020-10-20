@@ -1,6 +1,7 @@
 package facultad.trendz.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +31,24 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable=false)
     private User user;
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "Upvote",
+            joinColumns = { @JoinColumn(name = "post_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+    )
+    List<User> upvotes = new ArrayList<>();
+
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "Downvote",
+            joinColumns = { @JoinColumn(name = "post_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+    )
+    List<User> downvotes = new ArrayList<>();
+
 
 
     public Post(String title, String description, String link, Date date, Topic topic, User user) {
