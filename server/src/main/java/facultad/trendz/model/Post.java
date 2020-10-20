@@ -2,6 +2,7 @@ package facultad.trendz.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -19,18 +20,25 @@ public class Post {
 
     private Date date;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    private List<Comment> comments;
 
     @ManyToOne()
     @JoinColumn(name="topic_id", nullable=false)
     private Topic topic;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id", nullable=false)
+    private User user;
 
-    public Post(String title, String description, String link, Date date, Topic topic) {
+
+    public Post(String title, String description, String link, Date date, Topic topic, User user) {
         this.title = title;
         this.description = description;
         this.link = link;
         this.date = date;
         this.topic = topic;
+        this.user = user;
     }
 
     public Post() {
@@ -84,5 +92,25 @@ public class Post {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(Comment comment){
+        comments.add(comment);
     }
 }

@@ -39,17 +39,23 @@ class CreatePost extends Component<Props, State> {
     }
 
     handleSubmitPost = (title: string, description: string, link: string) => {
-             createPost(title, description, link,1,"post")
-                 .then((res) => {
-                     this.setState({errorMessage: '', successMessage: 'Post succesfully created'});
+            let topic = this.props.location.state.topic;
+             createPost(title, description, link, topic.id,"post")
+                 .then(() => {
+                     this.setState({errorMessage: '', successMessage: 'Post successfully created'});
+                     this.props.history.push('/main/topic/' + topic.id, {topic: topic});
                  })
-                 .catch(() => {
-                     this.setState({successMessage: '', errorMessage:'Title already in use'});
+                 .catch((err) => {
+                     if (err.status === 409)
+                         this.setState({successMessage: '', errorMessage: 'Title already in use'});
+                     else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
                  })
+
     }
 
     private handleCancel() {
-        this.props.history.push('/main/home');
+        let topic = this.props.location.state.topic;
+        this.props.history.push('/main/topic/' + topic.id, {topic: topic});
     }
 
     handleOnFocus = (prop: string) => {
@@ -119,6 +125,8 @@ class CreatePost extends Component<Props, State> {
                                             value={props.values.description}
                                             onFocus={() => this.handleOnFocus('description')}
                                             onBlur={() => !props.errors.description && this.handleOnBlur('description')}
+                                            rows={5}
+                                            cols={77}
                                         />
                                         <div
                                             className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>
@@ -150,6 +158,7 @@ class CreatePost extends Component<Props, State> {
                                         }
 
                                     </div>
+
                                     <TrendzButton
                                         title={'Submit'}
                                         onClick={() => props.values.title === ''  && props.values.description === '' ?

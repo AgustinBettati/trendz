@@ -1,6 +1,9 @@
 package facultad.trendz.dto.post;
 
+import facultad.trendz.dto.comment.CommentResponseDTO;
+
 import java.util.Date;
+import java.util.List;
 
 public class PostResponseDTO {
 
@@ -10,15 +13,21 @@ public class PostResponseDTO {
     private String link;
     private Date date;
     private Long topicId;
+    private Long userId;
+    private String username;
+    private List<CommentResponseDTO> comments;
 
 
-    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId){
+    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username){
         this.id = id;
         this.title = title;
         this.description = description;
         this.link=link;
         this.topicId=topicId;
         this.date=date;
+        this.userId=userId;
+        this.comments = comments;
+        this.username = username;
     }
 
     public PostResponseDTO() {}
@@ -69,5 +78,29 @@ public class PostResponseDTO {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public List<CommentResponseDTO> getComment() {
+        return comments;
+    }
+
+    public void setComment(List<CommentResponseDTO> comment) {
+        this.comments = comment;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

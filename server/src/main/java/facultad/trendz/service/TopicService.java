@@ -1,6 +1,6 @@
 package facultad.trendz.service;
 
-import facultad.trendz.dto.post.PostGetDTO;
+import facultad.trendz.dto.post.SimplePostResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.exception.topic.TopicExistsException;
@@ -54,14 +54,25 @@ public class TopicService {
         topicRepository.save(topic.get());
     }
 
-    public List<PostGetDTO> getTopicPosts(Long topicId) {
+    public List<SimplePostResponseDTO> getTopicPosts(Long topicId) {
        List<Post> posts = topicRepository.getTopicById(topicId).getPosts();
-        List<PostGetDTO> postsInfo = new ArrayList<>(posts.size());
+        List<SimplePostResponseDTO> postsInfo = new ArrayList<>(posts.size());
         for (Post post : posts) {
-            postsInfo.add(new PostGetDTO(post.getId(), post.getTitle(), post.getDescription(),post.getLink(), post.getDate()));
+            postsInfo.add(new SimplePostResponseDTO(post.getId(),
+                    post.getTitle(),
+                    post.getDescription(),
+                    post.getLink(),
+                    post.getDate(),
+                    post.getTopic().getId(),
+                    post.getUser().getId(),
+                    post.getUser().getUsername()));
         }
         return postsInfo;
+    }
 
-
+    public TopicResponseDTO getTopicById(Long topicId) {
+        return topicRepository.findByIdAndDeletedIsFalse(topicId).map(topic ->
+                new TopicResponseDTO(topicId, topic.getTitle(), topic.getDescription(), topic.getCreationDate())
+        ).orElseThrow(TopicNotFoundException::new);
     }
 }

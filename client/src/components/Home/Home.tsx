@@ -4,16 +4,15 @@ import {RouteComponentProps, withRouter} from "react-router-dom";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import ReactPaginate from "react-paginate";
 import {parseJwt} from "../Routing/utils";
-import {Icon} from "react-icons-kit";
-import {trash} from 'react-icons-kit/fa/trash';
+import {MdDelete} from 'react-icons/md';
 import Modal from "react-modal";
 import {deleteTopic, getTopics} from "../../api/TopicApi";
-import {Topic} from "../types/types";
+import {TopicType} from "../types/types";
 
 export type Props = RouteComponentProps<any> & {}
 
 export type State = {
-    topics: Topic[],
+    topics: TopicType[],
     showModal: boolean,
     selectedTopic: number
     currentPage: number
@@ -65,8 +64,8 @@ class Home extends Component<Props, State> {
         this.setState({currentPage: data.selected})
     }
 
-    handleTopicSelection = (topic: Topic) => {
-        this.props.history.push('/main/topic', {topic: topic})
+    handleTopicSelection = (topic: TopicType) => {
+        this.props.history.push('/main/topic/' + topic.id, {topic: topic})
     }
 
     render() {
@@ -105,15 +104,14 @@ class Home extends Component<Props, State> {
                 <div className={'topics-container'}>
                     {
                         this.state.topics.length &&
-                        this.renderTopics(this.state.currentPage).map((topic) => (
-                            <div className={'card-wrapper'}>
+                        this.renderTopics(this.state.currentPage).map((topic, index) => (
+                            <div className={'card-wrapper'} key={index}>
                                 <div className={'topic-card'} onClick={() => this.handleTopicSelection(topic)}>
                                     <div className={'topic-header'}>
                                         {topic.title}
                                         {
                                             parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') &&
-                                            <Icon
-                                                icon={trash}
+                                            <MdDelete
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     this.handleDelete(topic.id);

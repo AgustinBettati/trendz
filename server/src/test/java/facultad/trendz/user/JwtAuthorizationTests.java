@@ -1,4 +1,4 @@
-package facultad.trendz;
+package facultad.trendz.user;
 
 import facultad.trendz.dto.user.JwtResponseDTO;
 import facultad.trendz.dto.user.LoginDTO;

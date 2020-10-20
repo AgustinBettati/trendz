@@ -10,8 +10,6 @@ import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
 import {editPost} from "../../api/PostApi";
 import {getPostData} from "../../api/PostApi";
-import {parseJwt} from "../Routing/utils";
-import {getUserData} from "../../api/UserApi";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -52,7 +50,7 @@ class EditPost extends Component<Props, State> {
 
 
     componentDidMount() {
-        getPostData(1)
+        getPostData(this.props.location.state ? this.props.location.state.post.id : null)
             .then((res:any) => {
                 this.setState({title: res.title, description: res.description, link:res.link})
                 this.setState({
@@ -70,18 +68,22 @@ class EditPost extends Component<Props, State> {
 
 
     handleEditPost = (title: string, description: string, link: string) => {
-        editPost(title, description, link,1,"post")
-            .then((res) => {
-                this.setState({errorMessage: '', successMessage: 'Post succesfully edited'});
-                this.props.history.push('/main/home');
+        let postId = this.props.location.state.post.id;
+        editPost(title, description, link, postId,"post")
+            .then(() => {
+                this.setState({errorMessage: '', successMessage: 'Post successfully edited'});
+                this.props.history.push('/main/post/' + postId);
             })
-            .catch(() => {
-                this.setState({successMessage: '', errorMessage:'Title already in use'});
+            .catch((err) => {
+                if (err.status === 409)
+                    this.setState({successMessage: '', errorMessage: 'Title already in use'});
+                else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
             })
     }
 
     private handleCancel() {
-        this.props.history.push('/main/home');
+        this.props.location.state ? this.props.history.push('/main/post/' + this.props.location.state.post.id, {post: this.props.location.state.post}) :
+            this.props.history.push('/main/home');
     }
 
     handleOnFocus = (prop: string) => {
@@ -155,6 +157,8 @@ class EditPost extends Component<Props, State> {
                                                 value={props.values.description}
                                                 onFocus={() => this.handleOnFocus('description')}
                                                 onBlur={() => !props.errors.description && this.handleOnBlur('description')}
+                                                rows={5}
+                                                cols={77}
                                             />
                                             <div
                                                 className={'error-message'}>{this.state.descriptionTouched && props.errors.description}</div>

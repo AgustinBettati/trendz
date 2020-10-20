@@ -1,12 +1,12 @@
-package facultad.trendz;
+package facultad.trendz.topic;
 
+import facultad.trendz.TestUtils;
 import facultad.trendz.dto.*;
 import facultad.trendz.dto.post.PostCreateDTO;
-import facultad.trendz.dto.post.PostGetDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
+import facultad.trendz.dto.post.SimplePostResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
-import facultad.trendz.dto.user.*;
 import facultad.trendz.dto.user.JwtResponseDTO;
 import facultad.trendz.repository.TopicRepository;
 import org.junit.Assert;
@@ -30,7 +30,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TopicTests {
+public class TopicTests extends TestUtils {
 
     @LocalServerPort
     int randomServerPort;
@@ -42,7 +42,7 @@ public class TopicTests {
     public void testDeleteTopic() throws URISyntaxException {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin", randomServerPort);
         String jwtToken = loginResponse.getBody().getToken();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
@@ -77,7 +77,7 @@ public class TopicTests {
     public void testDeleteInvalidTopic() throws URISyntaxException {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin", randomServerPort);
 
         String jwtToken = loginResponse.getBody().getToken();
         HttpHeaders headers = new HttpHeaders();
@@ -105,7 +105,7 @@ public class TopicTests {
     public void testGetPopularTopics() throws URISyntaxException {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin", randomServerPort);
         String jwtToken = loginResponse.getBody().getToken();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + jwtToken);
@@ -134,17 +134,17 @@ public class TopicTests {
 
         //15 posts por topic#3
         for (int i = 0; i < topic1Amount; i++) {
-            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response3.getBody().getId()),jwtToken);
+            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response3.getBody().getId()),jwtToken, randomServerPort);
         }
 
         //14 posts for topic#1
         for (int i = topic1Amount; i < topic1Amount + topic2Amount; i++) {
-            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response1.getBody().getId()),jwtToken);
+            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response1.getBody().getId()),jwtToken, randomServerPort);
         }
 
         //13 posts for topic#2
         for (int i = topic1Amount + topic2Amount; i < topic1Amount + topic2Amount + topic3Amount; i++) {
-            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response2.getBody().getId()),jwtToken);
+            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response2.getBody().getId()),jwtToken, randomServerPort);
         }
 
         HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(headers);
@@ -164,7 +164,7 @@ public class TopicTests {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin", randomServerPort);
 
         String jwtToken = loginResponse.getBody().getToken();
         HttpHeaders headers = new HttpHeaders();
@@ -190,7 +190,7 @@ public class TopicTests {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+        ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin", randomServerPort);
 
         String jwtToken = loginResponse.getBody().getToken();
         HttpHeaders headers = new HttpHeaders();
@@ -224,7 +224,7 @@ public class TopicTests {
   public void testGetPostsByTopic() throws URISyntaxException {
     //GIVEN
     RestTemplate restTemplate = new RestTemplate();
-    ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin");
+    ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin", randomServerPort);
     String jwtToken = loginResponse.getBody().getToken();
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + jwtToken);
@@ -263,7 +263,7 @@ public class TopicTests {
 
     HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(headers);
     //WHEN
-    ResponseEntity<List<PostGetDTO>> response = restTemplate.exchange(topicsUri2, HttpMethod.GET, entity, new ParameterizedTypeReference<List<PostGetDTO>>() {});
+    ResponseEntity<List<SimplePostResponseDTO>> response = restTemplate.exchange(topicsUri2, HttpMethod.GET, entity, new ParameterizedTypeReference<List<SimplePostResponseDTO>>() {});
     //THEN
     Assert.assertEquals(200, response.getStatusCodeValue());
 
@@ -272,28 +272,4 @@ public class TopicTests {
     Assert.assertEquals("Post3", response.getBody().get(2).getTitle());
 
   }
-
-    private ResponseEntity<JwtResponseDTO> loginUser(String email, String password) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
-        final String loginUrl = "http://localhost:" + randomServerPort + "/login";
-        URI loginUri = new URI(loginUrl);
-        HttpHeaders loginHeaders = new HttpHeaders();
-        LoginDTO loginDTO = new LoginDTO(email, password);
-        HttpEntity<LoginDTO> loginRequest = new HttpEntity<>(loginDTO, loginHeaders);
-        return restTemplate.postForEntity(loginUri, loginRequest, JwtResponseDTO.class);
-    }
-
-    private void addPostToTopic(PostCreateDTO post, String jwt) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + jwt);
-
-        HttpEntity<PostCreateDTO> postEntity = new HttpEntity<>(post, headers);
-
-        final String postsUrl = "http://localhost:" + randomServerPort + "/post";
-        URI postsUri = new URI(postsUrl);
-
-        restTemplate.postForEntity(postsUri,postEntity, PostResponseDTO.class);
-    }
 }
