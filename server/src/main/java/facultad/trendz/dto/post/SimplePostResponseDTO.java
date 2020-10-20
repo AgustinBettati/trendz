@@ -1,30 +1,31 @@
 package facultad.trendz.dto.post;
 
-
 import java.util.Date;
 
-public class PostGetDTO {
+public class SimplePostResponseDTO {
 
     private Long id;
     private String title;
     private String description;
     private String link;
     private Date date;
-    private long userId;
+    private Long topicId;
+    private Long userId;
     private String username;
 
 
-    public PostGetDTO(Long id, String title, String description, String link, Date date, long userId, String username){
+    public SimplePostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, String username){
         this.id = id;
         this.title = title;
         this.description = description;
         this.link=link;
+        this.topicId=topicId;
         this.date=date;
         this.userId=userId;
-        this.username=username;
+        this.username = username;
     }
 
-    public PostGetDTO() {}
+    public SimplePostResponseDTO() {}
 
     public Long getId() {
         return id;
@@ -58,6 +59,14 @@ public class PostGetDTO {
         this.link = link;
     }
 
+    public Long getTopicId() {
+        return topicId;
+    }
+
+    public void setTopicId(Long topicId) {
+        this.topicId = topicId;
+    }
+
     public Date getDate() {
         return date;
     }
@@ -66,11 +75,11 @@ public class PostGetDTO {
         this.date = date;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

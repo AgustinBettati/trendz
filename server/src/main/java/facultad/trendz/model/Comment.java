@@ -26,6 +26,8 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    private boolean deleted;
+
     public Comment(String content, Date date, User user, Post post) {
         this.content = content;
         this.date = date;
@@ -82,5 +84,13 @@ public class Comment {
 
     public void setEditDate(Date editDate) {
         this.editDate = editDate;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
