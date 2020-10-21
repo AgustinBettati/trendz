@@ -113,6 +113,7 @@ public class PostService {
     public List<SimplePostResponseDTO> findPostByTitle(String title){
         return postRepository.findByTitleIgnoreCaseContaining(title)
                 .stream()
+                .sorted(Comparator.comparing(Post::getDate).reversed())
                 .map(post -> new SimplePostResponseDTO(post.getId(),
                         post.getTitle(),
                         post.getDescription(),

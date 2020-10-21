@@ -80,6 +80,7 @@ public class TopicService {
     public List<TopicResponseDTO> findTopicByTitle(String title) {
         return topicRepository.findByTitleIgnoreCaseContainingAndDeletedIsFalse(title)
                 .stream()
+                .sorted(Comparator.comparing(Topic::getCreationDate).reversed())
                 .map(topic -> new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(), topic.getCreationDate()))
                 .collect(Collectors.toList());
     }
