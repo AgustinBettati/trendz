@@ -118,4 +118,12 @@ public class User {
     public void setDownvotedPosts(List<Post> downvotedPosts) {
         this.downvotedPosts = downvotedPosts;
     }
+
+    public boolean isUpvoted(Post post){
+        return upvotedPosts.contains(post);
+    }
+
+    public boolean isDownvoted(Post post){
+        return downvotedPosts.contains(post);
+    }
 }

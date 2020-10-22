@@ -127,20 +127,46 @@ public class PostService {
         final Optional<Post> post = postRepository.findById(postId);
         if (!post.isPresent()) throw new PostNotFoundException();
         final Optional<User> user = userRepository.findById(userId);
+        if(user.get().isDownvoted(post.get())){
+            DeleteDownvotePost(user.get(),post.get());
+        }
         post.get().getUpvotes().add(user.get());
         user.get().getUpvotedPosts().add(post.get());
+        postRepository.save(post.get());
+        userRepository.save(user.get());
         return new UpvoteResponseDTO(userId, user.get().getUsername(), postId, post.get().getTitle());
     }
+
+    private void DeleteDownvotePost(User user,Post post) {
+        post.getDownvotes().remove(user);
+        user.getDownvotedPosts().remove(post);
+        postRepository.save(post);
+        userRepository.save(user);
+
+    }
+
     public DownvoteResponseDTO downvotePost(Long userId, Long postId) {
         final Optional<Post> post = postRepository.findById(postId);
         if (!post.isPresent()) throw new PostNotFoundException();
         final Optional<User> user = userRepository.findById(userId);
+        if(user.get().isUpvoted(post.get())){
+            DeleteUpvotePost(user.get(),post.get());
+        }
         post.get().getDownvotes().add(user.get());
         user.get().getDownvotedPosts().add(post.get());
+        postRepository.save(post.get());
+        userRepository.save(user.get());
         return new DownvoteResponseDTO(userId, user.get().getUsername(), postId, post.get().getTitle());
     }
 
-
+    private void DeleteUpvotePost(User user, Post post) {
+        post.getUpvotes().remove(user);
+        user.getUpvotedPosts().remove(post);
+        postRepository.save(post);
+        userRepository.save(user);
     }
+
+
+}
 
 
