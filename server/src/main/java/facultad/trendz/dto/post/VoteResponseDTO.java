@@ -3,7 +3,7 @@ package facultad.trendz.dto.post;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class UpvoteResponseDTO {
+public class VoteResponseDTO {
 
 
     @NotNull(message = "UserId cannot be empty")
@@ -19,7 +19,7 @@ public class UpvoteResponseDTO {
     private String postTitle;
 
 
-    public UpvoteResponseDTO(@NotNull(message = "UserId cannot be empty") Long userId,
+    public VoteResponseDTO(@NotNull(message = "UserId cannot be empty") Long userId,
                              @NotNull(message = "Username cannot be empty") String username,
                              @NotNull(message = "postId cannot be empty") Long postId,
                              @NotNull(message = "postTitle cannot be empty") String postTitle) {

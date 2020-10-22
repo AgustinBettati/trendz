@@ -65,17 +65,17 @@ public class PostController implements ControllerUtils {
 
 
     @PutMapping("/post/upvote/{postId}")
-    public ResponseEntity<UpvoteResponseDTO> upvotePost(@PathVariable Long postId,Authentication authentication) {
+    public ResponseEntity<VoteResponseDTO> upvotePost(@PathVariable Long postId,Authentication authentication) {
         MyUserDetails userDetails = (MyUserDetails)authentication.getPrincipal();
-        final UpvoteResponseDTO body = postService.upvotePost(userDetails.getId(), postId);
+        final VoteResponseDTO body = postService.upvotePost(userDetails.getId(), postId);
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body,status);
     }
 
     @PutMapping("/post/downvote/{postId}")
-    public ResponseEntity<DownvoteResponseDTO> downvotePost(@PathVariable Long postId,Authentication authentication) {
+    public ResponseEntity<VoteResponseDTO> downvotePost(@PathVariable Long postId,Authentication authentication) {
         MyUserDetails userDetails = (MyUserDetails)authentication.getPrincipal();
-        final DownvoteResponseDTO body = postService.downvotePost(userDetails.getId(), postId);
+        final VoteResponseDTO body = postService.downvotePost(userDetails.getId(), postId);
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body,status);
     }

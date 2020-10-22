@@ -123,7 +123,7 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public UpvoteResponseDTO upvotePost(Long userId, Long postId) {
+    public VoteResponseDTO upvotePost(Long userId, Long postId) {
         final Optional<Post> post = postRepository.findById(postId);
         if (!post.isPresent()) throw new PostNotFoundException();
         final Optional<User> user = userRepository.findById(userId);
@@ -134,7 +134,7 @@ public class PostService {
         user.get().getUpvotedPosts().add(post.get());
         postRepository.save(post.get());
         userRepository.save(user.get());
-        return new UpvoteResponseDTO(userId, user.get().getUsername(), postId, post.get().getTitle());
+        return new VoteResponseDTO(userId, user.get().getUsername(), postId, post.get().getTitle());
     }
 
     private void DeleteDownvotePost(User user,Post post) {
@@ -145,7 +145,7 @@ public class PostService {
 
     }
 
-    public DownvoteResponseDTO downvotePost(Long userId, Long postId) {
+    public VoteResponseDTO downvotePost(Long userId, Long postId) {
         final Optional<Post> post = postRepository.findById(postId);
         if (!post.isPresent()) throw new PostNotFoundException();
         final Optional<User> user = userRepository.findById(userId);
@@ -156,7 +156,7 @@ public class PostService {
         user.get().getDownvotedPosts().add(post.get());
         postRepository.save(post.get());
         userRepository.save(user.get());
-        return new DownvoteResponseDTO(userId, user.get().getUsername(), postId, post.get().getTitle());
+        return new VoteResponseDTO(userId, user.get().getUsername(), postId, post.get().getTitle());
     }
 
     private void DeleteUpvotePost(User user, Post post) {
