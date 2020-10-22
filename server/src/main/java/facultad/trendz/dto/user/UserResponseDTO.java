@@ -8,12 +8,14 @@ public class UserResponseDTO {
     private String email;
     private String username;
     private Role role;
+    private boolean deleted;
 
-    public UserResponseDTO(Long id, String email, String username, Role role) {
+    public UserResponseDTO(Long id, String email, String username, Role role, boolean deleted) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.role = role;
+        this.deleted = deleted;
     }
 
     public UserResponseDTO(){}
@@ -48,5 +50,13 @@ public class UserResponseDTO {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

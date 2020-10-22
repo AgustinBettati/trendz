@@ -25,6 +25,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Comment> comments;
 
+    private boolean deleted;
+
     public User() {
     }
 
@@ -89,5 +91,13 @@ public class User {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
