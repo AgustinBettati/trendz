@@ -5,6 +5,7 @@ import facultad.trendz.dto.comment.CommentCreateDTO;
 import facultad.trendz.dto.comment.CommentResponseDTO;
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
+import facultad.trendz.dto.post.VoteResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.JwtResponseDTO;
@@ -136,5 +137,34 @@ public abstract class TestUtils {
         return restTemplate.exchange(commentDeleteUri, HttpMethod.DELETE, commentDeleteEntity, MessageResponseDTO.class);
     }
 
+    public ResponseEntity<VoteResponseDTO> upvotePost(Long postId,String jwt,int randomServerPort) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwt);
+
+
+        HttpEntity<PostCreateDTO> entity = new HttpEntity<>(headers);
+        final String url = "http://localhost:" + randomServerPort + "/post/upvote/" + postId;
+        URI uri = new URI(url);
+
+        return restTemplate.exchange(uri, HttpMethod.PUT, entity, VoteResponseDTO.class);
+    }
+
+    public ResponseEntity<VoteResponseDTO> downvotePost(Long postId,String jwt,int randomServerPort) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwt);
+
+
+        HttpEntity<PostCreateDTO> entity = new HttpEntity<>(headers);
+        final String url = "http://localhost:" + randomServerPort + "/post/downvote/" + postId;
+        URI uri = new URI(url);
+
+        return restTemplate.exchange(uri, HttpMethod.PUT, entity, VoteResponseDTO.class);
+    }
 
 }
