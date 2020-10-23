@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class SearchController {
 
-    private TopicService topicService;
-    private PostService postService;
+    private final TopicService topicService;
+    private final PostService postService;
 
     @Autowired
     public SearchController(TopicService topicService, PostService postService) {
@@ -27,8 +27,8 @@ public class SearchController {
     @GetMapping("/search")
     public ResponseEntity<SearchResponseDTO> searchByTitle(@RequestParam String title){
         final SearchResponseDTO body = new SearchResponseDTO();
-        body.setPosts(postService.findPostByTitle(title));
-        body.setTopics(topicService.findTopicByTitle(title));
+        body.setPosts(postService.findPostByTitle(title, 5));
+        body.setTopics(topicService.findTopicByTitle(title, 5));
 
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body,status);

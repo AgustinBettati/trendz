@@ -77,10 +77,11 @@ public class TopicService {
         ).orElseThrow(TopicNotFoundException::new);
     }
 
-    public List<TopicResponseDTO> findTopicByTitle(String title) {
+    public List<TopicResponseDTO> findTopicByTitle(String title, int amount) {
         return topicRepository.findByTitleIgnoreCaseContainingAndDeletedIsFalse(title)
                 .stream()
                 .sorted(Comparator.comparing(Topic::getCreationDate).reversed())
+                .limit(amount)
                 .map(topic -> new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(), topic.getCreationDate()))
                 .collect(Collectors.toList());
     }
