@@ -25,10 +25,11 @@ public class SearchController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<SearchResponseDTO> searchByTitle(@RequestParam String title){
+    public ResponseEntity<SearchResponseDTO> searchByTitle(@RequestParam String title,
+                                                           @RequestParam(defaultValue = "5") int limit) {
         final SearchResponseDTO body = new SearchResponseDTO();
-        body.setPosts(postService.findPostByTitle(title, 5));
-        body.setTopics(topicService.findTopicByTitle(title, 5));
+        body.setPosts(postService.findPostByTitle(title, limit));
+        body.setTopics(topicService.findTopicByTitle(title, limit));
 
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body,status);
