@@ -131,9 +131,9 @@ public class PostService {
             DeleteDownvotePost(user.get(),post.get());
         }
         post.get().getUpvotes().add(user.get());
-        user.get().getUpvotedPosts().add(post.get());
+       // user.get().getUpvotedPosts().add(post.get());
         postRepository.save(post.get());
-        userRepository.save(user.get());
+       // userRepository.save(user.get());
         return new VoteResponseDTO(userId, user.get().getUsername(), postId, post.get().getTitle());
     }
 
@@ -153,9 +153,9 @@ public class PostService {
             DeleteUpvotePost(user.get(),post.get());
         }
         post.get().getDownvotes().add(user.get());
-        user.get().getDownvotedPosts().add(post.get());
+       // user.get().getDownvotedPosts().add(post.get());
         postRepository.save(post.get());
-        userRepository.save(user.get());
+       // userRepository.save(user.get());
         return new VoteResponseDTO(userId, user.get().getUsername(), postId, post.get().getTitle());
     }
 

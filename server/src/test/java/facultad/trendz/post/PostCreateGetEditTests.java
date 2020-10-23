@@ -4,10 +4,15 @@ import facultad.trendz.TestUtils;
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostEditDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
+import facultad.trendz.dto.post.VoteResponseDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.JwtResponseDTO;
+import facultad.trendz.dto.user.UserCreateDTO;
+import facultad.trendz.dto.user.UserResponseDTO;
 import facultad.trendz.model.Post;
+import facultad.trendz.model.User;
 import facultad.trendz.repository.PostRepository;
+import facultad.trendz.repository.UserRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -36,6 +42,8 @@ public class PostCreateGetEditTests extends TestUtils {
 
     @Autowired
     PostRepository postRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     public void testPostCreation() throws URISyntaxException {
@@ -292,4 +300,8 @@ public class PostCreateGetEditTests extends TestUtils {
         }
 
     }
+
+
+
+
 }

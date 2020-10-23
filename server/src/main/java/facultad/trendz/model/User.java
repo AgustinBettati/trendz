@@ -1,5 +1,8 @@
 package facultad.trendz.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -22,17 +25,21 @@ public class User {
     private Role role;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Post> posts;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
 
 
     @ManyToMany(mappedBy = "upvotes")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Post> upvotedPosts = new ArrayList<>();
 
 
     @ManyToMany(mappedBy = "downvotes")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Post> downvotedPosts = new ArrayList<>();
 
     public User() {

@@ -1,5 +1,8 @@
 package facultad.trendz.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +25,7 @@ public class Post {
     private Date date;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
 
     @ManyToOne()
@@ -38,7 +42,8 @@ public class Post {
             joinColumns = { @JoinColumn(name = "post_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
-    List<User> upvotes = new ArrayList<>();
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<User> upvotes = new ArrayList<>();
 
 
     @ManyToMany(cascade = { CascadeType.ALL })
@@ -47,7 +52,8 @@ public class Post {
             joinColumns = { @JoinColumn(name = "post_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
-    List<User> downvotes = new ArrayList<>();
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<User> downvotes = new ArrayList<>();
 
 
 
