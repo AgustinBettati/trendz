@@ -45,7 +45,8 @@ public class PostService {
                 post.getDate(),
                 post.getTopic().getId(),
                 userId,
-                post.getUser().getUsername());
+                post.getUser().getUsername(),
+                post.getTopic().getTitle());
     }
 
     public void validatePostTitle(String title) {
@@ -122,7 +123,8 @@ public class PostService {
                         post.getDate(),
                         post.getTopic().getId(),
                         post.getUser().getId(),
-                        post.getUser().getUsername()))
+                        post.getUser().getUsername(),
+                        post.getTopic().getTitle()))
                 .collect(Collectors.toList());
     }
 
