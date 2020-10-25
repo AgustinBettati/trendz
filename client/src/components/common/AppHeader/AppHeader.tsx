@@ -1,12 +1,22 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavLink, withRouter} from 'react-router-dom';
 import './AppHeader.css';
 import logo from '../../../assets/TrendzLogo.png';
 import {MdSearch} from 'react-icons/md';
 
-const AppHeader = ({history}: any) => {
+const AppHeader = ({history, location}: any) => {
 
     const [toSearch, setToSearch] = useState('')
+
+    useEffect(() => getSearchBarValue(), [])
+
+    const getSearchBarValue = () => {
+        if (location.pathname.includes('search')) {
+            setToSearch(location.pathname.split('/')[location.pathname.split('/').length-1])
+        } else {
+            setToSearch('')
+        }
+    }
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -29,6 +39,7 @@ const AppHeader = ({history}: any) => {
                     <div className={"searchbar-container"}>
                         <div className={"searchbar"}>
                             <input
+                                value={toSearch}
                                 placeholder={"Search...."}
                                 onChange={(e) => setToSearch(e.target.value)}
                                 onKeyDown={(e) => {if (e.key === 'Enter') handleSearch()}}
