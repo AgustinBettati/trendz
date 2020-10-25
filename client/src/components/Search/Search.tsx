@@ -111,7 +111,7 @@ class Search extends Component<Props, State> {
                                         {
                                             this.state.posts.map((post, index) => (
                                                 <div className={'post-card-wrapper'} key={index}>
-                                                    <div className={'post-card'} onClick={() => this.handlePostSelection(post)}>
+                                                    <div className={'post-card'} style={{height: 70}} onClick={() => this.handlePostSelection(post)}>
                                                         <div className={'post-card-header'}>
                                                             <div className={'post-card-title'}>
                                                                 <div className={'post-title'}>{post.title}</div>
@@ -120,12 +120,6 @@ class Search extends Component<Props, State> {
                                                             <div className={'post-topic'}>{post.topicTitle}</div>
                                                         </div>
                                                         <div className={'post-card-body'}>{post.description}</div>
-                                                        <div className={'post-card-footer'}>
-                                                            <div className={'post-link'} onClick={(e) => this.handlePostLinkClick(post.link, e)}>
-                                                                {post.link}
-                                                            </div>
-                                                            <div className={'read-more'}>Read more</div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             ))
