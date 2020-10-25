@@ -44,11 +44,7 @@ public class UserDeleteTests extends TestUtils {
         ResponseEntity<MessageResponseDTO> responseEntity1= restTemplate.exchange(deleteUri, HttpMethod.DELETE,httpEntity, MessageResponseDTO.class);
         //then
         Assert.assertEquals(200,responseEntity1.getStatusCodeValue());
-        Assert.assertTrue(responseEntity1.getBody().getMessage().contains("User Deleted"));
-        Assert.assertFalse(userRepository.existsByEmail("1@gmail.com"));
-
+        Assert.assertTrue(userRepository.existsByEmail("1@gmail.com"));
+        Assert.assertTrue(userRepository.findByEmail("1@gmail.com").isDeleted());
     }
-
-
-
 }
