@@ -117,7 +117,7 @@ class Search extends Component<Props, State> {
                                                                 <div className={'post-title'}>{post.title}</div>
                                                                 <div className={'post-author'}>{'by ' + post.username}</div>
                                                             </div>
-                                                            <div className={'post-topic'}>TopicTitle {/*Need topic title in the response*/}</div>
+                                                            <div className={'post-topic'}>{post.topicTitle}</div>
                                                         </div>
                                                         <div className={'post-card-body'}>{post.description}</div>
                                                         <div className={'post-card-footer'}>
