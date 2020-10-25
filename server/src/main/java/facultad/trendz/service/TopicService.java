@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TopicService {
@@ -65,7 +66,8 @@ public class TopicService {
                     post.getDate(),
                     post.getTopic().getId(),
                     post.getUser().getId(),
-                    post.getUser().getUsername()));
+                    post.getUser().getUsername(),
+                    post.getTopic().getTitle()));
         }
         return postsInfo;
     }
@@ -74,5 +76,14 @@ public class TopicService {
         return topicRepository.findByIdAndDeletedIsFalse(topicId).map(topic ->
                 new TopicResponseDTO(topicId, topic.getTitle(), topic.getDescription(), topic.getCreationDate())
         ).orElseThrow(TopicNotFoundException::new);
+    }
+
+    public List<TopicResponseDTO> findTopicByTitle(String title, int amount) {
+        return topicRepository.findByTitleIgnoreCaseContainingAndDeletedIsFalse(title)
+                .stream()
+                .sorted(Comparator.comparing(Topic::getCreationDate).reversed())
+                .limit(amount)
+                .map(topic -> new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(), topic.getCreationDate()))
+                .collect(Collectors.toList());
     }
 }

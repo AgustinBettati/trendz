@@ -45,7 +45,8 @@ public class PostService {
                 post.getDate(),
                 post.getTopic().getId(),
                 userId,
-                post.getUser().getUsername());
+                post.getUser().getUsername(),
+                post.getTopic().getTitle());
     }
 
     public void validatePostTitle(String title) {
@@ -108,6 +109,23 @@ public class PostService {
 
     public void deletePost(Long postId) {
         postRepository.delete(postRepository.findById(postId).orElseThrow(PostNotFoundException::new));
+    }
+
+    public List<SimplePostResponseDTO> findPostByTitle(String title, int amount){
+        return postRepository.findByTitleIgnoreCaseContaining(title)
+                .stream()
+                .sorted(Comparator.comparing(Post::getDate).reversed())
+                .limit(amount)
+                .map(post -> new SimplePostResponseDTO(post.getId(),
+                        post.getTitle(),
+                        post.getDescription(),
+                        post.getLink(),
+                        post.getDate(),
+                        post.getTopic().getId(),
+                        post.getUser().getId(),
+                        post.getUser().getUsername(),
+                        post.getTopic().getTitle()))
+                .collect(Collectors.toList());
     }
 
     private List<CommentResponseDTO> commentListToDTO(List<Comment> comments){
