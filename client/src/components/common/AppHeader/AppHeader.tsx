@@ -8,7 +8,7 @@ const AppHeader = ({history, location}: any) => {
 
     const [toSearch, setToSearch] = useState('')
 
-    useEffect(() => getSearchBarValue(), [])
+    useEffect(() => getSearchBarValue(), [location])
 
     const getSearchBarValue = () => {
         if (location.pathname.includes('search')) {
