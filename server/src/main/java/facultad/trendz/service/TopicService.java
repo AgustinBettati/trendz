@@ -66,7 +66,8 @@ public class TopicService {
                     post.getDate(),
                     post.getTopic().getId(),
                     post.getUser().getId(),
-                    post.getUser().getUsername()));
+                    post.getUser().getUsername(),
+                    post.getTopic().getTitle()));
         }
         return postsInfo;
     }
