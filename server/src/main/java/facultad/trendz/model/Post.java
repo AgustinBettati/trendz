@@ -28,6 +28,10 @@ public class Post {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Vote> votes;
+
     @ManyToOne()
     @JoinColumn(name="topic_id", nullable=false)
     private Topic topic;
@@ -66,6 +70,7 @@ public class Post {
         this.user = user;
         this.upvotes=new ArrayList<>();
         this.downvotes=new ArrayList<>();
+        this.votes=new ArrayList<>();
     }
 
     public Post() {

@@ -32,6 +32,10 @@ public class User {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Vote> votes ;
+
 
     @ManyToMany(mappedBy = "upvotes")
     @LazyCollection(LazyCollectionOption.FALSE)
