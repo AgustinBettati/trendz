@@ -1,5 +1,6 @@
 package facultad.trendz.service;
 
+import facultad.trendz.dto.post.SimplePostResponseDTO;
 import facultad.trendz.dto.user.ProfileEditDTO;
 import facultad.trendz.dto.user.UserCreateDTO;
 import facultad.trendz.dto.user.UserResponseDTO;
@@ -7,6 +8,7 @@ import facultad.trendz.exception.user.EmailExistsException;
 import facultad.trendz.exception.user.IncorrectPasswordException;
 import facultad.trendz.exception.user.UsernameExistsException;
 import facultad.trendz.model.ERole;
+import facultad.trendz.model.Post;
 import facultad.trendz.model.Role;
 import facultad.trendz.model.User;
 import facultad.trendz.exception.user.UserNotFoundException;
@@ -16,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -102,5 +106,23 @@ public class UserService {
         }
 
         userRepository.save(user.get());
+    }
+
+    public List<SimplePostResponseDTO> getLastPosts(Long id, int limit) {
+        return userRepository.findById(id).map(user ->
+            user.getPosts().stream()
+                    .sorted(Comparator.comparing(Post::getDate).reversed())
+                    .limit(limit)
+                    .map(post -> new SimplePostResponseDTO(post.getId(),
+                            post.getTitle(),
+                            post.getDescription(),
+                            post.getLink(),
+                            post.getDate(),
+                            post.getTopic().getId(),
+                            post.getUser().getId(),
+                            post.getUser().getUsername(),
+                            post.getTopic().getTitle()))
+                    .collect(Collectors.toList())
+        ).orElseThrow(UserNotFoundException::new);
     }
 }

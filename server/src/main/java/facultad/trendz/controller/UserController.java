@@ -3,6 +3,7 @@ package facultad.trendz.controller;
 import facultad.trendz.config.jwt.JwtUtils;
 import facultad.trendz.config.model.MyUserDetails;
 import facultad.trendz.dto.*;
+import facultad.trendz.dto.post.SimplePostResponseDTO;
 import facultad.trendz.dto.user.*;
 import facultad.trendz.model.User;
 import facultad.trendz.service.UserService;
@@ -66,10 +67,8 @@ public class UserController implements ControllerUtils{
     }
 
     @DeleteMapping(value = "/user")
-    public ResponseEntity<UserResponseDTO> deleteUser()  {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long id = ((MyUserDetails)authentication.getPrincipal()).getId();
-        final UserResponseDTO body = userService.deleteUser(id);
+    public ResponseEntity<UserResponseDTO> deleteUser(Authentication authentication)  {
+        final UserResponseDTO body = userService.deleteUser(getIdFromAuthentication(authentication));
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body, status);
     }
@@ -89,21 +88,22 @@ public class UserController implements ControllerUtils{
 
     @PutMapping("/user")
     public ResponseEntity<MessageResponseDTO> editProfile(@RequestBody ProfileEditDTO profileEditDTO, Authentication authentication){
-
-        MyUserDetails userDetails = (MyUserDetails)authentication.getPrincipal();
-
-        userService.editUser(profileEditDTO, userDetails.getId());
+        userService.editUser(profileEditDTO, getIdFromAuthentication(authentication));
 
         MessageResponseDTO body = new MessageResponseDTO("Profiled edited successfully");
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body, status);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin")
-    public ResponseEntity<String> adminContent() { // testing admin exclusive endpoint
-        String body = "Admin Content";
+    @GetMapping("/user/lastposts")
+    public ResponseEntity<List<SimplePostResponseDTO>> getLastPosts(@RequestParam(defaultValue = "5") int limit, Authentication authentication){
+        List<SimplePostResponseDTO> body =  userService.getLastPosts(getIdFromAuthentication(authentication), limit);
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body, status);
+    }
+
+    private Long getIdFromAuthentication(Authentication authentication){
+        MyUserDetails userDetails = (MyUserDetails)authentication.getPrincipal();
+        return userDetails.getId();
     }
 }
