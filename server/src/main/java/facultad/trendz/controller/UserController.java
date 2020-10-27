@@ -95,6 +95,14 @@ public class UserController implements ControllerUtils{
         return new ResponseEntity<>(body, status);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin")
+    public ResponseEntity<String> adminContent() { // testing admin exclusive endpoint
+        String body = "Admin Content";
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body, status);
+    }
+
     @GetMapping("/user/lastposts")
     public ResponseEntity<List<SimplePostResponseDTO>> getLastPosts(@RequestParam(defaultValue = "5") int limit, Authentication authentication){
         List<SimplePostResponseDTO> body =  userService.getLastPosts(getIdFromAuthentication(authentication), limit);
