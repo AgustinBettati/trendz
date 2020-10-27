@@ -3,6 +3,7 @@ package facultad.trendz.controller;
 import facultad.trendz.config.model.MyUserDetails;
 import facultad.trendz.dto.MessageResponseDTO;
 import facultad.trendz.dto.post.*;
+import facultad.trendz.dto.vote.VoteResponseDTO;
 import facultad.trendz.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,21 +65,6 @@ public class PostController implements ControllerUtils {
     }
 
 
-    @PutMapping("/post/upvote/{postId}")
-    public ResponseEntity<VoteResponseDTO> upvotePost(@PathVariable Long postId,Authentication authentication) {
-        MyUserDetails userDetails = (MyUserDetails)authentication.getPrincipal();
-        final VoteResponseDTO body = postService.upvotePost(userDetails.getId(), postId);
-        final HttpStatus status = HttpStatus.OK;
-        return new ResponseEntity<>(body,status);
-    }
-
-    @PutMapping("/post/downvote/{postId}")
-    public ResponseEntity<VoteResponseDTO> downvotePost(@PathVariable Long postId,Authentication authentication) {
-        MyUserDetails userDetails = (MyUserDetails)authentication.getPrincipal();
-        final VoteResponseDTO body = postService.downvotePost(userDetails.getId(), postId);
-        final HttpStatus status = HttpStatus.OK;
-        return new ResponseEntity<>(body,status);
-    }
 
 }
 

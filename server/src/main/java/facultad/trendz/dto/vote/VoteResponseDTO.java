@@ -1,4 +1,4 @@
-package facultad.trendz.dto.post;
+package facultad.trendz.dto.vote;
 
 import javax.validation.constraints.NotNull;
 
@@ -18,12 +18,15 @@ public class VoteResponseDTO {
     @NotNull(message = "postTitle cannot be empty")
     private String postTitle;
 
+    private boolean isUpvote;
 
-    public VoteResponseDTO( Long userId,String username,Long postId,String postTitle) {
+
+    public VoteResponseDTO( Long userId,String username,Long postId,String postTitle, Boolean isUpvote) {
         this.userId = userId;
         this.username = username;
         this.postId = postId;
         this.postTitle = postTitle;
+        this.isUpvote=isUpvote;
     }
 
     public VoteResponseDTO(){}
@@ -60,5 +63,11 @@ public class VoteResponseDTO {
         this.postTitle = postTitle;
     }
 
+    public boolean isUpvote() {
+        return isUpvote;
+    }
 
+    public void setUpvote(boolean upvote) {
+        isUpvote = upvote;
+    }
 }

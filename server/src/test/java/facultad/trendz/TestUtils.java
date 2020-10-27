@@ -5,7 +5,7 @@ import facultad.trendz.dto.comment.CommentCreateDTO;
 import facultad.trendz.dto.comment.CommentResponseDTO;
 import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
-import facultad.trendz.dto.post.VoteResponseDTO;
+import facultad.trendz.dto.vote.VoteResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.JwtResponseDTO;

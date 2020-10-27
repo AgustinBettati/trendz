@@ -21,8 +21,7 @@ public class Vote {
 
     private boolean isUpvote;
 
-    public Vote(Long id, Post post, User user, boolean isUpvote) {
-        this.id = id;
+    public Vote( Post post, User user, boolean isUpvote) {
         this.post = post;
         this.user = user;
         this.isUpvote = isUpvote;

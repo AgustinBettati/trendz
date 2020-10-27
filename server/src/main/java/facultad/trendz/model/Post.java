@@ -40,25 +40,6 @@ public class Post {
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "Upvote",
-            joinColumns = { @JoinColumn(name = "post_id") },
-            inverseJoinColumns = { @JoinColumn(name = "user_id") }
-    )
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<User> upvotes = new ArrayList<>();
-
-
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "Downvote",
-            joinColumns = { @JoinColumn(name = "post_id") },
-            inverseJoinColumns = { @JoinColumn(name = "user_id") }
-    )
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<User> downvotes = new ArrayList<>();
-
 
 
     public Post(String title, String description, String link, Date date, Topic topic, User user) {
@@ -68,8 +49,6 @@ public class Post {
         this.date = date;
         this.topic = topic;
         this.user = user;
-        this.upvotes=new ArrayList<>();
-        this.downvotes=new ArrayList<>();
         this.votes=new ArrayList<>();
     }
 
@@ -146,19 +125,11 @@ public class Post {
         comments.add(comment);
     }
 
-    public List<User> getUpvotes() {
-        return upvotes;
+    public List<Vote> getVotes() {
+        return votes;
     }
 
-    public void setUpvotes(List<User> upvotes) {
-        this.upvotes = upvotes;
-    }
-
-    public List<User> getDownvotes() {
-        return downvotes;
-    }
-
-    public void setDownvotes(List<User> downvotes) {
-        this.downvotes = downvotes;
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
     }
 }

@@ -37,14 +37,6 @@ public class User {
     private List<Vote> votes ;
 
 
-    @ManyToMany(mappedBy = "upvotes")
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Post> upvotedPosts = new ArrayList<>();
-
-
-    @ManyToMany(mappedBy = "downvotes")
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Post> downvotedPosts = new ArrayList<>();
 
     public User() {
     }
@@ -54,8 +46,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.downvotedPosts= new ArrayList<>();
-        this.upvotedPosts=new ArrayList<>();
+       this.votes=new ArrayList<>();
     }
 
     public Long getId() {
@@ -114,27 +105,11 @@ public class User {
         this.comments = comments;
     }
 
-    public List<Post> getUpvotedPosts() {
-        return upvotedPosts;
+    public List<Vote> getVotes() {
+        return votes;
     }
 
-    public void setUpvotedPosts(List<Post> upvotedPosts) {
-        this.upvotedPosts = upvotedPosts;
-    }
-
-    public List<Post> getDownvotedPosts() {
-        return downvotedPosts;
-    }
-
-    public void setDownvotedPosts(List<Post> downvotedPosts) {
-        this.downvotedPosts = downvotedPosts;
-    }
-
-    public boolean isUpvoted(Post post){
-        return upvotedPosts.contains(post);
-    }
-
-    public boolean isDownvoted(Post post){
-        return downvotedPosts.contains(post);
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
     }
 }
