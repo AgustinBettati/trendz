@@ -152,4 +152,14 @@ public abstract class TestUtils {
 
         return restTemplate.exchange(searchUri, HttpMethod.GET, searchEntity, SearchResponseDTO.class);
     }
+
+    public ResponseEntity<MessageResponseDTO> deleteUser(String jwt, int randomServerPort) throws URISyntaxException {
+        final String deleteUrl = "http://localhost:" + randomServerPort + "/user";
+        URI deleteUri = new URI(deleteUrl);
+        RestTemplate restTemplate= new RestTemplate();
+        HttpHeaders deleteHeader= new HttpHeaders();
+        deleteHeader.add("Authorization","Bearer "+ jwt);
+        HttpEntity<JwtResponseDTO> httpEntity=new HttpEntity<>(deleteHeader);
+        return restTemplate.exchange(deleteUri, HttpMethod.DELETE,httpEntity, MessageResponseDTO.class);
+    }
 }
