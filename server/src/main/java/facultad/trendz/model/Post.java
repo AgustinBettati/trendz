@@ -31,6 +31,8 @@ public class Post {
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
+    private boolean deleted;
+
 
     public Post(String title, String description, String link, Date date, Topic topic, User user) {
         this.title = title;
@@ -112,5 +114,13 @@ public class Post {
 
     public void addComment(Comment comment){
         comments.add(comment);
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

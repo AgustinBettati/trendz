@@ -111,6 +111,7 @@ public class UserService {
     public List<SimplePostResponseDTO> getLastPosts(Long id, int limit) {
         return userRepository.findById(id).map(user ->
             user.getPosts().stream()
+                    .filter(post -> !post.isDeleted())
                     .sorted(Comparator.comparing(Post::getDate).reversed())
                     .limit(limit)
                     .map(post -> new SimplePostResponseDTO(post.getId(),
@@ -121,7 +122,8 @@ public class UserService {
                             post.getTopic().getId(),
                             post.getUser().getId(),
                             post.getUser().getUsername(),
-                            post.getTopic().getTitle()))
+                            post.getTopic().getTitle(),
+                            post.isDeleted()))
                     .collect(Collectors.toList())
         ).orElseThrow(UserNotFoundException::new);
     }

@@ -13,9 +13,10 @@ public class SimplePostResponseDTO {
     private String topicTitle;
     private Long userId;
     private String username;
+    private boolean deleted;
 
 
-    public SimplePostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, String username, String topicTitle){
+    public SimplePostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, String username, String topicTitle, boolean deleted){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -25,6 +26,7 @@ public class SimplePostResponseDTO {
         this.userId=userId;
         this.username = username;
         this.topicTitle = topicTitle;
+        this.deleted = deleted;
     }
 
     public SimplePostResponseDTO() {}
@@ -99,5 +101,13 @@ public class SimplePostResponseDTO {
 
     public void setTopicTitle(String topicTitle) {
         this.topicTitle = topicTitle;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

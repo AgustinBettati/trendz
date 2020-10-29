@@ -46,7 +46,8 @@ public class PostService {
                 post.getTopic().getId(),
                 userId,
                 post.getUser().getUsername(),
-                post.getTopic().getTitle());
+                post.getTopic().getTitle(),
+                post.isDeleted());
     }
 
     public void validatePostTitle(String title) {
@@ -55,9 +56,8 @@ public class PostService {
     }
 
     public PostResponseDTO editPost(PostEditDTO postEdit, Long postId) {
-        final Optional<Post> post = postRepository.findById(postId);
+        final Optional<Post> post = postRepository.findByIdAndDeletedIsFalse(postId);
         return post.map(post1 -> {
-
             String newTitle = postEdit.getTitle();
             String newDescription = postEdit.getDescription();
             String newLink = postEdit.getLink();
@@ -82,12 +82,13 @@ public class PostService {
                     editedPost.getTopic().getId(),
                     editedPost.getUser().getId(),
                     commentListToDTO(editedPost.getComments()),
-                    editedPost.getUser().getUsername());
+                    editedPost.getUser().getUsername(),
+                    editedPost.isDeleted());
         }).orElseThrow(PostNotFoundException::new);
     }
 
     public PostResponseDTO getPost(Long postId){
-        final Optional<Post> post= postRepository.findById(postId);
+        final Optional<Post> post= postRepository.findByIdAndDeletedIsFalse(postId);
         return post.map(foundPost -> new PostResponseDTO(postId,
                 foundPost.getTitle(),
                 foundPost.getDescription(),
@@ -96,19 +97,34 @@ public class PostService {
                 foundPost.getTopic().getId(),
                 foundPost.getUser().getId(),
                 commentListToDTO(foundPost.getComments()),
-                foundPost.getUser().getUsername())).orElseThrow(PostNotFoundException::new);
+                foundPost.getUser().getUsername(),
+                foundPost.isDeleted())).orElseThrow(PostNotFoundException::new);
     }
 
     public boolean postAuthorVerification(Long postId, Authentication authentication){
-        final Optional<Post> post = postRepository.findById(postId);
+        final Optional<Post> post = postRepository.findByIdAndDeletedIsFalse(postId);
         if (!post.isPresent()) throw new PostNotFoundException();
         MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
         return post.get().getUser().getId().equals(myUserDetails.getId());
 
     }
 
-    public void deletePost(Long postId) {
-        postRepository.delete(postRepository.findById(postId).orElseThrow(PostNotFoundException::new));
+    public SimplePostResponseDTO deletePost(Long postId) {
+        return postRepository.findByIdAndDeletedIsFalse(
+                postId).map(post -> {
+            post.setDeleted(true);
+            postRepository.save(post);
+            return new SimplePostResponseDTO(postId,
+                    post.getTitle(),
+                    post.getDescription(),
+                    post.getLink(),
+                    post.getDate(),
+                    post.getTopic().getId(),
+                    post.getUser().getId(),
+                    post.getUser().getUsername(),
+                    post.getTopic().getTitle(),
+                    post.isDeleted());
+        }).orElseThrow(PostNotFoundException::new);
     }
 
     public List<SimplePostResponseDTO> findPostByTitle(String title, int amount){
@@ -124,7 +140,8 @@ public class PostService {
                         post.getTopic().getId(),
                         post.getUser().getId(),
                         post.getUser().getUsername(),
-                        post.getTopic().getTitle()))
+                        post.getTopic().getTitle(),
+                        post.isDeleted()))
                 .collect(Collectors.toList());
     }
 

@@ -16,9 +16,10 @@ public class PostResponseDTO {
     private Long userId;
     private String username;
     private List<CommentResponseDTO> comments;
+    private boolean deleted;
 
 
-    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username){
+    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username, boolean deleted){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -28,6 +29,7 @@ public class PostResponseDTO {
         this.userId=userId;
         this.comments = comments;
         this.username = username;
+        this.deleted = deleted;
     }
 
     public PostResponseDTO() {}
@@ -102,5 +104,21 @@ public class PostResponseDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<CommentResponseDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentResponseDTO> comments) {
+        this.comments = comments;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

@@ -52,6 +52,7 @@ public class TopicService {
         if (!topic.isPresent()) throw new TopicNotFoundException();
 
         topic.get().setDeleted(true);
+        topic.get().getPosts().forEach(post -> post.setDeleted(true));
         topicRepository.save(topic.get());
     }
 
@@ -67,7 +68,8 @@ public class TopicService {
                     post.getTopic().getId(),
                     post.getUser().getId(),
                     post.getUser().getUsername(),
-                    post.getTopic().getTitle()));
+                    post.getTopic().getTitle(),
+                    post.isDeleted()));
         }
         return postsInfo;
     }
