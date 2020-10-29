@@ -1,0 +1,15 @@
+.checkbox {
+    width: 20px;
+    height: 20px;
+    background-color: #F4F4F4;
+    border: 2px solid #1EA083;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+}
+
+.checkbox:hover{
+    cursor: pointer;
+}

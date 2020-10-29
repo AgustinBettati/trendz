@@ -13,6 +13,7 @@ import CreatePost from "../CreatePost/CreatePost";
 import EditPost from "../EditPost/EditPost";
 import Topic from "../Topic/Topic";
 import Post from "../Post/Post";
+import Search from "../Search/Search";
 type MatchProps = {
   match: {
     url: string
@@ -37,6 +38,7 @@ class App extends Component{
                   <Route exact path={`${match.url}/createTopic`} component={CreateTopic}/>
                   <Route exact path={`${match.url}/createPost`} component={CreatePost}/>
                   <Route exact path={`${match.url}/editPost`} component={EditPost}/>
+                  <Route exact path={`${match.url}/search/:toSearch`} component={Search}/>
                 </Switch>
               </AppFrame>
           ])}/>

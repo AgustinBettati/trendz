@@ -137,7 +137,7 @@ class Home extends Component<Props, State> {
                 <div className={'home-footer'}>
                     <ReactPaginate
                         onPageChange={this.handlePageClick}
-                        pageCount={this.state.topics.length/8}
+                        pageCount={Math.ceil(this.state.topics.length/8)}
                         pageRangeDisplayed={8}
                         marginPagesDisplayed={2}
                         previousLabel={"<"}
