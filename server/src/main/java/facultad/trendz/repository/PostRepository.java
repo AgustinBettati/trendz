@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     boolean existsByTitle(String title);
-    List<Post> findByTitleIgnoreCaseContaining(String title);
+    List<Post> findByTitleIgnoreCaseContainingAndDeletedIsFalse(String title);
     Optional<Post> findByIdAndDeletedIsFalse(Long id);
 }

@@ -128,7 +128,7 @@ public class PostService {
     }
 
     public List<SimplePostResponseDTO> findPostByTitle(String title, int amount){
-        return postRepository.findByTitleIgnoreCaseContaining(title)
+        return postRepository.findByTitleIgnoreCaseContainingAndDeletedIsFalse(title)
                 .stream()
                 .sorted(Comparator.comparing(Post::getDate).reversed())
                 .limit(amount)
