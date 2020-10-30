@@ -60,14 +60,14 @@ public class UserProfileTests extends TestUtils {
         URI getProfileUri = new URI(getProfileUrl);
 
         //WHEN
-        ResponseEntity<UserResponseDTO> response = restTemplate.exchange(getProfileUri, HttpMethod.GET, entity, UserResponseDTO.class); // get new user profile data, used exchange() method to add Authorization header
+        ResponseEntity<UserInfoDTO> response = restTemplate.exchange(getProfileUri, HttpMethod.GET, entity, UserInfoDTO.class); // get new user profile data, used exchange() method to add Authorization header
 
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
         Assert.assertNotNull(response.getBody());
-        Assert.assertEquals("testEmail08@gmail.com", response.getBody().getEmail());
-        Assert.assertEquals("testUsername08", response.getBody().getUsername());
-        Assert.assertEquals(ERole.ROLE_USER, response.getBody().getRole().getEnumRole());
+        Assert.assertEquals("testEmail08@gmail.com", response.getBody().getuserInfo().getEmail());
+        Assert.assertEquals("testUsername08", response.getBody().getuserInfo().getUsername());
+        Assert.assertEquals(ERole.ROLE_USER, response.getBody().getuserInfo().getRole().getEnumRole());
 
     }
 
