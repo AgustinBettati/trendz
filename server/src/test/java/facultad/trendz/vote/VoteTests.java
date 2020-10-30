@@ -10,6 +10,7 @@ import facultad.trendz.model.Post;
 import facultad.trendz.model.User;
 import facultad.trendz.repository.PostRepository;
 import facultad.trendz.repository.UserRepository;
+import facultad.trendz.repository.VoteRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +30,7 @@ import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PostVoteTests  extends TestUtils {
+public class VoteTests  extends TestUtils {
     @LocalServerPort
     int randomServerPort;
 
@@ -37,8 +38,10 @@ public class PostVoteTests  extends TestUtils {
     PostRepository postRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    VoteRepository voteRepository;
 
-   /* @Test
+    @Test
     public void testUpvotePost() throws URISyntaxException {
 
         RestTemplate restTemplate = new RestTemplate();
@@ -62,25 +65,24 @@ public class PostVoteTests  extends TestUtils {
         headers.add("Authorization", "Bearer " + jwtToken);
 
 
-        HttpEntity<PostCreateDTO> entity = new HttpEntity<>(headers);
-        final String url = "http://localhost:" + randomServerPort + "/post/upvote/"+postResponse.getBody().getId();
+        HttpEntity entity = new HttpEntity<>(headers);
+        final String url = "http://localhost:" + randomServerPort + "/post/"+postResponse.getBody().getId()+"/upvote";
         URI uri = new URI(url);
 
 
         //WHEN MAKING AN UPVOTE IN A POST
-        ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.PUT, entity, VoteResponseDTO.class);
+        ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.POST, entity, VoteResponseDTO.class);
         //THEN
         Optional<Post> post = postRepository.findById(response.getBody().getPostId()); // Post also updated on db
         Assert.assertTrue(post.isPresent());
         Optional<User> user= userRepository.findById(response.getBody().getUserId()); // Post also updated on db
         Assert.assertTrue(post.isPresent());
         Assert.assertTrue(user.isPresent());
-        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assert.assertEquals(201, response.getStatusCodeValue());
         Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
         Assert.assertEquals(postResponse.getBody().getTitle(), response.getBody().getPostTitle()); // post title must match
 
-        Assert.assertTrue(post.get().getUpvotes().stream().anyMatch(users->users.getUsername().equals("admin")));
-        Assert.assertTrue(user.get().getUpvotedPosts().stream().anyMatch(posts->posts.getTitle().equals("testTitleUpvotedPost")));
+        Assert.assertTrue(this.voteRepository.findByPostIdAndUserIdAndIsUpvote(postResponse.getBody().getUserId(),postResponse.getBody().getId(),true).isPresent());
         Assert.assertEquals(user.get().getEmail(),"admin@gmail.com");
 
 
@@ -111,26 +113,26 @@ public class PostVoteTests  extends TestUtils {
         headers.add("Authorization", "Bearer " + jwtToken);
 
 
-        HttpEntity<PostCreateDTO> entity = new HttpEntity<>(headers);
-        final String url = "http://localhost:" + randomServerPort + "/post/downvote/"+postResponse.getBody().getId();
+        HttpEntity entity = new HttpEntity<>(headers);
+        final String url = "http://localhost:" + randomServerPort + "/post/"+postResponse.getBody().getId()+"/downvote";
         URI uri = new URI(url);
 
 
         //WHEN MAKING AN UPVOTE IN A POST
-        ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.PUT, entity, VoteResponseDTO.class);
+        ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.POST, entity, VoteResponseDTO.class);
         //THEN
         Optional<Post> post = postRepository.findById(response.getBody().getPostId()); // Post also updated on db
         Assert.assertTrue(post.isPresent());
         Optional<User> user= userRepository.findById(response.getBody().getUserId()); // Post also updated on db
         Assert.assertTrue(post.isPresent());
         Assert.assertTrue(user.isPresent());
-        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assert.assertEquals(201, response.getStatusCodeValue());
         Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
         Assert.assertEquals(postResponse.getBody().getTitle(), response.getBody().getPostTitle()); // post title must match
 
-        Assert.assertTrue(post.get().getDownvotes().stream().anyMatch(users->users.getUsername().equals("admin")));
-        Assert.assertTrue(user.get().getDownvotedPosts().stream().anyMatch(posts->posts.getTitle().equals("testTitleDownvotedPost")));
+        Assert.assertTrue(this.voteRepository.findByPostIdAndUserIdAndIsUpvote(postResponse.getBody().getUserId(),postResponse.getBody().getId(),!true).isPresent());
         Assert.assertEquals(user.get().getEmail(),"admin@gmail.com");
+
 
 
 
@@ -160,30 +162,30 @@ public class PostVoteTests  extends TestUtils {
         headers.add("Authorization", "Bearer " + jwtToken);
 
 
-        HttpEntity<PostCreateDTO> entity = new HttpEntity<>(headers);
-        final String url = "http://localhost:" + randomServerPort + "/post/upvote/"+postResponse.getBody().getId();
+        HttpEntity entity = new HttpEntity<>(headers);
+        final String url = "http://localhost:" + randomServerPort + "/post/"+postResponse.getBody().getId()+"/upvote";
         URI uri = new URI(url);
 
 
         //WHEN MAKING AN UPVOTE IN A POST
-        ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.PUT, entity, VoteResponseDTO.class);
+        ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.POST, entity, VoteResponseDTO.class);
         //THEN
         Optional<Post> post = postRepository.findById(response.getBody().getPostId()); // Post also updated on db
         Assert.assertTrue(post.isPresent());
         Optional<User> user= userRepository.findById(response.getBody().getUserId()); // Post also updated on db
         Assert.assertTrue(post.isPresent());
         Assert.assertTrue(user.isPresent());
-        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assert.assertEquals(201, response.getStatusCodeValue());
         Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
         Assert.assertEquals(postResponse.getBody().getTitle(), response.getBody().getPostTitle()); // post title must match
 
         //verifying downvote has been deleted
-        Assert.assertFalse(post.get().getDownvotes().stream().anyMatch(users->users.getUsername().equals("admin")));
-        Assert.assertFalse(user.get().getDownvotedPosts().stream().anyMatch(posts->posts.getTitle().equals("testTitleDownvotedPost1")));
 
-        Assert.assertTrue(post.get().getUpvotes().stream().anyMatch(users->users.getUsername().equals("admin")));
-        Assert.assertTrue(user.get().getUpvotedPosts().stream().anyMatch(posts->posts.getTitle().equals("testTitleUpvotedPost1")));
+        Assert.assertFalse(this.voteRepository.findByPostIdAndUserIdAndIsUpvote(postResponse.getBody().getUserId(),postResponse.getBody().getId(),!true).isPresent());
+
+        Assert.assertTrue(this.voteRepository.findByPostIdAndUserIdAndIsUpvote(postResponse.getBody().getUserId(),postResponse.getBody().getId(),true).isPresent());
         Assert.assertEquals(user.get().getEmail(),"admin@gmail.com");
+
 
 
 
@@ -212,36 +214,35 @@ public class PostVoteTests  extends TestUtils {
         headers.add("Authorization", "Bearer " + jwtToken);
 
 
-        HttpEntity<PostCreateDTO> entity = new HttpEntity<>(headers);
-        final String url = "http://localhost:" + randomServerPort + "/post/downvote/"+postResponse.getBody().getId();
+        HttpEntity entity = new HttpEntity<>(headers);
+        final String url = "http://localhost:" + randomServerPort + "/post/"+postResponse.getBody().getId()+"/downvote";
         URI uri = new URI(url);
 
 
         //WHEN MAKING AN UPVOTE IN A POST
-        ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.PUT, entity, VoteResponseDTO.class);
+        ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.POST, entity, VoteResponseDTO.class);
         //THEN
         Optional<Post> post = postRepository.findById(response.getBody().getPostId()); // Post also updated on db
         Assert.assertTrue(post.isPresent());
         Optional<User> user= userRepository.findById(response.getBody().getUserId()); // Post also updated on db
         Assert.assertTrue(post.isPresent());
         Assert.assertTrue(user.isPresent());
-        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assert.assertEquals(201, response.getStatusCodeValue());
         Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
         Assert.assertEquals(postResponse.getBody().getTitle(), response.getBody().getPostTitle()); // post title must match
 
-        //veryfing upvote has been deleted
-        Assert.assertFalse(post.get().getUpvotes().stream().anyMatch(users->users.getUsername().equals("admin")));
-        Assert.assertFalse(user.get().getUpvotedPosts().stream().anyMatch(posts->posts.getTitle().equals("testTitleDownvotedPost2")));
+       //veryfing upvote has been deleted
+        Assert.assertFalse(this.voteRepository.findByPostIdAndUserIdAndIsUpvote(postResponse.getBody().getUserId(),postResponse.getBody().getId(),true).isPresent());
 
-        Assert.assertTrue(post.get().getDownvotes().stream().anyMatch(users->users.getUsername().equals("admin")));
-        Assert.assertTrue(user.get().getDownvotedPosts().stream().anyMatch(posts->posts.getTitle().equals("testTitleDownvotedPost2")));
+
+        Assert.assertTrue(this.voteRepository.findByPostIdAndUserIdAndIsUpvote(postResponse.getBody().getUserId(),postResponse.getBody().getId(),!true).isPresent());
         Assert.assertEquals(user.get().getEmail(),"admin@gmail.com");
 
 
 
     }
 
-    */
+
 
 
 

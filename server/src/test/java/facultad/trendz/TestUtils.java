@@ -145,11 +145,11 @@ public abstract class TestUtils {
         headers.add("Authorization", "Bearer " + jwt);
 
 
-        HttpEntity<PostCreateDTO> entity = new HttpEntity<>(headers);
-        final String url = "http://localhost:" + randomServerPort + "/post/upvote/" + postId;
+        HttpEntity entity = new HttpEntity<>(headers);
+        final String url = "http://localhost:" + randomServerPort + "/post/" + postId+"/upvote";
         URI uri = new URI(url);
 
-        return restTemplate.exchange(uri, HttpMethod.PUT, entity, VoteResponseDTO.class);
+        return restTemplate.exchange(uri, HttpMethod.POST, entity, VoteResponseDTO.class);
     }
 
     public ResponseEntity<VoteResponseDTO> downvotePost(Long postId,String jwt,int randomServerPort) throws URISyntaxException {
@@ -160,11 +160,11 @@ public abstract class TestUtils {
         headers.add("Authorization", "Bearer " + jwt);
 
 
-        HttpEntity<PostCreateDTO> entity = new HttpEntity<>(headers);
-        final String url = "http://localhost:" + randomServerPort + "/post/downvote/" + postId;
+        HttpEntity entity = new HttpEntity<>(headers);
+        final String url = "http://localhost:" + randomServerPort + "/post/" + postId+"/downvote";
         URI uri = new URI(url);
 
-        return restTemplate.exchange(uri, HttpMethod.PUT, entity, VoteResponseDTO.class);
+        return restTemplate.exchange(uri, HttpMethod.POST, entity, VoteResponseDTO.class);
     }
 
 }
