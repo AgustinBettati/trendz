@@ -57,21 +57,21 @@ public class TopicService {
     }
 
     public List<SimplePostResponseDTO> getTopicPosts(Long topicId) {
-       List<Post> posts = topicRepository.getTopicById(topicId).getPosts();
-        List<SimplePostResponseDTO> postsInfo = new ArrayList<>(posts.size());
-        for (Post post : posts) {
-            postsInfo.add(new SimplePostResponseDTO(post.getId(),
-                    post.getTitle(),
-                    post.getDescription(),
-                    post.getLink(),
-                    post.getDate(),
-                    post.getTopic().getId(),
-                    post.getUser().getId(),
-                    post.getUser().getUsername(),
-                    post.getTopic().getTitle(),
-                    post.isDeleted()));
-        }
-        return postsInfo;
+        return topicRepository.findByIdAndDeletedIsFalse(topicId).map(topic ->
+            topic.getPosts().stream()
+                .filter(post -> !post.isDeleted())
+                .map(post -> new SimplePostResponseDTO(post.getId(),
+                        post.getTitle(),
+                        post.getDescription(),
+                        post.getLink(),
+                        post.getDate(),
+                        post.getTopic().getId(),
+                        post.getUser().getId(),
+                        post.getUser().getUsername(),
+                        post.getTopic().getTitle(),
+                        post.isDeleted()))
+                .collect(Collectors.toList())
+        ).orElseThrow(TopicNotFoundException::new);
     }
 
     public TopicResponseDTO getTopicById(Long topicId) {
