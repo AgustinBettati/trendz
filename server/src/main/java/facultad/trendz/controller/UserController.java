@@ -37,8 +37,11 @@ public class UserController implements ControllerUtils{
     }
 
     @GetMapping(value = "/user/{userId}")
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable("userId") Long userId) {
-        final UserResponseDTO body = userService.getUserById(userId);
+    public ResponseEntity<UserInfoDTO> getUser(@PathVariable("userId") Long userId, @RequestParam(defaultValue = "5") int limit) {
+        final UserResponseDTO userInfo = userService.getUserById(userId);
+        final List<SimplePostResponseDTO> lastUserPosts = userService.getLastPosts(userId, limit);
+
+        final UserInfoDTO body = new UserInfoDTO(userInfo, lastUserPosts);
         final HttpStatus status = HttpStatus.OK;
 
         return new ResponseEntity<>(body, status);
