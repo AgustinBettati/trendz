@@ -29,12 +29,13 @@ class ViewProfile extends Component<Props, State> {
 
     componentDidMount() {
         getUserData(this.props.match.params.id)
-            .then((res) => this.setState({
-                posts: res.posts,
-                userName: res.userInfo.username,
-                email: res.userinfo.email,
-                deleted: res.userInfo.deleted
-            }))
+            .then((res) =>
+                this.setState({
+                    posts: res.posts,
+                    userName: res.userInfo.username,
+                    email: res.userinfo.email,
+                    deleted: res.userInfo.deleted
+                }))
             .catch((err) => this.setState({getDataError: 'An error occurred fetching profile data'}))
     }
 
@@ -47,11 +48,11 @@ class ViewProfile extends Component<Props, State> {
                 <div className={'view-profile-header'}>
                     <div className={'name-avatar-container'}>
                         <div className={'avatar'}>
-                            <Avatar name={'Nesti'}/>
+                            <Avatar name={this.state.userName}/>
                         </div>
                         <div className={'name-email'}>
-                            <span className={'name'}>{'Nesti'}</span>
-                            <span className={'email'}>{'nestinesti@gmail.com'}</span>
+                            <span className={'name'}>{this.state.userName}</span>
+                            <span className={'email'}>{this.state.email}</span>
                         </div>
                     </div>
                 </div>
