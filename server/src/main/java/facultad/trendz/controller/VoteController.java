@@ -30,8 +30,8 @@ public class VoteController implements ControllerUtils{
     }
 
     @PostMapping("/post/{postId}/upvote")
-    public ResponseEntity<Object> upvote( BindingResult bindingResult, @PathVariable Long postId, Authentication authentication) {
-        if (bindingResult.hasErrors()) return getInvalidDTOResponse(bindingResult);
+    public ResponseEntity<Object> upvote(  @PathVariable Long postId, Authentication authentication) {
+
 
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
 
@@ -41,8 +41,7 @@ public class VoteController implements ControllerUtils{
     }
 
     @PostMapping("/post/{postId}/downvote")
-    public ResponseEntity<Object> downvote( BindingResult bindingResult, @PathVariable Long postId, Authentication authentication) {
-        if (bindingResult.hasErrors()) return getInvalidDTOResponse(bindingResult);
+    public ResponseEntity<Object> downvote( @PathVariable Long postId, Authentication authentication) {
 
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
 

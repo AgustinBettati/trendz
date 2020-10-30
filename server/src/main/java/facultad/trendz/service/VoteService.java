@@ -40,7 +40,15 @@ public class VoteService {
     public  VoteResponseDTO saveVote(Long postId, Long userId, Boolean isUpvote) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Post post=postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-      Vote vote= new Vote( post,user, isUpvote);
+        Optional<Vote> oppositeVote=voteRepository.findByPostIdAndUserIdAndIsUpvote(userId,postId,!(isUpvote));
+        if (oppositeVote.isPresent()){
+            oppositeVote.get().setUpvote(isUpvote);
+            voteRepository.save(oppositeVote.get());
+        }
+        if(!voteRepository.findByPostIdAndUserIdAndIsUpvote(userId,postId,isUpvote).isPresent()) {
+            Vote vote = new Vote(post, user, isUpvote);
+            voteRepository.save(vote);
+        }
 
         return new VoteResponseDTO(user.getId(),user.getUsername(),post.getId(),post.getTitle(),isUpvote);
     }

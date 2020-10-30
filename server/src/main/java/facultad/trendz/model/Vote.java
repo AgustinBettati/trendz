@@ -3,7 +3,7 @@ package facultad.trendz.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "votes")
+@Table(name = "vote")
 public class Vote {
 
     @Id
