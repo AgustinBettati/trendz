@@ -13,6 +13,7 @@ import TimeAgo from 'react-timeago'
 
 import {createComment, deleteComment, editComment} from "../../api/CommentApi";
 import {getTopic} from "../../api/TopicApi";
+import {downvotePost, upvotePost} from "../../api/VoteAPI";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -35,7 +36,10 @@ export type State = {
     hoverIndex:number,
     toEditComment: number,
     editContent: string,
-    editErrorMessage: string
+    editErrorMessage: string,
+    handleVoteError: string,
+    clickedUpvote: boolean,
+    clickedDownvote: boolean
 }
 
 const postCommentSchema = yup.object({
@@ -77,7 +81,10 @@ class Post extends Component<Props, State> {
             hoverIndex:-1,
             toEditComment: -1,
             editContent: '',
-            editErrorMessage: ''
+            editErrorMessage: '',
+            handleVoteError: '',
+            clickedUpvote: false,
+            clickedDownvote: false
         }
     };
 
@@ -148,6 +155,27 @@ class Post extends Component<Props, State> {
             })
            .catch(() => this.setState({deleteCommentErrorMessage: 'An error occurred deleting your comment!'}))
 
+    }
+
+     handleDownvote = () => {
+        this.setState({clickedUpvote: false})
+        if(!this.state.clickedDownvote) {
+            downvotePost(this.props.match.params.id)
+                .then(() => {
+                    this.setState({clickedDownvote:true})
+                })
+                .catch(() => this.setState({handleVoteError: 'An error occurred'}))
+        }
+    }
+    handleUpvote = () => {
+        this.setState({clickedDownvote: false})
+        if(!this.state.clickedUpvote) {
+            upvotePost(this.props.match.params.id)
+                .then(() => {
+                    this.setState({clickedUpvote: true})
+                })
+                .catch(() => this.setState({handleVoteError: 'An error occurred'}))
+        }
     }
 
     handleDelete = () => {
@@ -266,11 +294,27 @@ class Post extends Component<Props, State> {
                     </div>
                     <div className={'body-footer'}>
                         <div className={'like-container'}>
-                            <MdThumbUp size={20} color={'#00B090'} className={'like-icon'}/>
+                            { this.state.clickedUpvote&&
+                                <MdThumbUp size={20} color={'#00B090'} className={'like-icon'}
+                                           onClick={() => this.handleUpvote()}/>
+                            }
+                            {!this.state.clickedUpvote&&
+                                <MdThumbUp size={20} color={'grey'} className={'like-icon'}
+                                           onClick={() => this.handleUpvote()}/>
+                            }
                             <span className={'like-value'}>295</span>
                         </div>
                         <div className={'like-container'}>
-                            <MdThumbDown size={20} color={'#C13D3D'} className={'like-icon'}/>
+                            { this.state.clickedDownvote&&
+
+                            <MdThumbDown size={20} color={'#C13D3D'} className={'like-icon'}
+                                         onClick={() => this.handleDownvote()}/>
+                        }
+                            {!this.state.clickedDownvote&&
+                                <MdThumbDown size={20} color={'grey'} className={'like-icon'}
+                                             onClick={() => this.handleDownvote()}/>
+                            }
+
                             <span className={'like-value'}>24</span>
                         </div>
                     </div>
@@ -371,6 +415,8 @@ class Post extends Component<Props, State> {
             props.resetForm();
         };
     }
+
+
 }
 
 export default withRouter(Post);
