@@ -3,6 +3,7 @@ import './ViewProfile.css';
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import Avatar from "react-avatar";
 import {getUserData} from "../../api/UserApi";
+import {MdThumbDown, MdThumbUp} from "react-icons/md";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -66,12 +67,22 @@ class ViewProfile extends Component<Props, State> {
                                 'There are no posts to show' :
                             this.state.posts.map((post, index) => (
                                 <div className={'post-card-wrapper'} key={index}>
-                                    <div className={'post-card'} style={{height: 70}} onClick={() => this.handlePostSelection(post)}>
+                                    <div className={'post-card'} style={{height: 85}} onClick={() => this.handlePostSelection(post)}>
                                         <div className={'post-card-header'}>
                                             <div className={'post-title'}>{post.title}</div>
                                             <div className={'post-topic'}>{post.topicTitle}</div>
                                         </div>
                                         <div className={'post-card-body'} style={{color: 'black'}}>{post.description}</div>
+                                        <div className={'likes-container'}>
+                                            <div className={'like-container'}>
+                                                <MdThumbUp size={20} color={'#00B090'} className={'like-icon'}/>
+                                                <span className={'like-value'} style={{color: 'black'}}>295</span>
+                                            </div>
+                                            <div className={'like-container'}>
+                                                <MdThumbDown size={20} color={'#C13D3D'} className={'like-icon'}/>
+                                                <span className={'like-value'} style={{color: 'black'}}>24</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             ))

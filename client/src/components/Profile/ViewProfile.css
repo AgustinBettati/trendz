@@ -94,3 +94,9 @@
     background: #00B090;
     border-radius: 3px;
 }
+
+.likes-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
