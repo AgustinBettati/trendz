@@ -215,3 +215,7 @@
     cursor: pointer;
     filter: brightness(0.9);
 }
+
+.clickUser:hover{
+    cursor: pointer;
+}

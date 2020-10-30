@@ -26,6 +26,14 @@
     font-weight: bold;
 }
 
+.deleted{
+    color: #DF6052;
+    font-family: Bitter, sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
 .email{
     color: #F4F4F4;
     font-family: Bitter, sans-serif;
