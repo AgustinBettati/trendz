@@ -53,6 +53,14 @@ public class VoteService {
         return new VoteResponseDTO(user.getId(),user.getUsername(),post.getId(),post.getTitle(),isUpvote);
     }
 
+    int getNumberOfUpvotes(Long postId){
+       return voteRepository.findByPostIdAndIsUpvote(postId,true).size();
+    }
+
+    int getNumberOfDownvotes(Long postId){
+        return voteRepository.findByPostIdAndIsUpvote(postId,false).size();
+    }
+
 
 
 }

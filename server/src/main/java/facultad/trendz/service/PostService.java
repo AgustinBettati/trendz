@@ -3,15 +3,14 @@ package facultad.trendz.service;
 import facultad.trendz.config.model.MyUserDetails;
 import facultad.trendz.dto.comment.CommentResponseDTO;
 import facultad.trendz.dto.post.*;
-import facultad.trendz.dto.vote.VoteResponseDTO;
 import facultad.trendz.exception.post.PostExistsException;
 import facultad.trendz.exception.post.PostNotFoundException;
 import facultad.trendz.model.Comment;
 import facultad.trendz.model.Post;
-import facultad.trendz.model.User;
 import facultad.trendz.repository.PostRepository;
 import facultad.trendz.repository.TopicRepository;
 import facultad.trendz.repository.UserRepository;
+import facultad.trendz.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -25,12 +24,14 @@ public class PostService {
     private final PostRepository postRepository;
     private final TopicRepository topicRepository;
     private final UserRepository userRepository;
+    private final VoteRepository voteRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, TopicRepository topicRepository, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, TopicRepository topicRepository, UserRepository userRepository,VoteRepository voteRepository) {
         this.postRepository = postRepository;
         this.topicRepository = topicRepository;
         this.userRepository=userRepository;
+        this.voteRepository=voteRepository;
     }
 
     public SimplePostResponseDTO savePost(PostCreateDTO postCreateDTO, Long userId) {
@@ -80,7 +81,10 @@ public class PostService {
                     editedPost.getTopic().getId(),
                     editedPost.getUser().getId(),
                     commentListToDTO(editedPost.getComments()),
-                    editedPost.getUser().getUsername());
+                    editedPost.getUser().getUsername(),
+                    getNumberOfUpvotes(postId),
+                    getNumberOfDownvotes(postId)
+            );
         }).orElseThrow(PostNotFoundException::new);
     }
 
@@ -94,7 +98,7 @@ public class PostService {
                 foundPost.getTopic().getId(),
                 foundPost.getUser().getId(),
                 commentListToDTO(foundPost.getComments()),
-                foundPost.getUser().getUsername())).orElseThrow(PostNotFoundException::new);
+                foundPost.getUser().getUsername(),getNumberOfUpvotes(postId),getNumberOfDownvotes(postId))).orElseThrow(PostNotFoundException::new);
     }
 
     public boolean postAuthorVerification(Long postId, Authentication authentication){
@@ -123,6 +127,14 @@ public class PostService {
                         comment.getUser().getId()))
                 .collect(Collectors.toList());
     }
+    int getNumberOfUpvotes(Long postId){
+        return voteRepository.findByPostIdAndIsUpvote(postId,true).size();
+    }
+
+    int getNumberOfDownvotes(Long postId){
+        return voteRepository.findByPostIdAndIsUpvote(postId,false).size();
+    }
+
 }
 
 

@@ -16,9 +16,13 @@ public class PostResponseDTO {
     private Long userId;
     private String username;
     private List<CommentResponseDTO> comments;
+    private int upvotes;
+    private int downvotes;
 
 
-    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username){
+
+
+    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username,int upvotes,int downvotes){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -28,6 +32,9 @@ public class PostResponseDTO {
         this.userId=userId;
         this.comments = comments;
         this.username = username;
+        this.upvotes=upvotes;
+        this.downvotes=downvotes;
+
     }
 
     public PostResponseDTO() {}
@@ -103,4 +110,14 @@ public class PostResponseDTO {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public List<CommentResponseDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentResponseDTO> comments) {
+        this.comments = comments;
+    }
+
+
 }
