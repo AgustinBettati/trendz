@@ -80,7 +80,7 @@ public class VoteTests  extends TestUtils {
         Assert.assertTrue(user.isPresent());
         Assert.assertEquals(201, response.getStatusCodeValue());
         Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
-        Assert.assertEquals(postResponse.getBody().getTitle(), response.getBody().getPostTitle()); // post title must match
+
 
         Assert.assertTrue(this.voteRepository.findByPostIdAndUserIdAndIsUpvote(postResponse.getBody().getUserId(),postResponse.getBody().getId(),true).isPresent());
         Assert.assertEquals(user.get().getEmail(),"admin@gmail.com");
@@ -128,8 +128,6 @@ public class VoteTests  extends TestUtils {
         Assert.assertTrue(user.isPresent());
         Assert.assertEquals(201, response.getStatusCodeValue());
         Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
-        Assert.assertEquals(postResponse.getBody().getTitle(), response.getBody().getPostTitle()); // post title must match
-
         Assert.assertTrue(this.voteRepository.findByPostIdAndUserIdAndIsUpvote(postResponse.getBody().getUserId(),postResponse.getBody().getId(),!true).isPresent());
         Assert.assertEquals(user.get().getEmail(),"admin@gmail.com");
 
@@ -177,7 +175,6 @@ public class VoteTests  extends TestUtils {
         Assert.assertTrue(user.isPresent());
         Assert.assertEquals(201, response.getStatusCodeValue());
         Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
-        Assert.assertEquals(postResponse.getBody().getTitle(), response.getBody().getPostTitle()); // post title must match
 
         //verifying downvote has been deleted
 
@@ -229,7 +226,7 @@ public class VoteTests  extends TestUtils {
         Assert.assertTrue(user.isPresent());
         Assert.assertEquals(201, response.getStatusCodeValue());
         Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
-        Assert.assertEquals(postResponse.getBody().getTitle(), response.getBody().getPostTitle()); // post title must match
+
 
        //veryfing upvote has been deleted
         Assert.assertFalse(this.voteRepository.findByPostIdAndUserIdAndIsUpvote(postResponse.getBody().getUserId(),postResponse.getBody().getId(),true).isPresent());

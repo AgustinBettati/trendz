@@ -16,6 +16,6 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
  @Query("from Vote v where v.post.id=:postId and v.user.id=:userId and v.isUpvote=:isUpvote")
  Optional<Vote> findByPostIdAndUserIdAndIsUpvote(@Param("userId")Long userId,@Param("postId") Long postId,@Param("isUpvote") boolean isUpvote);
  @Query("from Vote v where v.post.id=:postId  and v.isUpvote=:isUpvote")
- List<Optional<Vote> > findByPostIdAndIsUpvote(@Param("postId") Long postId, @Param("isUpvote") boolean isUpvote);
+ List<Vote> findByPostIdAndIsUpvote(@Param("postId") Long postId, @Param("isUpvote") boolean isUpvote);
 }
 

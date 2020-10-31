@@ -50,7 +50,7 @@ public class VoteService {
             voteRepository.save(vote);
         }
 
-        return new VoteResponseDTO(user.getId(),user.getUsername(),post.getId(),post.getTitle(),isUpvote);
+        return new VoteResponseDTO(user.getId(),post.getId());
     }
 
     int getNumberOfUpvotes(Long postId){

@@ -1,6 +1,7 @@
 package facultad.trendz.dto.post;
 
 import facultad.trendz.dto.comment.CommentResponseDTO;
+import facultad.trendz.dto.vote.VoteResponseDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -16,13 +17,14 @@ public class PostResponseDTO {
     private Long userId;
     private String username;
     private List<CommentResponseDTO> comments;
-    private int upvotes;
-    private int downvotes;
+    private List<VoteResponseDTO> upvotes;
+    private List<VoteResponseDTO> downvotes;
 
 
 
 
-    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username,int upvotes,int downvotes){
+
+    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username,List<VoteResponseDTO> upvotes,List<VoteResponseDTO> downvotes){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -119,5 +121,19 @@ public class PostResponseDTO {
         this.comments = comments;
     }
 
+    public List<VoteResponseDTO> getUpvotes() {
+        return upvotes;
+    }
 
+    public void setUpvotes(List<VoteResponseDTO> upvotes) {
+        this.upvotes = upvotes;
+    }
+
+    public List<VoteResponseDTO> getDownvotes() {
+        return downvotes;
+    }
+
+    public void setDownvotes(List<VoteResponseDTO> downvotes) {
+        this.downvotes = downvotes;
+    }
 }

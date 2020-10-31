@@ -3,10 +3,12 @@ package facultad.trendz.service;
 import facultad.trendz.config.model.MyUserDetails;
 import facultad.trendz.dto.comment.CommentResponseDTO;
 import facultad.trendz.dto.post.*;
+import facultad.trendz.dto.vote.VoteResponseDTO;
 import facultad.trendz.exception.post.PostExistsException;
 import facultad.trendz.exception.post.PostNotFoundException;
 import facultad.trendz.model.Comment;
 import facultad.trendz.model.Post;
+import facultad.trendz.model.Vote;
 import facultad.trendz.repository.PostRepository;
 import facultad.trendz.repository.TopicRepository;
 import facultad.trendz.repository.UserRepository;
@@ -82,8 +84,8 @@ public class PostService {
                     editedPost.getUser().getId(),
                     commentListToDTO(editedPost.getComments()),
                     editedPost.getUser().getUsername(),
-                    getNumberOfUpvotes(postId),
-                    getNumberOfDownvotes(postId)
+                    voteListToDTO(this.voteRepository.findByPostIdAndIsUpvote(postId,true)),
+                    voteListToDTO(this.voteRepository.findByPostIdAndIsUpvote(postId,false))
             );
         }).orElseThrow(PostNotFoundException::new);
     }
@@ -98,7 +100,8 @@ public class PostService {
                 foundPost.getTopic().getId(),
                 foundPost.getUser().getId(),
                 commentListToDTO(foundPost.getComments()),
-                foundPost.getUser().getUsername(),getNumberOfUpvotes(postId),getNumberOfDownvotes(postId))).orElseThrow(PostNotFoundException::new);
+                foundPost.getUser().getUsername(),voteListToDTO(this.voteRepository.findByPostIdAndIsUpvote(postId,true)),
+                voteListToDTO(this.voteRepository.findByPostIdAndIsUpvote(postId,false)))).orElseThrow(PostNotFoundException::new);
     }
 
     public boolean postAuthorVerification(Long postId, Authentication authentication){
@@ -126,6 +129,15 @@ public class PostService {
                         comment.isDeleted(),
                         comment.getUser().getId()))
                 .collect(Collectors.toList());
+    }
+
+
+    private List<VoteResponseDTO> voteListToDTO(List<Vote> votes){
+        return votes.stream()
+                .map(vote -> new VoteResponseDTO(vote.getUser().getId(),
+                                vote.getPost().getId())
+
+                ).collect(Collectors.toList());
     }
     int getNumberOfUpvotes(Long postId){
         return voteRepository.findByPostIdAndIsUpvote(postId,true).size();
