@@ -79,7 +79,7 @@ public class UserService {
     }
 
     public UserResponseDTO getUserById(Long userId) {
-        final Optional<User> user = userRepository.findByIdAndDeletedIsFalse(userId);
+        final Optional<User> user = userRepository.findById(userId);
 
         if (!user.isPresent()) throw new UserNotFoundException();
 
