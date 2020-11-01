@@ -52,7 +52,6 @@ const postCommentSchema = yup.object({
     comment: yup.string().max(10000, "Comment can be up to 10000 characters long"),
 
 })
-const userId=parseJwt(localStorage.getItem('token')).userId
 
 class Post extends Component<Props, State> {
 
@@ -104,6 +103,8 @@ class Post extends Component<Props, State> {
     };
 
     componentDidMount() {
+        const userId=parseJwt(localStorage.getItem('token')).userId
+
         getPostData(this.props.match.params.id)
             .then((res) => {
 
