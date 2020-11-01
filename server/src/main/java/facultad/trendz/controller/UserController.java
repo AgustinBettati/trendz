@@ -66,13 +66,12 @@ public class UserController implements ControllerUtils{
     }
 
     @DeleteMapping(value = "/user")
-    public ResponseEntity<MessageResponseDTO> deleteUser()  {
+    public ResponseEntity<UserResponseDTO> deleteUser()  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long id = ((MyUserDetails)authentication.getPrincipal()).getId();
-         userService.deleteUser(id);
-        MessageResponseDTO dto= new MessageResponseDTO("User Deleted");
+        final UserResponseDTO body = userService.deleteUser(id);
         final HttpStatus status = HttpStatus.OK;
-        return new ResponseEntity<>(dto, status);
+        return new ResponseEntity<>(body, status);
     }
 
     @PostMapping("/login")

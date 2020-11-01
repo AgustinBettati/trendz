@@ -38,6 +38,8 @@ public class User {
 
 
 
+    private boolean deleted;
+
     public User() {
     }
 
@@ -111,5 +113,13 @@ public class User {
 
     public void setVotes(List<Vote> votes) {
         this.votes = votes;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

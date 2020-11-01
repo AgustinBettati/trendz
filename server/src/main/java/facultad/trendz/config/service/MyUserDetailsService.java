@@ -19,17 +19,12 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username){
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-
-        return MyUserDetails.build(user);
+        return MyUserDetails.build(userRepository.findByUsernameAndDeletedIsFalse(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
     }
 
     public String getUsernameByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-
-        if (user == null) throw new UsernameNotFoundException("User Not Found with email: " + email);
-
-        return user.getUsername();
+        return userRepository.findByEmailAndDeletedIsFalse(email).map(User::getUsername)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
     }
 }

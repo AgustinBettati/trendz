@@ -1,6 +1,7 @@
 package facultad.trendz;
 
 import facultad.trendz.dto.MessageResponseDTO;
+import facultad.trendz.dto.SearchResponseDTO;
 import facultad.trendz.dto.comment.CommentCreateDTO;
 import facultad.trendz.dto.comment.CommentResponseDTO;
 import facultad.trendz.dto.post.PostCreateDTO;
@@ -167,4 +168,20 @@ public abstract class TestUtils {
         return restTemplate.exchange(uri, HttpMethod.POST, entity, VoteResponseDTO.class);
     }
 
+
+    public ResponseEntity<SearchResponseDTO> searchByTitle(String title, String jwt, int randomServerPort) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwt);
+
+        HttpEntity<CommentCreateDTO> searchEntity = new HttpEntity<>(headers);
+
+        title = title.replaceAll(" ", "%20");
+
+        final String searchUrl = String.format("http://localhost:%d/search?title=%s", randomServerPort, title);
+        URI searchUri = new URI(searchUrl);
+
+        return restTemplate.exchange(searchUri, HttpMethod.GET, searchEntity, SearchResponseDTO.class);
+    }
 }

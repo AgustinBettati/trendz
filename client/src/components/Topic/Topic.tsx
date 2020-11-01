@@ -150,7 +150,7 @@ class Topic extends Component<Props, State> {
                 <div className={'topic-footer'}>
                     <ReactPaginate
                         onPageChange={this.handlePageClick}
-                        pageCount={this.state.posts.length/3}
+                        pageCount={Math.ceil(this.state.posts.length/3)}
                         pageRangeDisplayed={5}
                         marginPagesDisplayed={2}
                         previousLabel={"<"}

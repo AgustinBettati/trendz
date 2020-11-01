@@ -33,11 +33,7 @@ public class UserService {
     }
 
     public User getUserByEmail(String email) {
-        final User user = userRepository.findByEmail(email);
-
-        if (user == null) throw new UserNotFoundException();
-
-        return user;
+        return userRepository.findByEmailAndDeletedIsFalse(email).orElseThrow(UserNotFoundException::new);
     }
 
     public List<User> getAll() {
@@ -53,13 +49,16 @@ public class UserService {
         final User user = new User(userCreateDTO.getEmail(), userCreateDTO.getUsername(), encryptedPassword, role);
 
         userRepository.save(user);
-        return new UserResponseDTO(user.getId(), user.getEmail(), user.getUsername(), user.getRole());
+        return new UserResponseDTO(user.getId(), user.getEmail(), user.getUsername(), user.getRole(),user.isDeleted());
     }
 
-    public void deleteUser(Long id){
-        final Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent()) throw new UserNotFoundException();
-        userRepository.delete(user.get());
+    public UserResponseDTO deleteUser(Long id){
+        return userRepository.findById(id).map(user -> {
+                    user.setDeleted(true);
+                    userRepository.save(user);
+                    return new UserResponseDTO(user.getId(), user.getEmail(), user.getUsername(), user.getRole(), user.isDeleted());
+                }
+        ).orElseThrow(UserNotFoundException::new);
     }
 
     public void validateUsername(String username) {
@@ -73,15 +72,15 @@ public class UserService {
     }
 
     public UserResponseDTO getUserById(Long userId) {
-        final Optional<User> user = userRepository.findById(userId);
+        final Optional<User> user = userRepository.findByIdAndDeletedIsFalse(userId);
 
         if (!user.isPresent()) throw new UserNotFoundException();
 
-        return new UserResponseDTO(user.get().getId(), user.get().getEmail(), user.get().getUsername(), user.get().getRole());
+        return new UserResponseDTO(user.get().getId(), user.get().getEmail(), user.get().getUsername(), user.get().getRole(), user.get().isDeleted());
     }
 
     public void editUser(ProfileEditDTO profileEditDTO, Long userId) {
-        final Optional<User> user = userRepository.findById(userId);
+        final Optional<User> user = userRepository.findByIdAndDeletedIsFalse(userId);
         if (!user.isPresent()) throw new UserNotFoundException();
 
         String oldPassword = profileEditDTO.getOldPassword();

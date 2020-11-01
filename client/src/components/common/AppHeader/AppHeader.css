@@ -33,13 +33,45 @@
 .searchbar-container {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
-    justify-content: inherit;
-    place-content: inherit;
+    align-items: center;
+    place-content: center;
     height: 100%;
     width: 100%;
 }
 
+.searchbar-container input{
+    height: 30%;
+    width: 500px;
+    background-color: #232020;
+    color: #F4F4F4;
+    font-family: Bitter, sans-serif;
+    font-size: 20px;
+    border: 2px solid #1EA083;
+}
+
+.searchbar-button-enabled{
+    background-color: #232020;
+    height: 30%;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 10px;
+    border: 2px solid #1EA083;
+}
+
+.searchbar-button-enabled:hover{
+    cursor: pointer;
+    filter: brightness(1.2);
+}
+
+.searchbar-button-disabled{
+    opacity: 0.5;
+    background-color: #232020;
+    height: 30%;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 10px;
+    border: 2px solid #1EA083;
+}
 
 .app-options {
     display: flex;

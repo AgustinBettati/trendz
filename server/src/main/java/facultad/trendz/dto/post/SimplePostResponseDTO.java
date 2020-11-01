@@ -10,11 +10,12 @@ public class SimplePostResponseDTO {
     private String link;
     private Date date;
     private Long topicId;
+    private String topicTitle;
     private Long userId;
     private String username;
 
 
-    public SimplePostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, String username){
+    public SimplePostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, String username, String topicTitle){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -23,6 +24,7 @@ public class SimplePostResponseDTO {
         this.date=date;
         this.userId=userId;
         this.username = username;
+        this.topicTitle = topicTitle;
     }
 
     public SimplePostResponseDTO() {}
@@ -89,5 +91,13 @@ public class SimplePostResponseDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getTopicTitle() {
+        return topicTitle;
+    }
+
+    public void setTopicTitle(String topicTitle) {
+        this.topicTitle = topicTitle;
     }
 }
