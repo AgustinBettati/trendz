@@ -14,6 +14,7 @@ import facultad.trendz.model.User;
 import facultad.trendz.exception.user.UserNotFoundException;
 import facultad.trendz.repository.RoleRepository;
 import facultad.trendz.repository.UserRepository;
+import facultad.trendz.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,12 +29,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final VoteRepository voteRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, VoteRepository voteRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.voteRepository = voteRepository;
     }
 
     public User getUserByEmail(String email) {
@@ -123,7 +126,9 @@ public class UserService {
                             post.getUser().getId(),
                             post.getUser().getUsername(),
                             post.getTopic().getTitle(),
-                            post.isDeleted()))
+                            post.isDeleted(),
+                            voteRepository.findByPostIdAndIsUpvote(post.getId(),true).stream().map(vote -> vote.getUser().getId()).collect(Collectors.toList()),
+                            voteRepository.findByPostIdAndIsUpvote(post.getId(),false).stream().map(vote -> vote.getUser().getId()).collect(Collectors.toList())))
                     .collect(Collectors.toList())
         ).orElseThrow(UserNotFoundException::new);
     }
