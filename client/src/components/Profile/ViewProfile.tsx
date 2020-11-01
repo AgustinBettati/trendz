@@ -4,6 +4,7 @@ import {RouteComponentProps, withRouter} from "react-router-dom";
 import Avatar from "react-avatar";
 import {getUserData} from "../../api/UserApi";
 import {MdThumbDown, MdThumbUp} from "react-icons/md";
+import {parseJwt} from "../Routing/utils";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -42,6 +43,10 @@ class ViewProfile extends Component<Props, State> {
         this.props.history.push('/main/post/' + post.id)
     }
 
+    voted = (votes: number[]) => {
+        return votes.includes(Number(parseJwt(localStorage.getItem('token')).userId))
+    }
+
     render() {
         return (
             <div className={'view-profile-container'}>
@@ -75,12 +80,12 @@ class ViewProfile extends Component<Props, State> {
                                         <div className={'post-card-body'} style={{color: 'black'}}>{post.description}</div>
                                         <div className={'likes-container'}>
                                             <div className={'like-container'}>
-                                                <MdThumbUp size={20} color={'#00B090'} className={'like-icon'}/>
-                                                <span className={'like-value'} style={{color: 'black'}}>295</span>
+                                                <MdThumbUp size={20} color={this.voted(post.upvotes) ? '#00B090' : 'grey'} className={'like-icon'}/>
+                                                <span className={'like-value'} style={{color: 'black'}}>{post.upvotes.length}</span>
                                             </div>
                                             <div className={'like-container'}>
-                                                <MdThumbDown size={20} color={'#C13D3D'} className={'like-icon'}/>
-                                                <span className={'like-value'} style={{color: 'black'}}>24</span>
+                                                <MdThumbDown size={20} color={this.voted(post.downvotes) ? '#C13D3D' : 'grey'} className={'like-icon'}/>
+                                                <span className={'like-value'} style={{color: 'black'}}>{post.downvotes.length}</span>
                                             </div>
                                         </div>
                                     </div>
