@@ -68,6 +68,7 @@ class OnStartLoader implements ApplicationRunner {
         postRepository.save(new Post("Twilight","My daughter loved the werewolfs","alink",new Date(),topicRepository.getTopicById(Long.valueOf(1)),userRepository.findByEmail("2@gmail.com")));
         postRepository.save(new Post("Casablanca","The plane scene made me cry","https://es.wikipedia.org/wiki/Star_Trek",new Date(),topicRepository.getTopicById(Long.valueOf(1)),userRepository.findByEmail("1@gmail.com")));
 
+
         postRepository.save(new Post("Steamed Potatoes","For this recipe you'll need potatoes, salt and pepper.","alink",new Date(),topicRepository.getTopicById(Long.valueOf(2)),userRepository.findByEmail("2@gmail.com")));
         postRepository.save(new Post("Ham and Spagetti Sandwich","Unusual, but actually very tasty","https://es.wikipedia.org/wiki/Star_Trek",new Date(),topicRepository.getTopicById(Long.valueOf(2)),userRepository.findByEmail("3@gmail.com")));
         postRepository.save(new Post("Bananna Cupacake","Ingredients: Bananna, Flour, Milk, Eggs and Sugar","alink",new Date(),topicRepository.getTopicById(Long.valueOf(2)),userRepository.findByEmail("1@gmail.com")));

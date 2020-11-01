@@ -13,6 +13,8 @@ import TimeAgo from 'react-timeago'
 
 import {createComment, deleteComment, editComment} from "../../api/CommentApi";
 import {getTopic} from "../../api/TopicApi";
+import {downvotePost, upvotePost} from "../../api/VoteAPI";
+import {number} from "yup";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -35,13 +37,22 @@ export type State = {
     hoverIndex:number,
     toEditComment: number,
     editContent: string,
-    editErrorMessage: string
+    editErrorMessage: string,
+    handleVoteError: string,
+    clickedUpvote: boolean,
+    clickedDownvote: boolean
+    upvotes: any[],
+    downvotes: any[],
+    numberOfUpvotes:number,
+    numberOfDownvotes:number,
+
 }
 
 const postCommentSchema = yup.object({
     comment: yup.string().max(10000, "Comment can be up to 10000 characters long"),
 
 })
+const userId=parseJwt(localStorage.getItem('token')).userId
 
 class Post extends Component<Props, State> {
 
@@ -55,6 +66,8 @@ class Post extends Component<Props, State> {
                 topicId: -1,
                 userId: -1,
                 username: '',
+                upvotes:[],
+                downvotes:[],
             },
             topic: {
                 id: -1,
@@ -77,20 +90,42 @@ class Post extends Component<Props, State> {
             hoverIndex:-1,
             toEditComment: -1,
             editContent: '',
-            editErrorMessage: ''
+            editErrorMessage: '',
+            handleVoteError: '',
+            clickedUpvote: false,
+            clickedDownvote: false,
+            upvotes: [],
+            downvotes: [],
+            numberOfUpvotes:0,
+            numberOfDownvotes:0,
+
+
         }
     };
 
     componentDidMount() {
         getPostData(this.props.match.params.id)
             .then((res) => {
-                this.setState({post: res, comments: res.comment})
+
+                this.setState({
+                    post: res,
+                    comments: res.comment,
+                    upvotes: res.upvotes,
+                    downvotes: res.downvotes,
+                    numberOfUpvotes:res.upvotes.length,
+                    numberOfDownvotes:res.downvotes.length,
+                    clickedDownvote:res.downvotes.includes(Number(userId)),
+                    clickedUpvote:res.upvotes.includes(Number(userId))
+                })
+                console.log(this.state.clickedUpvote)
+                console.log(this.state.clickedDownvote)
                 getTopic(res.topicId)
                     .then((res) => this.setState({topic: res}))
                     .catch((err) => this.setState({topicErrorMessage: err}))
             })
             .catch((err) => this.setState({postErrorMessage: err}))
     }
+
 
     handlePostComment = (comment: string) => {
         createComment(comment, this.props.match.params.id)
@@ -148,6 +183,35 @@ class Post extends Component<Props, State> {
             })
            .catch(() => this.setState({deleteCommentErrorMessage: 'An error occurred deleting your comment!'}))
 
+    }
+
+     handleDownvote = () => {
+         if (this.state.clickedUpvote){
+             this.setState({numberOfUpvotes:this.state.numberOfUpvotes-1})
+         }
+        this.setState({clickedUpvote: false})
+        if(!this.state.clickedDownvote) {
+            downvotePost(this.props.match.params.id)
+                .then(() => {
+                    this.setState({clickedDownvote:true})
+                })
+                .catch(() => this.setState({handleVoteError: 'An error occurred'}))
+            this.setState({numberOfDownvotes:this.state.numberOfDownvotes+1})
+        }
+    }
+    handleUpvote = () => {
+        if (this.state.clickedDownvote){
+            this.setState({numberOfDownvotes:this.state.numberOfDownvotes-1})
+        }
+        this.setState({clickedDownvote: false})
+        if(!this.state.clickedUpvote) {
+            upvotePost(this.props.match.params.id)
+                .then(() => {
+                    this.setState({clickedUpvote: true})
+                })
+                .catch(() => this.setState({handleVoteError: 'An error occurred'}))
+            this.setState({numberOfUpvotes: this.state.numberOfUpvotes+1})
+        }
     }
 
     handleDelete = () => {
@@ -270,12 +334,28 @@ class Post extends Component<Props, State> {
                     </div>
                     <div className={'body-footer'}>
                         <div className={'like-container'}>
-                            <MdThumbUp size={20} color={'#00B090'} className={'like-icon'}/>
-                            <span className={'like-value'}>295</span>
+                            { this.state.clickedUpvote&&
+                                <MdThumbUp size={20} color={'#00B090'} className={'like-icon'}
+                                           onClick={() => this.handleUpvote()}/>
+                            }
+                            {!this.state.clickedUpvote&&
+                                <MdThumbUp size={20} color={'grey'} className={'like-icon'}
+                                           onClick={() => this.handleUpvote()}/>
+                            }
+                            <span className={'like-value'}>{this.state.numberOfUpvotes}</span>
                         </div>
                         <div className={'like-container'}>
-                            <MdThumbDown size={20} color={'#C13D3D'} className={'like-icon'}/>
-                            <span className={'like-value'}>24</span>
+                            { this.state.clickedDownvote&&
+
+                            <MdThumbDown size={20} color={'#C13D3D'} className={'like-icon'}
+                                         onClick={() => this.handleDownvote()}/>
+                        }
+                            {!this.state.clickedDownvote&&
+                                <MdThumbDown size={20} color={'grey'} className={'like-icon'}
+                                             onClick={() => this.handleDownvote()}/>
+                            }
+
+                            <span className={'like-value'}>{this.state.numberOfDownvotes}</span>
                         </div>
                     </div>
                 </div>
@@ -377,6 +457,8 @@ class Post extends Component<Props, State> {
             props.resetForm();
         };
     }
+
+
 }
 
 export default withRouter(Post);

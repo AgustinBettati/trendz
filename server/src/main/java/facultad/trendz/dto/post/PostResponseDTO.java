@@ -1,6 +1,7 @@
 package facultad.trendz.dto.post;
 
 import facultad.trendz.dto.comment.CommentResponseDTO;
+import facultad.trendz.dto.vote.VoteResponseDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -17,9 +18,14 @@ public class PostResponseDTO {
     private String username;
     private List<CommentResponseDTO> comments;
     private boolean deleted;
+    private List<Long> upvotes;
+    private List<Long> downvotes;
 
 
-    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username, boolean deleted){
+
+
+
+    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username, boolean deleted, List<Long> upvotes,List<Long> downvotes){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -30,6 +36,9 @@ public class PostResponseDTO {
         this.comments = comments;
         this.username = username;
         this.deleted = deleted;
+        this.upvotes=upvotes;
+        this.downvotes=downvotes;
+
     }
 
     public PostResponseDTO() {}
@@ -106,14 +115,6 @@ public class PostResponseDTO {
         this.username = username;
     }
 
-    public List<CommentResponseDTO> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentResponseDTO> comments) {
-        this.comments = comments;
-    }
-
     public boolean isDeleted() {
         return deleted;
     }
@@ -121,4 +122,21 @@ public class PostResponseDTO {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    public List<Long> getUpvotes() {
+        return upvotes;
+    }
+
+    public void setUpvotes(List<Long> upvotes) {
+        this.upvotes = upvotes;
+    }
+
+    public List<Long> getDownvotes() {
+        return downvotes;
+    }
+
+    public void setDownvotes(List<Long> downvotes) {
+        this.downvotes = downvotes;
+    }
+
 }

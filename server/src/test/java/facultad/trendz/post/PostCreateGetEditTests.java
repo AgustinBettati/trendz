@@ -8,6 +8,7 @@ import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.JwtResponseDTO;
 import facultad.trendz.model.Post;
 import facultad.trendz.repository.PostRepository;
+import facultad.trendz.repository.UserRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +37,8 @@ public class PostCreateGetEditTests extends TestUtils {
 
     @Autowired
     PostRepository postRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     public void testPostCreation() throws URISyntaxException {
@@ -292,4 +295,8 @@ public class PostCreateGetEditTests extends TestUtils {
         }
 
     }
+
+
+
+
 }

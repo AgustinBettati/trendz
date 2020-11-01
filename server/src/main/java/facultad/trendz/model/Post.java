@@ -1,6 +1,10 @@
 package facultad.trendz.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +25,12 @@ public class Post {
     private Date date;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Vote> votes;
 
     @ManyToOne()
     @JoinColumn(name="topic_id", nullable=false)
@@ -34,6 +43,7 @@ public class Post {
     private boolean deleted;
 
 
+
     public Post(String title, String description, String link, Date date, Topic topic, User user) {
         this.title = title;
         this.description = description;
@@ -41,6 +51,7 @@ public class Post {
         this.date = date;
         this.topic = topic;
         this.user = user;
+        this.votes=new ArrayList<>();
     }
 
     public Post() {
@@ -114,6 +125,14 @@ public class Post {
 
     public void addComment(Comment comment){
         comments.add(comment);
+    }
+
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
     }
 
     public boolean isDeleted() {
