@@ -29,7 +29,7 @@ class Profile extends Component<Props, State> {
     componentDidMount() {
         getUserData(parseJwt(localStorage.getItem('token')).userId)
             .then((res) => {
-                this.setState({username: res.username, email: res.email})
+                this.setState({username: res.userInfo.username, email: res.userInfo.email})
             })
             .catch(() => this.setState({username: 'Unknown', email: 'Unknown'}))
     }

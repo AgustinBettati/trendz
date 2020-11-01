@@ -38,11 +38,31 @@
     width: fit-content;
 }
 
+.post-username-title{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .post-header-title{
     color: #00B090;
     font-size: 40px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+}
+
+.by{
+    margin: 0 10px;
+    color: #00b090;
+}
+
+.post-header-username{
+    color: #00b090;
+    background-color: #F4F4F4;
+    padding: 1px 3px;
+    border-radius: 3px;
+    font-size: 20px;
+}
+
+.post-header-username:hover{
+    cursor: pointer;
 }
 
 .post-buttons-container{
