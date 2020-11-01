@@ -1,6 +1,7 @@
 package facultad.trendz.dto.post;
 
 import java.util.Date;
+import java.util.List;
 
 public class SimplePostResponseDTO {
 
@@ -13,9 +14,11 @@ public class SimplePostResponseDTO {
     private String topicTitle;
     private Long userId;
     private String username;
+    private List<Long> upvotes;
+    private List<Long> downvotes;
 
 
-    public SimplePostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, String username, String topicTitle){
+    public SimplePostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, String username, String topicTitle, List<Long> upvotes, List<Long> downvotes){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -25,6 +28,8 @@ public class SimplePostResponseDTO {
         this.userId=userId;
         this.username = username;
         this.topicTitle = topicTitle;
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
     }
 
     public SimplePostResponseDTO() {}
@@ -99,5 +104,21 @@ public class SimplePostResponseDTO {
 
     public void setTopicTitle(String topicTitle) {
         this.topicTitle = topicTitle;
+    }
+
+    public List<Long> getUpvotes() {
+        return upvotes;
+    }
+
+    public void setUpvotes(List<Long> upvotes) {
+        this.upvotes = upvotes;
+    }
+
+    public List<Long> getDownvotes() {
+        return downvotes;
+    }
+
+    public void setDownvotes(List<Long> downvotes) {
+        this.downvotes = downvotes;
     }
 }

@@ -48,7 +48,9 @@ public class PostService {
                 post.getTopic().getId(),
                 userId,
                 post.getUser().getUsername(),
-                post.getTopic().getTitle());
+                post.getTopic().getTitle(),
+                voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(post.getId(),true)),
+                voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(post.getId(),false)));
     }
 
     public void validatePostTitle(String title) {
@@ -130,7 +132,9 @@ public class PostService {
                         post.getTopic().getId(),
                         post.getUser().getId(),
                         post.getUser().getUsername(),
-                        post.getTopic().getTitle()))
+                        post.getTopic().getTitle(),
+                        voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(post.getId(),true)),
+                        voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(post.getId(),false))))
                 .collect(Collectors.toList());
     }
 
