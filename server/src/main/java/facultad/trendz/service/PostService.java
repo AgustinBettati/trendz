@@ -2,17 +2,17 @@ package facultad.trendz.service;
 
 import facultad.trendz.config.model.MyUserDetails;
 import facultad.trendz.dto.comment.CommentResponseDTO;
-import facultad.trendz.dto.post.PostCreateDTO;
-import facultad.trendz.dto.post.PostEditDTO;
-import facultad.trendz.dto.post.PostResponseDTO;
-import facultad.trendz.dto.post.SimplePostResponseDTO;
+import facultad.trendz.dto.post.*;
+import facultad.trendz.dto.vote.VoteResponseDTO;
 import facultad.trendz.exception.post.PostExistsException;
 import facultad.trendz.exception.post.PostNotFoundException;
 import facultad.trendz.model.Comment;
 import facultad.trendz.model.Post;
+import facultad.trendz.model.Vote;
 import facultad.trendz.repository.PostRepository;
 import facultad.trendz.repository.TopicRepository;
 import facultad.trendz.repository.UserRepository;
+import facultad.trendz.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -26,12 +26,14 @@ public class PostService {
     private final PostRepository postRepository;
     private final TopicRepository topicRepository;
     private final UserRepository userRepository;
+    private final VoteRepository voteRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, TopicRepository topicRepository, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, TopicRepository topicRepository, UserRepository userRepository,VoteRepository voteRepository) {
         this.postRepository = postRepository;
         this.topicRepository = topicRepository;
         this.userRepository=userRepository;
+        this.voteRepository=voteRepository;
     }
 
     public SimplePostResponseDTO savePost(PostCreateDTO postCreateDTO, Long userId) {
@@ -46,7 +48,9 @@ public class PostService {
                 post.getTopic().getId(),
                 userId,
                 post.getUser().getUsername(),
-                post.getTopic().getTitle());
+                post.getTopic().getTitle(),
+                voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(post.getId(),true)),
+                voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(post.getId(),false)));
     }
 
     public void validatePostTitle(String title) {
@@ -82,7 +86,10 @@ public class PostService {
                     editedPost.getTopic().getId(),
                     editedPost.getUser().getId(),
                     commentListToDTO(editedPost.getComments()),
-                    editedPost.getUser().getUsername());
+                    editedPost.getUser().getUsername(),
+                    voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(postId,true)),
+                    voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(postId,false))
+            );
         }).orElseThrow(PostNotFoundException::new);
     }
 
@@ -96,7 +103,8 @@ public class PostService {
                 foundPost.getTopic().getId(),
                 foundPost.getUser().getId(),
                 commentListToDTO(foundPost.getComments()),
-                foundPost.getUser().getUsername())).orElseThrow(PostNotFoundException::new);
+                foundPost.getUser().getUsername(),voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(postId,true)),
+                voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(postId,false)))).orElseThrow(PostNotFoundException::new);
     }
 
     public boolean postAuthorVerification(Long postId, Authentication authentication){
@@ -124,7 +132,9 @@ public class PostService {
                         post.getTopic().getId(),
                         post.getUser().getId(),
                         post.getUser().getUsername(),
-                        post.getTopic().getTitle()))
+                        post.getTopic().getTitle(),
+                        voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(post.getId(),true)),
+                        voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(post.getId(),false))))
                 .collect(Collectors.toList());
     }
 
@@ -142,4 +152,25 @@ public class PostService {
                         comment.getUser().getId()))
                 .collect(Collectors.toList());
     }
+
+
+    private List<Long> voteListToNumberList(List<Vote> votes){
+        List longList= new ArrayList();
+        for (int i = 0; i <votes.size() ; i++) {
+            longList.add(votes.get(i).getUser().getId());
+
+
+        }
+        return longList;
+    }
+    int getNumberOfUpvotes(Long postId){
+        return voteRepository.findByPostIdAndIsUpvote(postId,true).size();
+    }
+
+    int getNumberOfDownvotes(Long postId){
+        return voteRepository.findByPostIdAndIsUpvote(postId,false).size();
+    }
+
 }
+
+

@@ -8,6 +8,7 @@ import facultad.trendz.exception.topic.TopicNotFoundException;
 import facultad.trendz.model.Post;
 import facultad.trendz.model.Topic;
 import facultad.trendz.repository.TopicRepository;
+import facultad.trendz.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,12 @@ import java.util.stream.Collectors;
 public class TopicService {
 
     private final TopicRepository topicRepository;
+    private final VoteRepository voteRepository;
 
     @Autowired
-    public TopicService(TopicRepository topicRepository) {
+    public TopicService(TopicRepository topicRepository, VoteRepository voteRepository) {
         this.topicRepository = topicRepository;
+        this.voteRepository = voteRepository;
     }
 
     public TopicResponseDTO saveTopic(TopicCreateDTO topicCreateDTO){
@@ -67,7 +70,9 @@ public class TopicService {
                     post.getTopic().getId(),
                     post.getUser().getId(),
                     post.getUser().getUsername(),
-                    post.getTopic().getTitle()));
+                    post.getTopic().getTitle(),
+                    voteRepository.findByPostIdAndIsUpvote(post.getId(),true).stream().map(vote -> vote.getUser().getId()).collect(Collectors.toList()),
+                    voteRepository.findByPostIdAndIsUpvote(post.getId(),true).stream().map(vote -> vote.getUser().getId()).collect(Collectors.toList())));
         }
         return postsInfo;
     }
