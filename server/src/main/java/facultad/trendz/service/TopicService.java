@@ -55,26 +55,28 @@ public class TopicService {
         if (!topic.isPresent()) throw new TopicNotFoundException();
 
         topic.get().setDeleted(true);
+        topic.get().getPosts().forEach(post -> post.setDeleted(true));
         topicRepository.save(topic.get());
     }
 
     public List<SimplePostResponseDTO> getTopicPosts(Long topicId) {
-       List<Post> posts = topicRepository.getTopicById(topicId).getPosts();
-        List<SimplePostResponseDTO> postsInfo = new ArrayList<>(posts.size());
-        for (Post post : posts) {
-            postsInfo.add(new SimplePostResponseDTO(post.getId(),
-                    post.getTitle(),
-                    post.getDescription(),
-                    post.getLink(),
-                    post.getDate(),
-                    post.getTopic().getId(),
-                    post.getUser().getId(),
-                    post.getUser().getUsername(),
-                    post.getTopic().getTitle(),
-                    voteRepository.findByPostIdAndIsUpvote(post.getId(),true).stream().map(vote -> vote.getUser().getId()).collect(Collectors.toList()),
-                    voteRepository.findByPostIdAndIsUpvote(post.getId(),true).stream().map(vote -> vote.getUser().getId()).collect(Collectors.toList())));
-        }
-        return postsInfo;
+        return topicRepository.findByIdAndDeletedIsFalse(topicId).map(topic ->
+            topic.getPosts().stream()
+                .filter(post -> !post.isDeleted())
+                .map(post -> new SimplePostResponseDTO(post.getId(),
+                        post.getTitle(),
+                        post.getDescription(),
+                        post.getLink(),
+                        post.getDate(),
+                        post.getTopic().getId(),
+                        post.getUser().getId(),
+                        post.getUser().getUsername(),
+                        post.getTopic().getTitle(),
+                        post.isDeleted(),
+                        voteRepository.findByPostIdAndIsUpvote(post.getId(),true).stream().map(vote -> vote.getUser().getId()).collect(Collectors.toList()),
+                        voteRepository.findByPostIdAndIsUpvote(post.getId(),true).stream().map(vote -> vote.getUser().getId()).collect(Collectors.toList())))
+                .collect(Collectors.toList())
+        ).orElseThrow(TopicNotFoundException::new);
     }
 
     public TopicResponseDTO getTopicById(Long topicId) {

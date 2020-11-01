@@ -256,6 +256,10 @@ class Post extends Component<Props, State> {
         return value + ' ' + unit + ' ' + suffix
     }
 
+    handleProfileNavigation = (id: number) => {
+        this.props.history.push('/main/viewProfile/' + id)
+    }
+
     render() {
         return (
             <div className={'post-container'}>
@@ -299,7 +303,11 @@ class Post extends Component<Props, State> {
                         <span className={'post-subtitle'} onClick={() => this.handleTopicNavigation()}>
                             {'This post belongs to the topic: ' + this.state.topic.title}
                         </span>
-                        <span className={'post-header-title'}>{this.state.post.title}</span>
+                        <div className={'post-username-title'}>
+                            <span className={'post-header-title'}>{this.state.post.title}</span>
+                            <span className={'by'}>by</span>
+                            <span className={'post-header-username'} onClick={() => this.handleProfileNavigation(this.state.post.userId)}>{this.state.post.username}</span>
+                        </div>
                         {
                             this.state.post.link &&
                             <a href={this.state.post.link} target={'_blank'}>{this.state.post.link}</a>
@@ -401,7 +409,9 @@ class Post extends Component<Props, State> {
                                      }}
                                      onMouseLeave={() => this.setIsShown(-1)}>
                                     <div className={'comment-header'}>
-                                        {comment.username + ' - '}
+                                        <div onClick={() => this.handleProfileNavigation(comment.userId)} className={'clickUser'}>
+                                            {comment.username + ' - '}
+                                        </div>
                                         <TimeAgo date={comment.creationDate} formatter={this.formatter} />
                                         {comment.editDate && <span style={{color: '#818181', marginLeft: 5}}>edited</span>}
                                         {

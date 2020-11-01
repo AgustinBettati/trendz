@@ -1,0 +1,102 @@
+.view-profile-container{
+    background-color: #232020;
+    height: 100%;
+    width: 100%;
+}
+
+.view-profile-header{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-sizing: border-box;
+    padding: 40px 60px;
+}
+
+.name-avatar-container{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.name{
+    color: #00b090;
+    font-family: Bitter, sans-serif;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.deleted{
+    color: #DF6052;
+    font-family: Bitter, sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.email{
+    color: #F4F4F4;
+    font-family: Bitter, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.name-email{
+    display: flex;
+    flex-direction: column;
+}
+
+.avatar{
+    border-radius: 10px;
+    border: 3px solid #00b090;
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.latest-posts-wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-sizing: border-box;
+    padding: 0 60px;
+}
+
+.latest-posts-title{
+    color: #F4F4F4;
+    font-family: Bitter, sans-serif;
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.latest-posts-container{
+    box-sizing: border-box;
+    width: 100%;
+    padding: 20px 20px 0;
+    box-shadow: inset 0 0 10px 3px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    overflow-y: scroll;
+    height: 600px;
+    color: #F4F4F4;
+    font-size: 20px;
+}
+
+.latest-posts-container::-webkit-scrollbar{
+    width: 5px;
+}
+
+.latest-posts-container::-webkit-scrollbar-track{
+    background: #232020;
+}
+
+.latest-posts-container::-webkit-scrollbar-thumb{
+    background: #00B090;
+    border-radius: 3px;
+}
+
+.likes-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

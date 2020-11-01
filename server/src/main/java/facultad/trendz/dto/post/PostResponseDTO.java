@@ -17,6 +17,7 @@ public class PostResponseDTO {
     private Long userId;
     private String username;
     private List<CommentResponseDTO> comments;
+    private boolean deleted;
     private List<Long> upvotes;
     private List<Long> downvotes;
 
@@ -24,7 +25,7 @@ public class PostResponseDTO {
 
 
 
-    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username,List<Long> upvotes,List<Long> downvotes){
+    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username, boolean deleted, List<Long> upvotes,List<Long> downvotes){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -34,6 +35,7 @@ public class PostResponseDTO {
         this.userId=userId;
         this.comments = comments;
         this.username = username;
+        this.deleted = deleted;
         this.upvotes=upvotes;
         this.downvotes=downvotes;
 
@@ -113,12 +115,12 @@ public class PostResponseDTO {
         this.username = username;
     }
 
-    public List<CommentResponseDTO> getComments() {
-        return comments;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setComments(List<CommentResponseDTO> comments) {
-        this.comments = comments;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public List<Long> getUpvotes() {
@@ -136,4 +138,5 @@ public class PostResponseDTO {
     public void setDownvotes(List<Long> downvotes) {
         this.downvotes = downvotes;
     }
+
 }

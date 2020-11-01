@@ -3,6 +3,7 @@ package facultad.trendz.controller;
 import facultad.trendz.config.jwt.JwtUtils;
 import facultad.trendz.config.model.MyUserDetails;
 import facultad.trendz.dto.*;
+import facultad.trendz.dto.post.SimplePostResponseDTO;
 import facultad.trendz.dto.user.*;
 import facultad.trendz.model.User;
 import facultad.trendz.service.UserService;
@@ -36,8 +37,11 @@ public class UserController implements ControllerUtils{
     }
 
     @GetMapping(value = "/user/{userId}")
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable("userId") Long userId) {
-        final UserResponseDTO body = userService.getUserById(userId);
+    public ResponseEntity<UserInfoDTO> getUser(@PathVariable("userId") Long userId, @RequestParam(defaultValue = "5") int limit) {
+        final UserResponseDTO userInfo = userService.getUserById(userId);
+        final List<SimplePostResponseDTO> lastUserPosts = userService.getLastPosts(userId, limit);
+
+        final UserInfoDTO body = new UserInfoDTO(userInfo, lastUserPosts);
         final HttpStatus status = HttpStatus.OK;
 
         return new ResponseEntity<>(body, status);
@@ -66,10 +70,8 @@ public class UserController implements ControllerUtils{
     }
 
     @DeleteMapping(value = "/user")
-    public ResponseEntity<UserResponseDTO> deleteUser()  {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long id = ((MyUserDetails)authentication.getPrincipal()).getId();
-        final UserResponseDTO body = userService.deleteUser(id);
+    public ResponseEntity<UserResponseDTO> deleteUser(Authentication authentication)  {
+        final UserResponseDTO body = userService.deleteUser(getIdFromAuthentication(authentication));
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body, status);
     }
@@ -89,10 +91,7 @@ public class UserController implements ControllerUtils{
 
     @PutMapping("/user")
     public ResponseEntity<MessageResponseDTO> editProfile(@RequestBody ProfileEditDTO profileEditDTO, Authentication authentication){
-
-        MyUserDetails userDetails = (MyUserDetails)authentication.getPrincipal();
-
-        userService.editUser(profileEditDTO, userDetails.getId());
+        userService.editUser(profileEditDTO, getIdFromAuthentication(authentication));
 
         MessageResponseDTO body = new MessageResponseDTO("Profiled edited successfully");
         final HttpStatus status = HttpStatus.OK;
@@ -105,5 +104,17 @@ public class UserController implements ControllerUtils{
         String body = "Admin Content";
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body, status);
+    }
+
+    @GetMapping("/user/lastposts")
+    public ResponseEntity<List<SimplePostResponseDTO>> getLastPosts(@RequestParam(defaultValue = "5") int limit, Authentication authentication){
+        List<SimplePostResponseDTO> body =  userService.getLastPosts(getIdFromAuthentication(authentication), limit);
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body, status);
+    }
+
+    private Long getIdFromAuthentication(Authentication authentication){
+        MyUserDetails userDetails = (MyUserDetails)authentication.getPrincipal();
+        return userDetails.getId();
     }
 }

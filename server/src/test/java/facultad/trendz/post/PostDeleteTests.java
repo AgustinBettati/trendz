@@ -62,7 +62,8 @@ public class PostDeleteTests extends TestUtils {
         Assert.assertEquals(200, deleteResponse.getStatusCodeValue());
         Assert.assertTrue(deleteResponse.getBody().getMessage().contains("Successfully deleted Post"));
 
-        Assert.assertFalse(postRepository.existsById(postResponse.getBody().getId()));
+        Assert.assertTrue(postRepository.findById(postResponse.getBody().getId()).isPresent());
+        Assert.assertTrue(postRepository.findById(postResponse.getBody().getId()).get().isDeleted());
     }
 
     @Test
@@ -174,7 +175,8 @@ public class PostDeleteTests extends TestUtils {
         Assert.assertEquals(200, deleteResponse.getStatusCodeValue());
         Assert.assertTrue(deleteResponse.getBody().getMessage().contains("Successfully deleted Post"));
 
-        Assert.assertFalse(postRepository.existsById(postResponse.getBody().getId()));
+        Assert.assertTrue(postRepository.findById(postResponse.getBody().getId()).isPresent());
+        Assert.assertTrue(postRepository.findById(postResponse.getBody().getId()).get().isDeleted());
     }
 
 

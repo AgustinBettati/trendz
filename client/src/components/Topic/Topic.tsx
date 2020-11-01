@@ -77,6 +77,11 @@ class Topic extends Component<Props, State> {
         window.open(link, '_blank');
     }
 
+    handleProfileNavigation = (e: any, id: number) => {
+        e.stopPropagation()
+        this.props.history.push('/main/viewProfile/' + id)
+    }
+
     render() {
         return (
             <div className={'topic-container'}>
@@ -125,7 +130,7 @@ class Topic extends Component<Props, State> {
                                             <div className={'post-title'}>
                                                 {post.title}
                                             </div>
-                                            <div className={'post-author'}>
+                                            <div className={'post-author'} onClick={(e) => this.handleProfileNavigation(e, post.userId)}>
                                                 {'by ' + post.username}
                                             </div>
                                         </div>
