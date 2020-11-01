@@ -89,6 +89,7 @@
 .post-author{
     font-size: 16px;
     margin-bottom: 5px;
+    text-decoration: underline;
 }
 
 .post-topic{

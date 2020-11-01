@@ -302,7 +302,11 @@ class Post extends Component<Props, State> {
                         <span className={'post-subtitle'} onClick={() => this.handleTopicNavigation()}>
                             {'This post belongs to the topic: ' + this.state.topic.title}
                         </span>
-                        <span className={'post-header-title'}>{this.state.post.title}</span>
+                        <div className={'post-username-title'}>
+                            <span className={'post-header-title'}>{this.state.post.title}</span>
+                            <span className={'by'}>by</span>
+                            <span className={'post-header-username'} onClick={() => this.handleProfileNavigation(this.state.post.userId)}>{this.state.post.username}</span>
+                        </div>
                         {
                             this.state.post.link &&
                             <a href={this.state.post.link} target={'_blank'}>{this.state.post.link}</a>
