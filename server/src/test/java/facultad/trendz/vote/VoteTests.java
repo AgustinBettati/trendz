@@ -72,14 +72,12 @@ public class VoteTests  extends TestUtils {
 
         //WHEN MAKING AN UPVOTE IN A POST
         ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.POST, entity, VoteResponseDTO.class);
-        //THEN
-        Optional<Post> post = postRepository.findById(response.getBody().getPostId()); // Post also updated on db
-        Assert.assertTrue(post.isPresent());
+        //
         Optional<User> user= userRepository.findById(response.getBody().getUserId()); // Post also updated on db
-        Assert.assertTrue(post.isPresent());
+
         Assert.assertTrue(user.isPresent());
         Assert.assertEquals(201, response.getStatusCodeValue());
-        Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
+    //keeps same id as original post
 
 
         Assert.assertTrue(this.voteRepository.findByPostIdAndUserIdAndIsUpvote(postResponse.getBody().getUserId(),postResponse.getBody().getId(),true).isPresent());
@@ -121,13 +119,12 @@ public class VoteTests  extends TestUtils {
         //WHEN MAKING AN UPVOTE IN A POST
         ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.POST, entity, VoteResponseDTO.class);
         //THEN
-        Optional<Post> post = postRepository.findById(response.getBody().getPostId()); // Post also updated on db
-        Assert.assertTrue(post.isPresent());
+
+
         Optional<User> user= userRepository.findById(response.getBody().getUserId()); // Post also updated on db
-        Assert.assertTrue(post.isPresent());
         Assert.assertTrue(user.isPresent());
         Assert.assertEquals(201, response.getStatusCodeValue());
-        Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
+
         Assert.assertTrue(this.voteRepository.findByPostIdAndUserIdAndIsUpvote(postResponse.getBody().getUserId(),postResponse.getBody().getId(),!true).isPresent());
         Assert.assertEquals(user.get().getEmail(),"admin@gmail.com");
 
@@ -168,13 +165,12 @@ public class VoteTests  extends TestUtils {
         //WHEN MAKING AN UPVOTE IN A POST
         ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.POST, entity, VoteResponseDTO.class);
         //THEN
-        Optional<Post> post = postRepository.findById(response.getBody().getPostId()); // Post also updated on db
-        Assert.assertTrue(post.isPresent());
+
+
         Optional<User> user= userRepository.findById(response.getBody().getUserId()); // Post also updated on db
-        Assert.assertTrue(post.isPresent());
         Assert.assertTrue(user.isPresent());
         Assert.assertEquals(201, response.getStatusCodeValue());
-        Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
+
 
         //verifying downvote has been deleted
 
@@ -219,13 +215,13 @@ public class VoteTests  extends TestUtils {
         //WHEN MAKING AN UPVOTE IN A POST
         ResponseEntity<VoteResponseDTO> response = restTemplate.exchange(uri, HttpMethod.POST, entity, VoteResponseDTO.class);
         //THEN
-        Optional<Post> post = postRepository.findById(response.getBody().getPostId()); // Post also updated on db
-        Assert.assertTrue(post.isPresent());
+
+
         Optional<User> user= userRepository.findById(response.getBody().getUserId()); // Post also updated on db
-        Assert.assertTrue(post.isPresent());
+
         Assert.assertTrue(user.isPresent());
         Assert.assertEquals(201, response.getStatusCodeValue());
-        Assert.assertEquals(postResponse.getBody().getId(), response.getBody().getPostId()); //keeps same id as original post
+
 
 
        //veryfing upvote has been deleted

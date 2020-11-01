@@ -18,6 +18,6 @@ export type PostType = {
   topicId: number,
   userId: number,
   username: string,
-  upvotes: number,
-  downvotes: number,
+  upvotes: any[],
+  downvotes: any[],
 }

@@ -84,8 +84,8 @@ public class PostService {
                     editedPost.getUser().getId(),
                     commentListToDTO(editedPost.getComments()),
                     editedPost.getUser().getUsername(),
-                    voteListToDTO(this.voteRepository.findByPostIdAndIsUpvote(postId,true)),
-                    voteListToDTO(this.voteRepository.findByPostIdAndIsUpvote(postId,false))
+                    voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(postId,true)),
+                    voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(postId,false))
             );
         }).orElseThrow(PostNotFoundException::new);
     }
@@ -100,8 +100,8 @@ public class PostService {
                 foundPost.getTopic().getId(),
                 foundPost.getUser().getId(),
                 commentListToDTO(foundPost.getComments()),
-                foundPost.getUser().getUsername(),voteListToDTO(this.voteRepository.findByPostIdAndIsUpvote(postId,true)),
-                voteListToDTO(this.voteRepository.findByPostIdAndIsUpvote(postId,false)))).orElseThrow(PostNotFoundException::new);
+                foundPost.getUser().getUsername(),voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(postId,true)),
+                voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(postId,false)))).orElseThrow(PostNotFoundException::new);
     }
 
     public boolean postAuthorVerification(Long postId, Authentication authentication){
@@ -132,12 +132,14 @@ public class PostService {
     }
 
 
-    private List<VoteResponseDTO> voteListToDTO(List<Vote> votes){
-        return votes.stream()
-                .map(vote -> new VoteResponseDTO(vote.getUser().getId(),
-                                vote.getPost().getId())
+    private List<Long> voteListToNumberList(List<Vote> votes){
+        List longList= new ArrayList();
+        for (int i = 0; i <votes.size() ; i++) {
+            longList.add(votes.get(i).getUser().getId());
 
-                ).collect(Collectors.toList());
+
+        }
+        return longList;
     }
     int getNumberOfUpvotes(Long postId){
         return voteRepository.findByPostIdAndIsUpvote(postId,true).size();

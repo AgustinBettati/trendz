@@ -17,14 +17,14 @@ public class PostResponseDTO {
     private Long userId;
     private String username;
     private List<CommentResponseDTO> comments;
-    private List<VoteResponseDTO> upvotes;
-    private List<VoteResponseDTO> downvotes;
+    private List<Long> upvotes;
+    private List<Long> downvotes;
 
 
 
 
 
-    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username,List<VoteResponseDTO> upvotes,List<VoteResponseDTO> downvotes){
+    public PostResponseDTO(Long id, String title, String description, String link, Date date,Long topicId,Long userId, List<CommentResponseDTO> comments, String username,List<Long> upvotes,List<Long> downvotes){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -121,19 +121,19 @@ public class PostResponseDTO {
         this.comments = comments;
     }
 
-    public List<VoteResponseDTO> getUpvotes() {
+    public List<Long> getUpvotes() {
         return upvotes;
     }
 
-    public void setUpvotes(List<VoteResponseDTO> upvotes) {
+    public void setUpvotes(List<Long> upvotes) {
         this.upvotes = upvotes;
     }
 
-    public List<VoteResponseDTO> getDownvotes() {
+    public List<Long> getDownvotes() {
         return downvotes;
     }
 
-    public void setDownvotes(List<VoteResponseDTO> downvotes) {
+    public void setDownvotes(List<Long> downvotes) {
         this.downvotes = downvotes;
     }
 }
