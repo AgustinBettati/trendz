@@ -104,6 +104,6 @@ public class TopicService {
         PagedListHolder<TopicResponseDTO> pages = new PagedListHolder<>(sortedTopics);
         pages.setPageSize(size);
         pages.setPage(page);
-        return new TopicPageDTO(pages.getPageList(), pages.getPage(), pages.getPageSize(), pages.getPageCount());
+        return new TopicPageDTO(pages.getPageList(), pages.getPage(), pages.getPageList().size(), pages.getPageCount());
     }
 }
