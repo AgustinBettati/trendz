@@ -70,9 +70,6 @@ public class TopicTests extends TestUtils {
         Assert.assertTrue(topicRepository.getTopicById(topicId).isDeleted());
 
         topicRepository.findAllByDeletedIsFalse().forEach(topic1 -> Assert.assertNotEquals(topicId, topic1.getId()));
-//        ResponseEntity<List<TopicResponseDTO>> topicsResponse = restTemplate.exchange(topicsUri, HttpMethod.GET, entity, new ParameterizedTypeReference<List<TopicResponseDTO>>() {});
-
-//        topicsResponse.getBody().forEach(topicResponseDTO -> Assert.assertNotEquals(topicId, topicResponseDTO.getId())); // assert get topics doesn't return the deleted topic
     }
 
     @Test
