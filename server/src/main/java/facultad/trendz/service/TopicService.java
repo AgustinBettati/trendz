@@ -83,7 +83,7 @@ public class TopicService {
         pages.setPageSize(size);
         pages.setPage(page);
 
-        return new PostPageDTO(pages.getPageList(), pages.getPage(), pages.getPageSize(), pages.getPageCount());
+        return new PostPageDTO(pages.getPageList(), pages.getPage(), pages.getPageList().size(), pages.getPageCount());
     }
 
     public TopicResponseDTO getTopicById(Long topicId) {
