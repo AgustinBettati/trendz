@@ -1,15 +1,16 @@
 package facultad.trendz.service;
 
+import facultad.trendz.dto.post.PostPageDTO;
 import facultad.trendz.dto.post.SimplePostResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.exception.topic.TopicExistsException;
 import facultad.trendz.exception.topic.TopicNotFoundException;
-import facultad.trendz.model.Post;
 import facultad.trendz.model.Topic;
 import facultad.trendz.repository.TopicRepository;
 import facultad.trendz.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -59,8 +60,8 @@ public class TopicService {
         topicRepository.save(topic.get());
     }
 
-    public List<SimplePostResponseDTO> getTopicPosts(Long topicId) {
-        return topicRepository.findByIdAndDeletedIsFalse(topicId).map(topic ->
+    public PostPageDTO getTopicPosts(Long topicId, int size, int page) {
+        List<SimplePostResponseDTO> posts =  topicRepository.findByIdAndDeletedIsFalse(topicId).map(topic ->
             topic.getPosts().stream()
                 .filter(post -> !post.isDeleted())
                 .map(post -> new SimplePostResponseDTO(post.getId(),
@@ -77,6 +78,12 @@ public class TopicService {
                         voteRepository.findByPostIdAndIsUpvote(post.getId(),true).stream().map(vote -> vote.getUser().getId()).collect(Collectors.toList())))
                 .collect(Collectors.toList())
         ).orElseThrow(TopicNotFoundException::new);
+
+        PagedListHolder<SimplePostResponseDTO> pages = new PagedListHolder<>(posts);
+        pages.setPageSize(size);
+        pages.setPage(page);
+
+        return new PostPageDTO(pages.getPageList(), pages.getPage(), pages.getPageSize(), pages.getPageCount());
     }
 
     public TopicResponseDTO getTopicById(Long topicId) {
