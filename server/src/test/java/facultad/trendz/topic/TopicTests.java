@@ -281,7 +281,7 @@ public class TopicTests extends TestUtils {
         Assert.assertEquals("Post2", response.getBody().getPosts().get(1).getTitle());
         Assert.assertEquals("Post3", response.getBody().getPosts().get(2).getTitle());
 
-        Assert.assertEquals(pageSize, response.getBody().getPageSize());
+        Assert.assertEquals(3, response.getBody().getPageSize());
         Assert.assertEquals(page, response.getBody().getPageNumber());
         Assert.assertEquals(Math.ceil( 3.0 / (double) pageSize), response.getBody().getTotalPages(), 0.0);
     }
