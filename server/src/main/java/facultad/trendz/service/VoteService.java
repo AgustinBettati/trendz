@@ -63,23 +63,16 @@ public class VoteService {
         return voteRepository.findByPostIdAndIsUpvote(postId,false).size();
     }
 
-    public boolean voteAuthorVerification(Long voteId, Authentication authentication) {
-        final Optional<Vote> vote = voteRepository.findById(voteId);
-        return vote.map(vote1 -> {
-            MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
-            return vote1.getUser().getId().equals(myUserDetails.getId());
-        }).orElseThrow(VoteNotFoundException::new);
-    }
 
     @PreRemove
-    public MessageResponseDTO deleteVote(Long voteId) {
-        Optional<Vote> vote = voteRepository.findById(voteId);
+    public MessageResponseDTO deleteVote(Long postId,Long userId) {
+        Optional<Vote> vote = voteRepository.findByPostIdAndUserId(postId,userId);
         if(vote.isPresent()){
              Post post=vote.get().getPost();
              post.getVotes().remove(vote.get());
              User user= vote.get().getUser();
              user.getVotes().remove(vote.get());
-       voteRepository.deleteById(voteId);
+       voteRepository.delete(vote.get());
             return new MessageResponseDTO("Vote deleted successfully");
         }
         throw new VoteNotFoundException();
