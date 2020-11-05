@@ -16,5 +16,14 @@ export function downvotePost(postId: number): Promise<any> {
     });
 }
 
+export function deleteVote(postId: number):Promise<any> {
+    return request({
+        url: API_BASE_URL + "/vote/" + postId,
+        method: 'DELETE',
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json'}
+    })
+}
+
+
 
 
