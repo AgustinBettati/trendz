@@ -50,6 +50,14 @@ public class VoteController implements ControllerUtils{
         return new ResponseEntity<>(body, status);
     }
 
+   @PreAuthorize("@voteService.voteAuthorVerification(#voteId,#authentication)")
+    @DeleteMapping("/vote/{voteId}")
+    public ResponseEntity<MessageResponseDTO> deleteComment(@PathVariable Long voteId, Authentication authentication) {
+        final MessageResponseDTO body = voteService.deleteVote(voteId);
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body, status);
+    }
+
 
 
 }
