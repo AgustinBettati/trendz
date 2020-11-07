@@ -16,7 +16,8 @@ export type State = {
     showModal: boolean,
     currentPage: number,
     topic: TopicType,
-    topicErrorMessage: string
+    topicErrorMessage: string,
+    totalPages: number
 }
 
 class Topic extends Component<Props, State> {
@@ -32,7 +33,8 @@ class Topic extends Component<Props, State> {
             showModal: false,
             topicErrorMessage: '',
             posts: [],
-            currentPage: 0
+            currentPage: 0,
+            totalPages: 0
         }
     };
 
@@ -41,7 +43,7 @@ class Topic extends Component<Props, State> {
              getTopic(this.props.match.params.id)
                  .then((res) => this.setState({topic: res}))
                  .catch((err) => this.setState({topicErrorMessage: err}))
-        getTopicPosts(this.props.match.params.id).then(res => this.setState({posts: res}))
+        getTopicPosts(this.props.match.params.id, this.state.currentPage, 3).then(res => this.setState({posts: res}))
     }
 
     handleCancel = () => {

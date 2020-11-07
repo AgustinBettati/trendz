@@ -26,9 +26,9 @@ export function deleteTopic(id: number): Promise<any> {
     });
 }
 
-export function getTopicPosts(id: number): Promise<any> {
+export function getTopicPosts(id: number, page: number, size: number): Promise<any> {
     return request({
-        url: API_BASE_URL + "/topicposts/"+id,
+        url: API_BASE_URL + "/topicposts/" + id + '?page=' + page + '&size=' + size,
         method: 'GET',
         headers: {'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json'}
     });
