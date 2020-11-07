@@ -43,7 +43,15 @@ class Topic extends Component<Props, State> {
              getTopic(this.props.match.params.id)
                  .then((res) => this.setState({topic: res}))
                  .catch((err) => this.setState({topicErrorMessage: err}))
-        getTopicPosts(this.props.match.params.id, this.state.currentPage, 3).then(res => this.setState({posts: res}))
+        this.getPosts()
+    }
+
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any) {
+        if(prevState.currentPage !== this.state.currentPage) this.getPosts()
+    }
+
+    getPosts = () => {
+        getTopicPosts(this.props.match.params.id, this.state.currentPage, 3).then(res => this.setState({posts: res.posts, totalPages: res.totalPages}))
     }
 
     handleCancel = () => {
@@ -56,10 +64,6 @@ class Topic extends Component<Props, State> {
 
     handleDelete = () => {
         this.setState({showModal: true})
-    }
-
-    renderPosts = (currentPage: number) => {
-        return this.state.posts.slice(currentPage*3, currentPage*3+3)
     }
 
     handlePageClick = (data: {selected: number}) => {
@@ -124,7 +128,7 @@ class Topic extends Component<Props, State> {
                 <div className={'posts-container'}>
                     {
                         this.state.posts.length &&
-                        this.renderPosts(this.state.currentPage).map((post, index) => (
+                        this.state.posts.map((post, index) => (
                             <div className={'post-card-wrapper'} key={index}>
                                 <div className={'post-card'} onClick={() => this.handlePostSelection(post)}>
                                     <div className={'post-card-header'}>
@@ -157,7 +161,7 @@ class Topic extends Component<Props, State> {
                 <div className={'topic-footer'}>
                     <ReactPaginate
                         onPageChange={this.handlePageClick}
-                        pageCount={Math.ceil(this.state.posts.length/3)}
+                        pageCount={this.state.totalPages}
                         pageRangeDisplayed={5}
                         marginPagesDisplayed={2}
                         previousLabel={"<"}
