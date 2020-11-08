@@ -27,6 +27,7 @@
     "react-s-alert": "^1.4.1",
     "react-scripts": "3.4.2",
     "react-timeago": "^5.2.0",
+    "react-toastify": "^6.1.0",
     "typescript": "^3.7.5",
     "yup": "^0.29.3"
   },

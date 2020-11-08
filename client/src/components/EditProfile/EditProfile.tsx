@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import {editUserData, getUserData} from "../../api/UserApi";
 import {parseJwt} from "../Routing/utils";
 import {NavLink, RouteComponentProps} from "react-router-dom";
+import {toast} from "react-toastify";
 
 export type Props = RouteComponentProps<any>
 
@@ -78,14 +79,13 @@ export class EditProfile extends Component<Props, State> {
             newPassword === '' ? null : newPassword)
             .then(() => {
                 this.setState({errorMessage: '', successMessage: 'User edited successfully'});
-                this.props.history.push('/main/profile');
+                this.props.history.push('/main/profile')
+                toast('Profile successfully edited!')
             })
             .catch((err) => {
-                if (err.status === 409)
-                    this.setState({successMessage: '', errorMessage: 'Username already in use'});
-                else if (err.status === 401)
-                    this.setState({successMessage: '', errorMessage: 'Incorrect password'});
-                else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
+                if (err.status === 409) toast.error('Username already in use')
+                else if (err.status === 401) toast.error('Incorrect password')
+                else toast.error('An error occurred editing your profile!')
             })
     }
 

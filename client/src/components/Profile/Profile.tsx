@@ -6,6 +6,7 @@ import {deleteUser, getUserData} from "../../api/UserApi";
 import {parseJwt} from "../Routing/utils";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import Modal from 'react-modal';
+import {toast} from "react-toastify";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -40,11 +41,15 @@ class Profile extends Component<Props, State> {
 
     handleConfirm(){
         deleteUser()
-            .then((res)=>{
-                console.log(res)
+            .then(() => {
+                this.handleCancel()
                 this.props.history.push('/')
+                toast('User successfully deleted!')
             })
-            .catch((err)=>console.log(err))
+            .catch(() => {
+                this.handleCancel()
+                toast.error('An error occurred deleting the user!')
+            })
     }
 
     handleCancel(){

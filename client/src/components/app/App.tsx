@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css'
+import {RouteComponentProps, withRouter} from "react-router-dom";
 import { Switch, Route } from 'react-router-dom'
 import Register from "../Register/Register";
 import PrivateRoute from "../Routing/PrivateRoute";
@@ -15,6 +17,7 @@ import Topic from "../Topic/Topic";
 import Post from "../Post/Post";
 import Search from "../Search/Search";
 import ViewProfile from "../Profile/ViewProfile";
+import {ToastContainer} from "react-toastify";
 
 type MatchProps = {
   match: {
@@ -22,10 +25,13 @@ type MatchProps = {
   }
 }
 
-class App extends Component{
+export type Props = RouteComponentProps<any> & {}
+
+class App extends Component<Props>{
   render() {
     return (
       <div className="app">
+        <ToastContainer position={'top-center'} autoClose={2500}/>
         <Switch>
           <Route exact={true} path="/" component={Login}/>
           <Route exact={true} path="/register" component={Register}/>
@@ -51,4 +57,4 @@ class App extends Component{
   }
 }
 
-export default App
+export default withRouter(App)

@@ -7,6 +7,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {registerUser} from "../../api/UserApi";
 import {NavLink,RouteComponentProps} from "react-router-dom";
+import {toast} from "react-toastify";
 
 export type Props =  RouteComponentProps<any>
 
@@ -43,15 +44,13 @@ export class Register extends Component<Props, State> {
     handleRegister = (email: string, username: string, password: string) => {
         registerUser(email, username, password, 'user')
             .then(() => {
-                this.setState({errorMessage: '', successMessage: 'User successfully registered'});
-                this.props.history.push('/');
+                this.props.history.push('/')
+                toast('Account successfully created!')
             })
             .catch((err) => {
-                if (err.status === 409)
-                    this.setState({successMessage: '', errorMessage: err.message});
-                else if (err.status === 401)
-                    this.setState({successMessage: '', errorMessage: 'Invalid Credentials'});
-                else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
+                if (err.status === 409) toast.error(err.message)
+                else if (err.status === 401) toast.error('Invalid Credentials')
+                else toast.error('An error occurred creating your account!')
             })
     }
 
@@ -165,27 +164,11 @@ export class Register extends Component<Props, State> {
                                             this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
                                         disabled={!!(props.errors.email || props.errors.username || props.errors.password || props.errors.confirmPassword)}
                                     />
-                                    <div style={{
-                                        height: 20,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        marginTop: 10
-                                    }}>
-                                        {
-                                            this.state.errorMessage !== '' &&
-                                            <div className={'error-message'}>{this.state.errorMessage}</div>
-                                        }
-                                        {
-                                            this.state.successMessage !== '' &&
-                                            <div className={'success-message'}>{this.state.successMessage}</div>
-                                        }
-                                    </div>
                                 </div>
                             </div>
                         )}
                     </Formik>
-                    <div style={{fontFamily: 'Bitter, sans-serif'}}>
+                    <div style={{fontFamily: 'Bitter, sans-serif', marginTop: 10}}>
                         Already registered?
                         <NavLink to="/" className="register-link">Login</NavLink>
                     </div>

@@ -13,8 +13,8 @@ import TimeAgo from 'react-timeago'
 
 import {createComment, deleteComment, editComment} from "../../api/CommentApi";
 import {getTopic} from "../../api/TopicApi";
+import {toast} from "react-toastify";
 import {deleteVote, downvotePost, upvotePost} from "../../api/VoteAPI";
-import {number} from "yup";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -173,7 +173,15 @@ class Post extends Component<Props, State> {
 
     handleConfirm = () => {
         deletePost(this.props.location.state ? this.props.location.state.post.id : this.props.match.params.id)
-            .then(() => this.handleTopicNavigation())
+            .then(() => {
+                this.handleCancel()
+                this.handleTopicNavigation()
+                toast('Post deleted successfully!')
+            })
+            .catch(() => {
+                this.handleCancel()
+                toast.error('An error occurred deleting the post!')
+            })
     }
 
     handleConfirmDeleteComment = () => {

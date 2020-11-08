@@ -8,6 +8,7 @@ import Modal from "react-modal";
 import {deleteTopic, getTopic} from "../../api/TopicApi";
 import { getTopicPosts} from "../../api/TopicApi";
 import {TopicType} from "../types/types";
+import {toast} from "react-toastify";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -59,7 +60,16 @@ class Topic extends Component<Props, State> {
     }
 
     handleConfirm = () => {
-        deleteTopic(this.state.topic.id).then(() => this.props.history.push('/main/home'))
+        deleteTopic(this.state.topic.id)
+            .then(() => {
+                this.handleCancel()
+                this.props.history.push('/main/home')
+                toast('Topic deleted successfully!')
+            })
+            .catch(() => {
+                this.handleCancel()
+                toast.error('An error occurred deleting the topic!')
+            })
     }
 
     handleDelete = () => {
