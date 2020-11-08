@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import "./CreatePost.css"
+import "./CreatePost.css";
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import {TrendzMultilineInput} from "../common/TrendzMultilineInput/TrendzMultilineInput";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
@@ -9,6 +9,7 @@ import * as yup from 'yup';
 import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
 import {createPost} from "../../api/PostApi";
+import {toast, ToastContainer} from "react-toastify";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -39,18 +40,16 @@ class CreatePost extends Component<Props, State> {
     }
 
     handleSubmitPost = (title: string, description: string, link: string) => {
-            let topic = this.props.location.state.topic;
-             createPost(title, description, link, topic.id,"post")
-                 .then(() => {
-                     this.setState({errorMessage: '', successMessage: 'Post successfully created'});
-                     this.props.history.push('/main/topic/' + topic.id, {topic: topic});
-                 })
-                 .catch((err) => {
-                     if (err.status === 409)
-                         this.setState({successMessage: '', errorMessage: 'Title already in use'});
-                     else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
-                 })
-
+        let topic = this.props.location.state.topic;
+         createPost(title, description, link, topic.id,"post")
+             .then(() => {
+                 this.setState({errorMessage: '', successMessage: 'Post successfully created'});
+                 toast('Topic successfully created!', {onClose: () => this.props.history.push('/main/topic/' + topic.id, {topic: topic})})
+             })
+             .catch((err) => {
+                 if (err.status === 409) toast.error('Title already in use!')
+                 else toast.error('An error occurred creating the post!')
+             })
     }
 
     private handleCancel() {
@@ -90,6 +89,7 @@ class CreatePost extends Component<Props, State> {
     render() {
         return (
             <div className={"main-container"}>
+                <ToastContainer position={"top-center"} autoClose={2500}/>
                 <div className={'createpost-card'}>
                     <div className={'createpost-header'}>
                         <img className={'trendz-logo'} src={logo} alt={''}/>
@@ -146,19 +146,6 @@ class CreatePost extends Component<Props, State> {
                                     </div>
                                 </div>
                                 <div className={'createpost-footer'}>
-                                    <div>
-
-                                        {
-                                            this.state.errorMessage !== '' &&
-                                            <div className={'error-message'}>{this.state.errorMessage}</div>
-                                        }
-                                        {
-                                            this.state.successMessage !== '' &&
-                                            <div className={'success-message'}>{this.state.successMessage}</div>
-                                        }
-
-                                    </div>
-
                                     <TrendzButton
                                         title={'Submit'}
                                         onClick={() => props.values.title === ''  && props.values.description === '' ?
@@ -172,7 +159,6 @@ class CreatePost extends Component<Props, State> {
                                         alignItems: 'center',
                                         marginTop: 10
                                     }}>
-
                                     </div>
                                     <TrendzButton
                                         title={'Cancel'}

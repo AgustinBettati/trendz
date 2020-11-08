@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css'
 import { Switch, Route } from 'react-router-dom'
 import Register from "../Register/Register";

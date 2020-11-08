@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 import './Home.css';
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
@@ -8,6 +8,7 @@ import {MdDelete} from 'react-icons/md';
 import Modal from "react-modal";
 import {deleteTopic, getTopics} from "../../api/TopicApi";
 import {TopicType} from "../types/types";
+import { ToastContainer, toast } from 'react-toastify';
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -47,9 +48,18 @@ class Home extends Component<Props, State> {
     }
 
     handleConfirm = () => {
-        deleteTopic(this.state.selectedTopic).then(() => this.getTopics())
-        this.setState({selectedTopic: -1})
-        this.handleCancel()
+        deleteTopic(this.state.selectedTopic)
+            .then(() => {
+                this.getTopics()
+                this.setState({selectedTopic: -1})
+                this.handleCancel()
+                toast('Topic successfully deleted!')
+            })
+            .catch(() => {
+                this.setState({selectedTopic: -1})
+                this.handleCancel()
+                toast.error('An error occurred deleting the topic!')
+            })
     }
 
     handleDelete = (id: number) => {
@@ -71,6 +81,7 @@ class Home extends Component<Props, State> {
     render() {
         return (
             <div className={'home-container'}>
+                <ToastContainer position={"top-center"} autoClose={2500}/>
                 <Modal
                     isOpen={this.state.showModal}
                     onRequestClose={this.handleCancel.bind(this)}

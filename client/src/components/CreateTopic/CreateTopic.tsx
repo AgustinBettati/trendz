@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 import "./CreateTopic.css"
 import {TrendzInput} from "../common/TrendzInput/TrendzInput";
 import {TrendzMultilineInput} from "../common/TrendzMultilineInput/TrendzMultilineInput";
@@ -9,6 +9,7 @@ import * as yup from 'yup';
 import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
 import {createTopic} from "../../api/TopicApi";
+import {toast, ToastContainer} from "react-toastify";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -40,12 +41,11 @@ class CreateTopic extends Component<Props, State> {
         createTopic(title,description)
             .then(() => {
                 this.setState({errorMessage: '', successMessage: 'Topic successfully created'});
-                this.props.history.push('/main/home');
+                toast('Topic successfully created!', {onClose: () => this.props.history.push('/main/home')})
             })
             .catch((err) => {
-                if (err.status === 409)
-                    this.setState({successMessage: '', errorMessage: 'Title already in use'});
-                else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
+                if (err.status === 409) toast.error('Title already in use!')
+                else toast.error('An error occurred creating the topic!')
             })
     }
 
@@ -79,6 +79,7 @@ class CreateTopic extends Component<Props, State> {
     render() {
         return (
             <div className={"main-container"}>
+                <ToastContainer position={"top-center"} autoClose={2500}/>
                 <div className={'createtopic-card'}>
                     <div className={'createtopic-header'}>
                         <img className={'trendz-logo'} src={logo} alt={''}/>
@@ -122,18 +123,6 @@ class CreateTopic extends Component<Props, State> {
                                     </div>
                                 </div>
                                 <div className={'createpost-footer'}>
-                                    <div>
-
-                                        {
-                                            this.state.errorMessage !== '' &&
-                                            <div className={'error-message'}>{this.state.errorMessage}</div>
-                                        }
-                                        {
-                                            this.state.successMessage !== '' &&
-                                            <div className={'success-message'}>{this.state.successMessage}</div>
-                                        }
-
-                                    </div>
                                     <TrendzButton
                                         title={'Submit'}
                                         onClick={() => props.values.title === ''  && props.values.description === '' ?
@@ -147,7 +136,6 @@ class CreateTopic extends Component<Props, State> {
                                         alignItems: 'center',
                                         marginTop: 10
                                     }}>
-
                                     </div>
                                     <TrendzButton
                                         title={'Cancel'}
@@ -161,8 +149,6 @@ class CreateTopic extends Component<Props, State> {
             </div>
         )
     }
-
-
 }
 
 export default withRouter(CreateTopic)

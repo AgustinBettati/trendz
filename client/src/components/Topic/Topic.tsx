@@ -8,6 +8,7 @@ import Modal from "react-modal";
 import {deleteTopic, getTopic} from "../../api/TopicApi";
 import { getTopicPosts} from "../../api/TopicApi";
 import {TopicType} from "../types/types";
+import {toast, ToastContainer} from "react-toastify";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -49,7 +50,15 @@ class Topic extends Component<Props, State> {
     }
 
     handleConfirm = () => {
-        deleteTopic(this.state.topic.id).then(() => this.props.history.push('/main/home'))
+        deleteTopic(this.state.topic.id)
+            .then(() => {
+                this.handleCancel()
+                toast('Topic deleted successfully!', {onClose: () => this.props.history.push('/main/home')})
+            })
+            .catch(() => {
+                this.handleCancel()
+                toast.error('An error occurred deleting the topic!')
+            })
     }
 
     handleDelete = () => {
@@ -85,6 +94,7 @@ class Topic extends Component<Props, State> {
     render() {
         return (
             <div className={'topic-container'}>
+                <ToastContainer position={"top-center"} autoClose={2500}/>
                 <Modal
                     isOpen={this.state.showModal}
                     onRequestClose={this.handleCancel.bind(this)}

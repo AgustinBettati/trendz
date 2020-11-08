@@ -15,6 +15,7 @@ import {createComment, deleteComment, editComment} from "../../api/CommentApi";
 import {getTopic} from "../../api/TopicApi";
 import {downvotePost, upvotePost} from "../../api/VoteAPI";
 import {number} from "yup";
+import {toast, ToastContainer} from "react-toastify";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -173,7 +174,14 @@ class Post extends Component<Props, State> {
 
     handleConfirm = () => {
         deletePost(this.props.location.state ? this.props.location.state.post.id : this.props.match.params.id)
-            .then(() => this.handleTopicNavigation())
+            .then(() => {
+                this.handleCancel()
+                toast('Post deleted successfully!', {onClose: () => this.handleTopicNavigation()})
+            })
+            .catch(() => {
+                this.handleCancel()
+                toast.error('An error occurred deleting the post!')
+            })
     }
 
     handleConfirmDeleteComment = () => {
@@ -263,6 +271,7 @@ class Post extends Component<Props, State> {
     render() {
         return (
             <div className={'post-container'}>
+                <ToastContainer position={"top-center"} autoClose={2500}/>
                 <Modal
                     isOpen={this.state.showModal}
                     onRequestClose={this.handleCancel.bind(this)}
