@@ -10,9 +10,9 @@ export function createTopic(title: string, description: string): Promise<any> {
     });
 }
 
-export function getTopics(): Promise<any> {
+export function getTopics(page: number, size: number): Promise<any> {
     return request({
-        url: API_BASE_URL + "/topic",
+        url: API_BASE_URL + "/topic?page=" + page + '&size=' + size,
         method: 'GET',
         headers: {'Authorization': 'Bearer ' + localStorage.getItem('token'), 'Content-Type': 'application/json'}
     });

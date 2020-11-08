@@ -6,6 +6,7 @@ import facultad.trendz.dto.post.PostCreateDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
 import facultad.trendz.dto.post.SimplePostResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
+import facultad.trendz.dto.topic.TopicPageDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.JwtResponseDTO;
 import facultad.trendz.repository.TopicRepository;
@@ -68,9 +69,7 @@ public class TopicTests extends TestUtils {
         Assert.assertEquals(200, deleteResponse.getStatusCodeValue());
         Assert.assertTrue(topicRepository.getTopicById(topicId).isDeleted());
 
-        ResponseEntity<List<TopicResponseDTO>> topicsResponse = restTemplate.exchange(topicsUri, HttpMethod.GET, entity, new ParameterizedTypeReference<List<TopicResponseDTO>>() {});
-
-        topicsResponse.getBody().forEach(topicResponseDTO -> Assert.assertNotEquals(topicId, topicResponseDTO.getId())); // assert get topics doesn't return the deleted topic
+        topicRepository.findAllByDeletedIsFalse().forEach(topic1 -> Assert.assertNotEquals(topicId, topic1.getId()));
     }
 
     @Test
@@ -119,7 +118,9 @@ public class TopicTests extends TestUtils {
         HttpEntity<TopicCreateDTO> topicEntity2 = new HttpEntity<>(topic2, headers);
         HttpEntity<TopicCreateDTO> topicEntity3 = new HttpEntity<>(topic3, headers);
 
-        final String topicsUrl = "http://localhost:" + randomServerPort + "/topic";
+        final int page = 0;
+        final int pageSize = 5;
+        final String topicsUrl = String.format("http://localhost:%d/topic?page=%d&size=%d", randomServerPort, page, pageSize );
         URI topicsUri = new URI(topicsUrl);
 
         ResponseEntity<TopicResponseDTO> response1 = restTemplate.postForEntity(topicsUri, topicEntity1, TopicResponseDTO.class);
@@ -149,14 +150,16 @@ public class TopicTests extends TestUtils {
 
         HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(headers);
         //WHEN
-        ResponseEntity<List<TopicResponseDTO>> response = restTemplate.exchange(topicsUri, HttpMethod.GET, entity, new ParameterizedTypeReference<List<TopicResponseDTO>>() {});
+        ResponseEntity<TopicPageDTO> response = restTemplate.exchange(topicsUri, HttpMethod.GET, entity, TopicPageDTO.class);
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
 
-        Assert.assertEquals("T3", response.getBody().get(0).getTitle()); //topic#3 with 15 posts
-        Assert.assertEquals("T1", response.getBody().get(1).getTitle()); //topic#1 with 14 posts
-        Assert.assertEquals("T2", response.getBody().get(2).getTitle()); //topic#2 with 13 posts
-
+        Assert.assertEquals("T3", response.getBody().getTopics().get(0).getTitle()); //topic#3 with 15 posts
+        Assert.assertEquals("T1", response.getBody().getTopics().get(1).getTitle()); //topic#1 with 14 posts
+        Assert.assertEquals("T2", response.getBody().getTopics().get(2).getTitle()); //topic#2 with 13 posts
+        Assert.assertEquals(pageSize, response.getBody().getPageSize());
+        Assert.assertEquals(page, response.getBody().getPageNumber());
+        Assert.assertEquals(Math.ceil((double) topicRepository.findAllByDeletedIsFalse().size() / (double) pageSize), response.getBody().getTotalPages(), 0.0);
     }
 
     @Test

@@ -15,7 +15,8 @@ export type State = {
     topics: TopicType[],
     showModal: boolean,
     selectedTopic: number
-    currentPage: number
+    currentPage: number,
+    totalPages: number
 }
 
 class Home extends Component<Props, State> {
@@ -26,7 +27,8 @@ class Home extends Component<Props, State> {
             selectedTopic: -1,
             showModal: false,
             topics: [],
-            currentPage: 0
+            currentPage: 0,
+            totalPages: 0
         }
     };
 
@@ -34,8 +36,12 @@ class Home extends Component<Props, State> {
         this.getTopics()
     }
 
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any) {
+        if(prevState.currentPage !== this.state.currentPage) this.getTopics()
+    }
+
     getTopics() {
-        getTopics().then(res => this.setState({topics: res}))
+        getTopics(this.state.currentPage, 8).then(res => this.setState({topics: res.topics, totalPages: res.totalPages}))
     }
 
     createTopic = () => {
@@ -54,10 +60,6 @@ class Home extends Component<Props, State> {
 
     handleDelete = (id: number) => {
         this.setState({selectedTopic: id, showModal: true})
-    }
-
-    renderTopics = (currentPage: number) => {
-        return this.state.topics.slice(currentPage*8, currentPage*8+8)
     }
 
     handlePageClick = (data: {selected: number}) => {
@@ -104,7 +106,7 @@ class Home extends Component<Props, State> {
                 <div className={'topics-container'}>
                     {
                         this.state.topics.length &&
-                        this.renderTopics(this.state.currentPage).map((topic, index) => (
+                        this.state.topics.map((topic, index) => (
                             <div className={'card-wrapper'} key={index}>
                                 <div className={'topic-card'} onClick={() => this.handleTopicSelection(topic)}>
                                     <div className={'topic-header'}>
@@ -137,7 +139,7 @@ class Home extends Component<Props, State> {
                 <div className={'home-footer'}>
                     <ReactPaginate
                         onPageChange={this.handlePageClick}
-                        pageCount={Math.ceil(this.state.topics.length/8)}
+                        pageCount={this.state.totalPages}
                         pageRangeDisplayed={8}
                         marginPagesDisplayed={2}
                         previousLabel={"<"}
