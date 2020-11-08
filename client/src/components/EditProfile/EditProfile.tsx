@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import {editUserData, getUserData} from "../../api/UserApi";
 import {parseJwt} from "../Routing/utils";
 import {NavLink, RouteComponentProps} from "react-router-dom";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 export type Props = RouteComponentProps<any>
 
@@ -79,7 +79,8 @@ export class EditProfile extends Component<Props, State> {
             newPassword === '' ? null : newPassword)
             .then(() => {
                 this.setState({errorMessage: '', successMessage: 'User edited successfully'});
-                toast('Profile successfully edited!', {onClose: () => this.props.history.push('/main/profile')})
+                this.props.history.push('/main/profile')
+                toast('Profile successfully edited!')
             })
             .catch((err) => {
                 if (err.status === 409) toast.error('Username already in use')
@@ -126,7 +127,6 @@ export class EditProfile extends Component<Props, State> {
     render() {
         return (
             <div className={"main-container"}>
-                <ToastContainer position={"top-center"} autoClose={2500}/>
                 <div className={'edit-card'}>
                     {
                         this.state.username === '' ?

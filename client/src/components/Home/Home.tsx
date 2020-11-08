@@ -8,7 +8,7 @@ import {MdDelete} from 'react-icons/md';
 import Modal from "react-modal";
 import {deleteTopic, getTopics} from "../../api/TopicApi";
 import {TopicType} from "../types/types";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -81,7 +81,6 @@ class Home extends Component<Props, State> {
     render() {
         return (
             <div className={'home-container'}>
-                <ToastContainer position={"top-center"} autoClose={2500}/>
                 <Modal
                     isOpen={this.state.showModal}
                     onRequestClose={this.handleCancel.bind(this)}

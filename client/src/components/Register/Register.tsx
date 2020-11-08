@@ -7,7 +7,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {registerUser} from "../../api/UserApi";
 import {NavLink,RouteComponentProps} from "react-router-dom";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 export type Props =  RouteComponentProps<any>
 
@@ -44,7 +44,8 @@ export class Register extends Component<Props, State> {
     handleRegister = (email: string, username: string, password: string) => {
         registerUser(email, username, password, 'user')
             .then(() => {
-                toast('Account successfully created!', {onClose: () => this.props.history.push('/')})
+                this.props.history.push('/')
+                toast('Account successfully created!')
             })
             .catch((err) => {
                 if (err.status === 409) toast.error(err.message)
@@ -91,7 +92,6 @@ export class Register extends Component<Props, State> {
     render() {
         return (
             <div className={"main-container"}>
-                <ToastContainer position={"top-right"} autoClose={2500}/>
                 <div className={'register-card'}>
                     <div className={'register-header'}>
                         <img className={'trendz-logo'} src={logo} alt={''}/>

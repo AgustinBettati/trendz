@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
 import {createTopic} from "../../api/TopicApi";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -41,7 +41,8 @@ class CreateTopic extends Component<Props, State> {
         createTopic(title,description)
             .then(() => {
                 this.setState({errorMessage: '', successMessage: 'Topic successfully created'});
-                toast('Topic successfully created!', {onClose: () => this.props.history.push('/main/home')})
+                this.props.history.push('/main/home')
+                toast('Topic successfully created!')
             })
             .catch((err) => {
                 if (err.status === 409) toast.error('Title already in use!')
@@ -79,7 +80,6 @@ class CreateTopic extends Component<Props, State> {
     render() {
         return (
             <div className={"main-container"}>
-                <ToastContainer position={"top-center"} autoClose={2500}/>
                 <div className={'createtopic-card'}>
                     <div className={'createtopic-header'}>
                         <img className={'trendz-logo'} src={logo} alt={''}/>

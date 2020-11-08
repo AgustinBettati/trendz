@@ -14,8 +14,7 @@ import TimeAgo from 'react-timeago'
 import {createComment, deleteComment, editComment} from "../../api/CommentApi";
 import {getTopic} from "../../api/TopicApi";
 import {downvotePost, upvotePost} from "../../api/VoteAPI";
-import {number} from "yup";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -176,7 +175,8 @@ class Post extends Component<Props, State> {
         deletePost(this.props.location.state ? this.props.location.state.post.id : this.props.match.params.id)
             .then(() => {
                 this.handleCancel()
-                toast('Post deleted successfully!', {onClose: () => this.handleTopicNavigation()})
+                this.handleTopicNavigation()
+                toast('Post deleted successfully!')
             })
             .catch(() => {
                 this.handleCancel()
@@ -271,7 +271,6 @@ class Post extends Component<Props, State> {
     render() {
         return (
             <div className={'post-container'}>
-                <ToastContainer position={"top-center"} autoClose={2500}/>
                 <Modal
                     isOpen={this.state.showModal}
                     onRequestClose={this.handleCancel.bind(this)}

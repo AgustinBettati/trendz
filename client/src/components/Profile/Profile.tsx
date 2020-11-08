@@ -6,7 +6,7 @@ import {deleteUser, getUserData} from "../../api/UserApi";
 import {parseJwt} from "../Routing/utils";
 import {TrendzButton} from "../common/TrendzButton/TrendzButton";
 import Modal from 'react-modal';
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -43,7 +43,8 @@ class Profile extends Component<Props, State> {
         deleteUser()
             .then(() => {
                 this.handleCancel()
-                toast('User successfully deleted!', {onClose: () => this.props.history.push('/')})
+                this.props.history.push('/')
+                toast('User successfully deleted!')
             })
             .catch(() => {
                 this.handleCancel()
@@ -58,7 +59,6 @@ class Profile extends Component<Props, State> {
     render() {
         return (
             <div className={'container'}>
-                <ToastContainer position={"top-center"} autoClose={2500}/>
                 <Modal
                     isOpen={this.state.showModal}
                     onRequestClose={this.handleCancel.bind(this)}

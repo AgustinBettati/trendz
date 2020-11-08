@@ -10,7 +10,7 @@ import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
 import {editPost} from "../../api/PostApi";
 import {getPostData} from "../../api/PostApi";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -73,7 +73,8 @@ class EditPost extends Component<Props, State> {
         editPost(title, description, link, postId,"post")
             .then(() => {
                 this.setState({errorMessage: '', successMessage: 'Post successfully edited'});
-                toast('Post successfully edited!', {onClose: () => this.props.history.push('/main/post/' + postId)})
+                this.props.history.push('/main/post/' + postId)
+                toast('Post successfully edited!')
             })
             .catch((err) => {
                 // to determine what we are going to do with error messages
@@ -122,7 +123,6 @@ class EditPost extends Component<Props, State> {
         if (this.state.postDataLoaded) {
             return (
                 <div className={"main-container"}>
-                    <ToastContainer position={"top-center"} autoClose={2500}/>
                     <div className={'editpost-card'}>
 
                         <div className={'editpost-header'}>
