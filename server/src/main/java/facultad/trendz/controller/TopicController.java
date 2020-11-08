@@ -1,8 +1,9 @@
 package facultad.trendz.controller;
 
 import facultad.trendz.dto.MessageResponseDTO;
-import facultad.trendz.dto.post.SimplePostResponseDTO;
+import facultad.trendz.dto.post.PostPageDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
+import facultad.trendz.dto.topic.TopicPageDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,8 @@ public class TopicController implements ControllerUtils{
     }
 
     @GetMapping("/topic")
-    public ResponseEntity<List<TopicResponseDTO>> getTopics(){
-        final List<TopicResponseDTO> body = topicService.getTopicsByPopularity();
+    public ResponseEntity<TopicPageDTO> topicTest(@RequestParam int page, @RequestParam(defaultValue = "5") int size){
+        final TopicPageDTO body = topicService.getPagedTopicsByPopularity(page, size);
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body,status);
     }
@@ -55,8 +56,8 @@ public class TopicController implements ControllerUtils{
     }
 
     @GetMapping("/topicposts/{topicId}")
-    public ResponseEntity<List<SimplePostResponseDTO>> getTopicPosts(@PathVariable Long topicId){
-        List<SimplePostResponseDTO> body=topicService.getTopicPosts(topicId);
+    public ResponseEntity<PostPageDTO> getTopicPosts(@PathVariable Long topicId, @RequestParam int page, @RequestParam(defaultValue = "5") int size){
+        PostPageDTO body = topicService.getTopicPosts(topicId, size, page);
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body,status);
     }

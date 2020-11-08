@@ -51,6 +51,16 @@ public class VoteController implements ControllerUtils{
     }
 
 
+    @DeleteMapping("/vote/{postId}")
+    public ResponseEntity<MessageResponseDTO> deleteComment(@PathVariable Long postId, Authentication authentication) {
+       MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        final Long userId=userDetails.getId();
+        final MessageResponseDTO body = voteService.deleteVote(postId,userId);
+        final HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(body, status);
+    }
+
+
 
 }
 

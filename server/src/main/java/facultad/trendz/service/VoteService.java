@@ -8,6 +8,7 @@ import facultad.trendz.dto.vote.VoteResponseDTO;
 import facultad.trendz.exception.comment.CommentNotFoundException;
 import facultad.trendz.exception.post.PostNotFoundException;
 import facultad.trendz.exception.user.UserNotFoundException;
+import facultad.trendz.exception.vote.VoteNotFoundException;
 import facultad.trendz.model.Comment;
 import facultad.trendz.model.Post;
 import facultad.trendz.model.User;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PreRemove;
 import java.util.Date;
 import java.util.Optional;
 
@@ -62,6 +64,19 @@ public class VoteService {
     }
 
 
+    @PreRemove
+    public MessageResponseDTO deleteVote(Long postId,Long userId) {
+        Optional<Vote> vote = voteRepository.findByPostIdAndUserId(postId,userId);
+        if(vote.isPresent()){
+             Post post=vote.get().getPost();
+             post.getVotes().remove(vote.get());
+             User user= vote.get().getUser();
+             user.getVotes().remove(vote.get());
+       voteRepository.delete(vote.get());
+            return new MessageResponseDTO("Vote deleted successfully");
+        }
+        throw new VoteNotFoundException();
+    }
 
 }
 

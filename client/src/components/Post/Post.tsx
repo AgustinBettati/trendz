@@ -13,8 +13,8 @@ import TimeAgo from 'react-timeago'
 
 import {createComment, deleteComment, editComment} from "../../api/CommentApi";
 import {getTopic} from "../../api/TopicApi";
-import {downvotePost, upvotePost} from "../../api/VoteAPI";
 import {toast} from "react-toastify";
+import {deleteVote, downvotePost, upvotePost} from "../../api/VoteAPI";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -195,6 +195,13 @@ class Post extends Component<Props, State> {
     }
 
      handleDownvote = () => {
+        if(this.state.clickedDownvote){
+            deleteVote(this.props.match.params.id)
+                .then(() => {
+                    this.setState({clickedDownvote:false, numberOfDownvotes:this.state.numberOfDownvotes-1})
+                })
+                .catch(() => this.setState({handleVoteError: 'An error occurred'}))
+        }
          if (this.state.clickedUpvote){
              this.setState({numberOfUpvotes:this.state.numberOfUpvotes-1})
          }
@@ -209,6 +216,13 @@ class Post extends Component<Props, State> {
         }
     }
     handleUpvote = () => {
+        if(this.state.clickedUpvote){
+            deleteVote(this.props.match.params.id)
+                .then(() => {
+                    this.setState({clickedUpvote:false, numberOfUpvotes:this.state.numberOfUpvotes-1})
+                })
+                .catch(() => this.setState({handleVoteError: 'An error occurred'}))
+        }
         if (this.state.clickedDownvote){
             this.setState({numberOfDownvotes:this.state.numberOfDownvotes-1})
         }

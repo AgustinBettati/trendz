@@ -87,7 +87,8 @@ public class PostService {
                     commentListToDTO(editedPost.getComments()),
                     editedPost.getUser().getUsername(),
                     editedPost.isDeleted(),
-                    voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(postId, true)),
+                    voteListToNumberList(
+                            this.voteRepository.findByPostIdAndIsUpvote(postId, true)),
                     voteListToNumberList(this.voteRepository.findByPostIdAndIsUpvote(postId, false))
             );
         }).orElseThrow(PostNotFoundException::new);
