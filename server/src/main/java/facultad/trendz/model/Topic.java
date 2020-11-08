@@ -17,7 +17,7 @@ public class Topic {
 
     private Date creationDate;
 
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(mappedBy = "topic", fetch = FetchType.EAGER)
      private List<Post> posts;
 
     private Boolean deleted;

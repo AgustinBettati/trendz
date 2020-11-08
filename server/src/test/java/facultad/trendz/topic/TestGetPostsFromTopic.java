@@ -2,8 +2,8 @@ package facultad.trendz.topic;
 
 import facultad.trendz.TestUtils;
 import facultad.trendz.dto.post.PostCreateDTO;
+import facultad.trendz.dto.post.PostPageDTO;
 import facultad.trendz.dto.post.PostResponseDTO;
-import facultad.trendz.dto.post.SimplePostResponseDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.dto.user.JwtResponseDTO;
@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,7 +23,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -74,18 +72,20 @@ public class TestGetPostsFromTopic extends TestUtils {
         restTemplate.postForEntity(postsUri,postEntity2,PostResponseDTO.class);
         restTemplate.postForEntity(postsUri,postEntity3,PostResponseDTO.class);
 
-        final String topicsUrl2 = "http://localhost:" + randomServerPort + "/topicposts/" +response1.getBody().getId();
+        final int page = 0;
+        final int pageSize = 5;
+        final String topicsUrl2 = String.format("http://localhost:%d/topicposts/%d?page=%d&size=%d", randomServerPort,response1.getBody().getId(), page, pageSize );
         URI topicsUri2 = new URI(topicsUrl2);
 
         HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(headers);
         //WHEN
-        ResponseEntity<List<SimplePostResponseDTO>> response = restTemplate.exchange(topicsUri2, HttpMethod.GET, entity, new ParameterizedTypeReference<List<SimplePostResponseDTO>>() {});
+        ResponseEntity<PostPageDTO> response = restTemplate.exchange(topicsUri2, HttpMethod.GET, entity, PostPageDTO.class);
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
 
-        Assert.assertEquals("Post 1", response.getBody().get(0).getTitle());
-        Assert.assertEquals("Post 2", response.getBody().get(1).getTitle());
-        Assert.assertEquals("Post 3", response.getBody().get(2).getTitle());
+        Assert.assertEquals("Post 1", response.getBody().getPosts().get(0).getTitle());
+        Assert.assertEquals("Post 2", response.getBody().getPosts().get(1).getTitle());
+        Assert.assertEquals("Post 3", response.getBody().getPosts().get(2).getTitle());
 
     }
 

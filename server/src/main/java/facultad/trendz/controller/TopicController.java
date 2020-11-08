@@ -1,7 +1,7 @@
 package facultad.trendz.controller;
 
 import facultad.trendz.dto.MessageResponseDTO;
-import facultad.trendz.dto.post.SimplePostResponseDTO;
+import facultad.trendz.dto.post.PostPageDTO;
 import facultad.trendz.dto.topic.TopicCreateDTO;
 import facultad.trendz.dto.topic.TopicPageDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
@@ -56,8 +56,8 @@ public class TopicController implements ControllerUtils{
     }
 
     @GetMapping("/topicposts/{topicId}")
-    public ResponseEntity<List<SimplePostResponseDTO>> getTopicPosts(@PathVariable Long topicId){
-        List<SimplePostResponseDTO> body=topicService.getTopicPosts(topicId);
+    public ResponseEntity<PostPageDTO> getTopicPosts(@PathVariable Long topicId, @RequestParam int page, @RequestParam(defaultValue = "5") int size){
+        PostPageDTO body = topicService.getTopicPosts(topicId, size, page);
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body,status);
     }
