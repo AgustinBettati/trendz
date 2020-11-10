@@ -70,6 +70,28 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
+    align-content: flex-end;
+
+}
+
+.comment-buttons-container{
+    text-align: right;
+    flex-direction: row;
+    justify-self: right;
+
+
+}
+.comment-header-container{
+    display: flex;
+    flex-direction: row;
+    width:100%;
+
+
+
+
+
+
+
 }
 
 .post-buttons-container button{
@@ -187,13 +209,15 @@
 .comment-header{
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-content: space-evenly;
+    width: 85vw;
     font-style: italic;
-    font-size: 12px;
+    font-size: 15px;
     font-family: Bitter, sans-serif;
     font-weight: bold;
     color: #00B090;
     margin-bottom: 5px;
+
 }
 
 .edit-comment{
