@@ -10,6 +10,7 @@ import {withRouter} from "react-router-dom";
 import {RouteComponentProps} from 'react-router-dom';
 import {editPost} from "../../api/PostApi";
 import {getPostData} from "../../api/PostApi";
+import {toast} from "react-toastify";
 
 export type Props = RouteComponentProps<any> & {}
 
@@ -72,12 +73,15 @@ class EditPost extends Component<Props, State> {
         editPost(title, description, link, postId,"post")
             .then(() => {
                 this.setState({errorMessage: '', successMessage: 'Post successfully edited'});
-                this.props.history.push('/main/post/' + postId);
+                this.props.history.push('/main/post/' + postId)
+                toast('Post successfully edited!')
             })
             .catch((err) => {
-                if (err.status === 409)
-                    this.setState({successMessage: '', errorMessage: 'Title already in use'});
-                else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
+                // to determine what we are going to do with error messages
+                //this.setState({successMessage: '', errorMessage: 'Title already in use'});
+                if (err.status === 409) toast.error('Title already in use')
+                //this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
+                else toast.error('An error occurred editing the post!')
             })
     }
 
