@@ -7,6 +7,7 @@ import facultad.trendz.dto.topic.TopicPageDTO;
 import facultad.trendz.dto.topic.TopicResponseDTO;
 import facultad.trendz.exception.topic.TopicExistsException;
 import facultad.trendz.exception.topic.TopicNotFoundException;
+import facultad.trendz.model.Post;
 import facultad.trendz.model.Topic;
 import facultad.trendz.repository.TopicRepository;
 import facultad.trendz.repository.VoteRepository;
@@ -65,6 +66,7 @@ public class TopicService {
         List<SimplePostResponseDTO> posts =  topicRepository.findByIdAndDeletedIsFalse(topicId).map(topic ->
             topic.getPosts().stream()
                 .filter(post -> !post.isDeleted())
+                .sorted(Comparator.comparing(Post::getDate).reversed())
                 .map(post -> new SimplePostResponseDTO(post.getId(),
                         post.getTitle(),
                         post.getDescription(),
