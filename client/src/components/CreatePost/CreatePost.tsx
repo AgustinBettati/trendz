@@ -94,7 +94,8 @@ class CreatePost extends Component<Props, State> {
                     <div className={'createpost-header'}>
                         <img className={'trendz-logo'} src={logo} alt={''}/>
                         <div className={'divisor'}/>
-                        <div className={'createpost-title'}>Create Post</div>
+                        <div className={'createpost-topic-title'}>{this.props.location.state.topic.title}</div>
+                        <div className={'createpost-title'}>Create Post </div>
                     </div>
                     <Formik
                         initialValues={{title: '', description: '',link: ''}}

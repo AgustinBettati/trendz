@@ -80,6 +80,7 @@ class OnStartLoader implements ApplicationRunner {
         topicRepository.save(new Topic("Movies1F2","Here we talk about recent theatrical releases", new Date()));
         topicRepository.save(new Topic("Movies1G2","Here we talk about recent theatrical releases", new Date()));
         topicRepository.save(new Topic("Movies1H2","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("this is a very long topic title asjdh jhdjhjh dsfhs  hhskdjsd jjsdjdsj dsjdjdsjsdjks djjdsjsd jsd","Here we talk about recent theatrical releases", new Date()));
 
 
         postRepository.save(new Post("Star Wars","Han Solo was the best","alink",new Date(),topicRepository.getTopicById(Long.valueOf(1)),userRepository.findByEmail("1@gmail.com")));
