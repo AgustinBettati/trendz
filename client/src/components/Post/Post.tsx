@@ -332,7 +332,7 @@ class Post extends Component<Props, State> {
                         </div>
                         {
                             this.state.post.link &&
-                            <a href={this.state.post.link.match(/^http?:/) ? this.state.post.link : '//' + this.state.post.link}
+                            <a href={this.state.post.link.match(/^https?:/) ? this.state.post.link : '//' + this.state.post.link}
                                target={'_blank'}>{this.state.post.link}</a>
                         }
                     </div>
