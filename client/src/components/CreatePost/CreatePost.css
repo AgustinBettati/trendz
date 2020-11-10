@@ -46,8 +46,16 @@
     margin-top: 20px;
     font-family: Bitter, sans-serif;
     font-weight: bold;
+    font-size: 25px;
+    color: #00B090;
+}
+.createpost-topic-title{
+    margin-top: 20px;
+    font-family: Bitter, sans-serif;
+    font-weight: bold;
     font-size: 30px;
     color: #00B090;
+    font-style: italic;
 }
 
 .form-container{
