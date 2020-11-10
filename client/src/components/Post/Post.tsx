@@ -430,20 +430,29 @@ class Post extends Component<Props, State> {
                                                           this.setState({commentToDeleteUserId:comment.userId})
                                      }}
                                      onMouseLeave={() => this.setIsShown(-1)}>
+                                    <div className={'comment-header-container'}>
                                     <div className={'comment-header'}>
                                         <div onClick={() => this.handleProfileNavigation(comment.userId)} className={'clickUser'}>
                                             {comment.username + ' - '}
                                         </div>
                                         <TimeAgo date={comment.creationDate} formatter={this.formatter} />
+
                                         {comment.editDate && <span style={{color: '#818181', marginLeft: 5}}>edited</span>}
+
+                                    </div>
+                                        <div className={'comment-buttons-container'}>
+
                                         {
+
                                             (parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') ||
                                                 parseJwt(localStorage.getItem('token')).userId == this.state.commentToDeleteUserId)  && this.state.hoverIndex==index &&
+
                                                 <MdDelete
                                                     color={'#DF6052'}
                                                     size={20}
                                                     onClick={() => this.setState({showDeleteCommentModal: true, commentToDelete: comment.content, commentToDeleteId:comment.id})}
                                                 />
+
                                         }
                                         {
                                             (parseJwt(localStorage.getItem('token')).userId == comment.userId) && this.state.hoverIndex==index &&
@@ -452,8 +461,13 @@ class Post extends Component<Props, State> {
                                                 size={20}
                                                 onClick={() => this.handleEditClick(index, comment.content)}
                                             />
+
                                         }
+                                        </div>
+
                                     </div>
+
+
                                     {
                                         this.state.toEditComment === index ?
                                             <div className={'edit-comment'}>
