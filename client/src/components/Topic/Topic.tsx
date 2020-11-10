@@ -90,6 +90,7 @@ class Topic extends Component<Props, State> {
 
     handlePostLinkClick = (link: string, e: any) => {
         e.stopPropagation();
+        link = link.match(/^https?:/) ? link : '//' + link;
         window.open(link, '_blank');
     }
 
