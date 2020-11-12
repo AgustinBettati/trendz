@@ -424,6 +424,7 @@ class Post extends Component<Props, State> {
                     </div>
                     <div className={'post-comments-container'}>
                         {
+                            this.state.comments.length !== 0 ?
                             this.state.comments.map((comment, index) => (
                                 <div key={index} className={'comment-card'}
                                      onMouseEnter={() => {this.setIsShown(index)
@@ -484,7 +485,8 @@ class Post extends Component<Props, State> {
                                         <div className={'comment-body'}>{comment.content}</div>
                                     }
                                 </div>
-                            ))
+                            )) :
+                                <div className={'empty-message'} style={{marginBottom: 10}}>This post has no comments yet!</div>
                         }
                     </div>
                 </div>
