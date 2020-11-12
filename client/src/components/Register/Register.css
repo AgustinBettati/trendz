@@ -61,7 +61,6 @@
     flex-direction: column;
     justify-content: space-around;
     height: 350px;
-    margin-bottom: 20px;
 }
 
 .error-message{
