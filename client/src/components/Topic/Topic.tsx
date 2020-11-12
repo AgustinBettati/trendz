@@ -137,7 +137,7 @@ class Topic extends Component<Props, State> {
                 </div>
                 <div className={'posts-container'}>
                     {
-                        this.state.posts.length &&
+                        this.state.posts.length !== 0 ?
                         this.state.posts.map((post, index) => (
                             <div className={'post-card-wrapper'} key={index}>
                                 <div className={'post-card'} onClick={() => this.handlePostSelection(post)}>
@@ -165,7 +165,8 @@ class Topic extends Component<Props, State> {
                                     </div>
                                 </div>
                             </div>
-                        ))
+                        )) :
+                            <span className={'empty-message'}>This topic has no posts yet!</span>
                     }
                 </div>
                 <div className={'topic-footer'}>
