@@ -80,6 +80,7 @@ class OnStartLoader implements ApplicationRunner {
         topicRepository.save(new Topic("Movies1F2","Here we talk about recent theatrical releases", new Date()));
         topicRepository.save(new Topic("Movies1G2","Here we talk about recent theatrical releases", new Date()));
         topicRepository.save(new Topic("Movies1H2","Here we talk about recent theatrical releases", new Date()));
+        topicRepository.save(new Topic("Movies and Books","Un párrafo, también llamado parágrafo (del griego παράγραφος [parágraphos], y este de παρα, «próximo, semejante», y γραφος, «escritura»), es una unidad comunicativa formada por un conjunto de oraciones secuenciales que trata un mismo tema. Está compuesto por un conjunto de oraciones que tienen cierta unidad temática o que, sin tenerla, se enuncian juntas. Es un componente del texto que en su aspecto externo comienza con una mayúscula y termina en un punto y aparte. Comprende varias oraciones relacionadas sobre el mismo subtema; una de ellas expresa la idea principal.", new Date()));
 
 
         postRepository.save(new Post("Star Wars","Han Solo was the best","alink",new Date(),topicRepository.getTopicById(Long.valueOf(1)),userRepository.findByEmail("1@gmail.com")));
