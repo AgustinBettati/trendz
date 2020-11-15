@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 
 public class PostCreateDTO {
 
-    @Size(max = 40, message = "Password must have as much as 40 characters")
+    @Size(max = 60, message = "Post title must have as much as 60 characters")
     @NotNull(message = "Title cannot be empty")
     private String title;
 
