@@ -28,14 +28,24 @@
 }
 
 .topic-subtitle{
-    color: #F4F4F4;
+    color: black;
     font-size: 20px;
+    width:60vw;
+    height:10vw;
 }
 
 .posts-container{
     height: 100%;
     width: 100%;
     margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.description-container{
+    height: 100%;
+    width: 100%;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -101,8 +111,13 @@
 }
 
 .post-card-body{
-    height: 100px;
+    height: 73px;
     padding: 5px;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .post-card-footer{
@@ -148,4 +163,41 @@
 .topic-buttons-container button{
     margin-left: 20px;
     height: 100%;
+}
+.topic-body-container{
+    box-sizing: border-box;
+    background-color: #232020;
+    width: 94vw;
+    padding: 20px;
+    border-radius: 20px;
+    color: white;
+    max-height: 5vw;
+    overflow-y: scroll;
+
+}
+
+.post-body-wrapper{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 40px 0;
+}
+
+.topic-body-container::-webkit-scrollbar{
+    width: 5px;
+}
+
+.topic-body-container::-webkit-scrollbar-track{
+    background: #232020;
+}
+
+.topic-body-container::-webkit-scrollbar-thumb{
+    background: #00b090;
+    border-radius: 3px;
+}
+
+.empty-message{
+    color: #F4F4F4;
+    font-family: Bitter, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
 }

@@ -332,7 +332,8 @@ class Post extends Component<Props, State> {
                         </div>
                         {
                             this.state.post.link &&
-                            <a href={this.state.post.link} target={'_blank'}>{this.state.post.link}</a>
+                            <a href={this.state.post.link.match(/^https?:/) ? this.state.post.link : '//' + this.state.post.link}
+                               target={'_blank'}>{this.state.post.link}</a>
                         }
                     </div>
                     <div className={'post-buttons-container'}>
@@ -424,6 +425,7 @@ class Post extends Component<Props, State> {
                     </div>
                     <div className={'post-comments-container'}>
                         {
+                            this.state.comments.length !== 0 ?
                             this.state.comments.map((comment, index) => (
                                 <div key={index} className={'comment-card'}
                                      onMouseEnter={() => {this.setIsShown(index)
@@ -484,7 +486,8 @@ class Post extends Component<Props, State> {
                                         <div className={'comment-body'}>{comment.content}</div>
                                     }
                                 </div>
-                            ))
+                            )) :
+                                <div className={'empty-message'} style={{marginBottom: 10}}>This post has no comments yet!</div>
                         }
                     </div>
                 </div>

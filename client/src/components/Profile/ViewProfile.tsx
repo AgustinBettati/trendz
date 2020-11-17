@@ -71,7 +71,7 @@ class ViewProfile extends Component<Props, State> {
                             this.state.posts.length === 0 ?
                                 'There are no posts to show' :
                             this.state.posts.map((post, index) => (
-                                <div className={'post-card-wrapper'} key={index}>
+                                <div className={'post-card-wrapper'} key={index} style={{width: '100%'}}>
                                     <div className={'post-card'} style={{height: 85}} onClick={() => this.handlePostSelection(post)}>
                                         <div className={'post-card-header'}>
                                             <div className={'post-title'}>{post.title}</div>

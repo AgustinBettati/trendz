@@ -15,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @CrossOrigin(origins = "*")
 @Controller
@@ -41,7 +40,7 @@ public class TopicController implements ControllerUtils{
 
     @GetMapping("/topic")
     public ResponseEntity<TopicPageDTO> topicTest(@RequestParam int page, @RequestParam(defaultValue = "5") int size){
-        final TopicPageDTO body = topicService.getPagedTopicsByPopularity(page, size);
+        final TopicPageDTO body = topicService.getPagedTopics(page, size);
         final HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(body,status);
     }
