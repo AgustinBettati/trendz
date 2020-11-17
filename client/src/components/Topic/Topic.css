@@ -111,8 +111,13 @@
 }
 
 .post-card-body{
-    height: 100px;
+    height: 73px;
     padding: 5px;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .post-card-footer{
@@ -188,4 +193,11 @@
 .topic-body-container::-webkit-scrollbar-thumb{
     background: #00b090;
     border-radius: 3px;
+}
+
+.empty-message{
+    color: #F4F4F4;
+    font-family: Bitter, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
 }

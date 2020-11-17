@@ -43,9 +43,7 @@ class Login extends Component<Props, State> {
                 this.props.history.push('/main/home');
             })
             .catch((err) => {
-                if (err.status === 404)
-                    this.setState({successMessage: '', errorMessage: 'Email not found'});
-                else if (err.status === 401)
+                 if (err.status === 401|| err.status===404)
                     this.setState({successMessage: '', errorMessage: 'Invalid Credentials'});
                 else this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
             })
