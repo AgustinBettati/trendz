@@ -122,8 +122,9 @@ class Topic extends Component<Props, State> {
                 <div className={'topic-header-wrapper'}>
                     <div className={'header-text'}>
                         <span className={'topic-title'}>{this.state.topic.title}</span>
-                        <span className={'topic-subtitle'}>{this.state.topic.description}</span>
                     </div>
+
+
                     <div className={'topic-buttons-container'}>
                         {
                         parseJwt(localStorage.getItem('token')).role.includes('ROLE_ADMIN') &&
@@ -136,7 +137,14 @@ class Topic extends Component<Props, State> {
                         <TrendzButton title={'Create Post'} onClick={() => this.handlePostCreation()}/>
                     </div>
                 </div>
+                <div className={'post-body-wrapper'}>
+                    <div className={'topic-body-container'}>
+                        {this.state.topic.description}
+                    </div>
+                </div>
+
                 <div className={'posts-container'}>
+
                     {
                         this.state.posts.length !== 0 ?
                         this.state.posts.map((post, index) => (
