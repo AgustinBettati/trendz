@@ -97,8 +97,6 @@ class Post extends Component<Props, State> {
             downvotes: [],
             numberOfUpvotes:0,
             numberOfDownvotes:0,
-
-
         }
     };
 
@@ -127,7 +125,6 @@ class Post extends Component<Props, State> {
             .catch((err) => this.setState({postErrorMessage: err}))
     }
 
-
     handlePostComment = (comment: string) => {
         createComment(comment, this.props.match.params.id)
             .then((res) => {
@@ -136,9 +133,8 @@ class Post extends Component<Props, State> {
                 this.setState({errorMessage: '', successMessage: 'Comment succesfully created', comments: newComments});
             })
             .catch(() => {
-                this.setState({successMessage: '', errorMessage: 'Ooops! something went wrong!'});
+                this.setState({successMessage: '', errorMessage: 'An error occurred posting your comment!'});
             })
-
     }
 
     handleOnFocus = (prop: string) => {
@@ -155,7 +151,6 @@ class Post extends Component<Props, State> {
             case 'comment':
                 this.setState({commentTouched: false});
                 break;
-
         }
     }
 
