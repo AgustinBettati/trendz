@@ -149,3 +149,10 @@
     margin-left: 20px;
     height: 100%;
 }
+
+.empty-message{
+    color: #F4F4F4;
+    font-family: Bitter, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+}
