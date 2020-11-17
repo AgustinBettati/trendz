@@ -77,7 +77,7 @@ class ViewProfile extends Component<Props, State> {
                                             <div className={'post-title'}>{post.title}</div>
                                             <div className={'post-topic'}>{post.topicTitle}</div>
                                         </div>
-                                        <div className={'post-card-body'} style={{color: 'black'}}>{post.description}</div>
+                                        <div className={'profile-post-card-body'} style={{color: 'black'}}>{post.description}</div>
                                         <div className={'likes-container'}>
                                             <div className={'like-container'}>
                                                 <MdThumbUp size={20} color={this.voted(post.upvotes) ? '#00B090' : 'grey'} className={'like-icon'}/>
