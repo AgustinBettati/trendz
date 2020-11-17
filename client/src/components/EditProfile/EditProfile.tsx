@@ -15,7 +15,6 @@ export type State = {
     username: string,
     email: string,
     errorMessage: string,
-    successMessage: string,
     usernameTouched: boolean,
     oldPasswordTouched: boolean,
     newPasswordTouched: boolean,
@@ -56,7 +55,6 @@ export class EditProfile extends Component<Props, State> {
             username: '',
             email: '',
             errorMessage: '',
-            successMessage: '',
             usernameTouched: false,
             oldPasswordTouched: false,
             newPasswordTouched: false,
@@ -73,24 +71,23 @@ export class EditProfile extends Component<Props, State> {
     }
 
     handleEdit = (username: string, oldPassword: string, newPassword: string) => {
-
         editUserData(username === this.state.username ? null : username,
             oldPassword === '' ? null : oldPassword,
             newPassword === '' ? null : newPassword)
             .then(() => {
-                this.setState({errorMessage: '', successMessage: 'User edited successfully'});
+                this.setState({errorMessage: ''});
                 this.props.history.push('/main/profile')
                 toast('Profile successfully edited!')
             })
             .catch((err) => {
-                if (err.status === 409) toast.error('Username already in use')
-                else if (err.status === 401) toast.error('Incorrect password')
-                else toast.error('An error occurred editing your profile!')
+                if (err.status === 409) this.setState({errorMessage: 'Username already in use'});
+                else if (err.status === 401) this.setState({errorMessage: 'Incorrect password'});
+                else this.setState({errorMessage: 'An error occurred editing your profile!'});
             })
     }
 
     handleOnFocus = (prop: string) => {
-        this.setState({errorMessage: '', successMessage: ''})
+        this.setState({errorMessage: ''})
         switch (prop){
             case 'username':
                 this.setState({usernameTouched: true});
@@ -199,30 +196,15 @@ export class EditProfile extends Component<Props, State> {
                                                 </div>
                                             </div>
                                             <div className={'edit-footer'}>
+                                                <div className={'error-message'}>{this.state.errorMessage}</div>
                                                 <TrendzButton
                                                     title={'Save changes'}
                                                     onClick={() => props.values.username === '' || (props.values.username === this.state.username && props.values.newPassword === '' && props.values.oldPassword === '' && props.values.confirmNewPassword === '') ?
                                                         this.setState({errorMessage: 'Please, complete or change fields before submitting'}) : props.handleSubmit()}
                                                     disabled={!!(props.errors.username || props.errors.oldPassword || props.errors.newPassword || props.errors.confirmNewPassword)}
                                                 />
-                                                <div style={{
-                                                    height: 20,
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    alignItems: 'center',
-                                                    marginTop: 10
-                                                }}>
-                                                    {
-                                                        this.state.errorMessage !== '' &&
-                                                        <div className={'error-message'}>{this.state.errorMessage}</div>
-                                                    }
-                                                    {
-                                                        this.state.successMessage !== '' &&
-                                                        <div className={'success-message'}>{this.state.successMessage}</div>
-                                                    }
-                                                </div>
                                             </div>
-                                            <div style={{fontFamily: 'Bitter, sans-serif'}}>
+                                            <div style={{fontFamily: 'Bitter, sans-serif', marginTop: 5}}>
                                                 Go to
                                                 <NavLink to="/main/profile" className="register-link">Profile</NavLink>
                                             </div>

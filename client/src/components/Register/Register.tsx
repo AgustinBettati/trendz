@@ -13,7 +13,6 @@ export type Props =  RouteComponentProps<any>
 
 export type State = {
     errorMessage: string,
-    successMessage: string,
     emailTouched: boolean,
     usernameTouched: boolean,
     passwordTouched: boolean,
@@ -33,7 +32,6 @@ export class Register extends Component<Props, State> {
         super(props);
         this.state = {
             errorMessage: '',
-            successMessage: '',
             emailTouched: false,
             usernameTouched: false,
             passwordTouched: false,
@@ -48,14 +46,14 @@ export class Register extends Component<Props, State> {
                 toast('Account successfully created!')
             })
             .catch((err) => {
-                if (err.status === 409) toast.error(err.message)
-                else if (err.status === 401) toast.error('Invalid Credentials')
-                else toast.error('An error occurred creating your account!')
+                if (err.status === 409) this.setState({errorMessage: err.message})
+                else if (err.status === 401) this.setState({errorMessage: 'Invalid Credentials'})
+                else this.setState({errorMessage: 'An error occurred creating your account!'})
             })
     }
 
     handleOnFocus = (prop: string) => {
-        this.setState({errorMessage: '', successMessage: ''})
+        this.setState({errorMessage: ''})
         switch (prop){
             case 'email':
                 this.setState({emailTouched: true});
@@ -158,6 +156,7 @@ export class Register extends Component<Props, State> {
                                     </div>
                                 </div>
                                 <div className={'register-footer'}>
+                                    <div className={'error-message'}>{this.state.errorMessage}</div>
                                     <TrendzButton
                                         title={'Submit'}
                                         onClick={() => props.values.email === '' && props.values.username === '' && props.values.password === '' ?

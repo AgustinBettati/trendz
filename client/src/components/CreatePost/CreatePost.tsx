@@ -15,7 +15,6 @@ export type Props = RouteComponentProps<any> & {}
 
 export type State = {
     errorMessage: string,
-    successMessage: string,
     titleTouched: boolean,
     descriptionTouched: boolean,
     linkTouched: boolean,
@@ -32,7 +31,6 @@ class CreatePost extends Component<Props, State> {
         super(props);
         this.state = {
             errorMessage: '',
-            successMessage: '',
             titleTouched: false,
             descriptionTouched: false,
             linkTouched: false,
@@ -43,13 +41,13 @@ class CreatePost extends Component<Props, State> {
         let topic = this.props.location.state.topic;
          createPost(title, description, link, topic.id,"post")
              .then(() => {
-                 this.setState({errorMessage: '', successMessage: 'Post successfully created'});
+                 this.setState({errorMessage: ''});
                  this.props.history.push('/main/topic/' + topic.id, {topic: topic})
                  toast('Post successfully created!')
              })
              .catch((err) => {
-                 if (err.status === 409) toast.error('Title already in use!')
-                 else toast.error('An error occurred creating the post!')
+                 if (err.status === 409) this.setState({errorMessage: 'Title already in use'});
+                 else this.setState({errorMessage: 'An error occurred creating the post!'});
              })
     }
 
@@ -59,7 +57,7 @@ class CreatePost extends Component<Props, State> {
     }
 
     handleOnFocus = (prop: string) => {
-        this.setState({errorMessage: '', successMessage: ''})
+        this.setState({errorMessage: ''})
         switch (prop){
             case 'title':
                 this.setState({titleTouched: true});
@@ -147,24 +145,19 @@ class CreatePost extends Component<Props, State> {
                                     </div>
                                 </div>
                                 <div className={'createpost-footer'}>
-                                    <TrendzButton
-                                        title={'Submit'}
-                                        onClick={() => props.values.title === ''  && props.values.description === '' ?
-                                            this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
-                                        disabled={!!(props.errors.title  || props.errors.description )}
-                                    />
-                                    <div style={{
-                                        height: 20,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        marginTop: 10
-                                    }}>
+                                    <div className={'error-message'}>{this.state.errorMessage}</div>
+                                    <div className={'footer-buttons'}>
+                                        <TrendzButton
+                                            title={'Submit'}
+                                            onClick={() => props.values.title === ''  && props.values.description === '' ?
+                                                this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
+                                            disabled={!!(props.errors.title  || props.errors.description )}
+                                        />
+                                        <TrendzButton
+                                            title={'Cancel'}
+                                            onClick={()=>this.handleCancel() }
+                                        />
                                     </div>
-                                    <TrendzButton
-                                        title={'Cancel'}
-                                        onClick={()=>this.handleCancel() }
-                                    />
                                 </div>
                             </div>
                         )}

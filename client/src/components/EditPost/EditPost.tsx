@@ -20,7 +20,6 @@ export type State = {
     link: string,
     postDataLoaded: boolean,
     errorMessage: string,
-    successMessage: string,
     titleTouched: boolean,
     descriptionTouched: boolean,
     linkTouched: boolean,
@@ -41,7 +40,6 @@ class EditPost extends Component<Props, State> {
             link:'',
             postDataLoaded:false,
             errorMessage: '',
-            successMessage: '',
             titleTouched: false,
             descriptionTouched: false,
             linkTouched: false,
@@ -72,16 +70,13 @@ class EditPost extends Component<Props, State> {
         let postId = this.props.location.state.post.id;
         editPost(title, description, link, postId,"post")
             .then(() => {
-                this.setState({errorMessage: '', successMessage: 'Post successfully edited'});
+                this.setState({errorMessage: ''});
                 this.props.history.push('/main/post/' + postId)
                 toast('Post successfully edited!')
             })
             .catch((err) => {
-                // to determine what we are going to do with error messages
-                //this.setState({successMessage: '', errorMessage: 'Title already in use'});
-                if (err.status === 409) toast.error('Title already in use')
-                //this.setState({successMessage: '', errorMessage: 'Error connecting to server. Please try again later'});
-                else toast.error('An error occurred editing the post!')
+                if (err.status === 409) this.setState({errorMessage: 'Title already in use'});
+                else this.setState({errorMessage: 'An error occurred editing the post!'})
             })
     }
 
@@ -91,7 +86,7 @@ class EditPost extends Component<Props, State> {
     }
 
     handleOnFocus = (prop: string) => {
-        this.setState({errorMessage: '', successMessage: ''})
+        this.setState({errorMessage: ''})
         switch (prop){
             case 'title':
                 this.setState({titleTouched: true});
@@ -181,37 +176,19 @@ class EditPost extends Component<Props, State> {
                                         </div>
                                     </div>
                                     <div className={'editpost-footer'}>
-                                        <div>
-
-                                            {
-                                                this.state.errorMessage !== '' &&
-                                                <div className={'error-message'}>{this.state.errorMessage}</div>
-                                            }
-                                            {
-                                                this.state.successMessage !== '' &&
-                                                <div className={'success-message'}>{this.state.successMessage}</div>
-                                            }
-
+                                        <div className={'error-message'}>{this.state.errorMessage}</div>
+                                        <div className={'footer-buttons'}>
+                                            <TrendzButton
+                                                title={'Submit'}
+                                                onClick={() => props.values.title === '' && props.values.description === '' ?
+                                                    this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
+                                                disabled={!!(props.errors.title || props.errors.description)}
+                                            />
+                                            <TrendzButton
+                                                title={'Cancel'}
+                                                onClick={() => this.handleCancel()}
+                                            />
                                         </div>
-                                        <TrendzButton
-                                            title={'Submit'}
-                                            onClick={() => props.values.title === '' && props.values.description === '' ?
-                                                this.setState({errorMessage: 'Please, complete fields before submitting'}) : props.handleSubmit()}
-                                            disabled={!!(props.errors.title || props.errors.description)}
-                                        />
-                                        <div style={{
-                                            height: 20,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            marginTop: 10
-                                        }}>
-
-                                        </div>
-                                        <TrendzButton
-                                            title={'Cancel'}
-                                            onClick={() => this.handleCancel()}
-                                        />
                                     </div>
                                 </div>
                             )}
