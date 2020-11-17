@@ -83,9 +83,9 @@ public class TestGetPostsFromTopic extends TestUtils {
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
 
-        Assert.assertEquals("Post 1", response.getBody().getPosts().get(0).getTitle());
+        Assert.assertEquals("Post 3", response.getBody().getPosts().get(0).getTitle());
         Assert.assertEquals("Post 2", response.getBody().getPosts().get(1).getTitle());
-        Assert.assertEquals("Post 3", response.getBody().getPosts().get(2).getTitle());
+        Assert.assertEquals("Post 1", response.getBody().getPosts().get(2).getTitle());
 
     }
 

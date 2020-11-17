@@ -280,9 +280,9 @@ public class TopicTests extends TestUtils {
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
 
-        Assert.assertEquals("Post1", response.getBody().getPosts().get(0).getTitle());
+        Assert.assertEquals("Post3", response.getBody().getPosts().get(0).getTitle());
         Assert.assertEquals("Post2", response.getBody().getPosts().get(1).getTitle());
-        Assert.assertEquals("Post3", response.getBody().getPosts().get(2).getTitle());
+        Assert.assertEquals("Post1", response.getBody().getPosts().get(2).getTitle());
 
         Assert.assertEquals(3, response.getBody().getPageSize());
         Assert.assertEquals(page, response.getBody().getPageNumber());
