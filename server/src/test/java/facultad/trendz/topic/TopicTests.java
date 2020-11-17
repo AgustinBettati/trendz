@@ -108,7 +108,7 @@ public class TopicTests extends TestUtils {
     }
 
     @Test
-    public void testGetPopularTopics() throws URISyntaxException {
+    public void testTopicsByDate() throws URISyntaxException {
         //GIVEN
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<JwtResponseDTO> loginResponse = loginUser("admin@gmail.com", "admin", randomServerPort);
@@ -130,30 +130,10 @@ public class TopicTests extends TestUtils {
         final String topicsUrl = String.format("http://localhost:%d/topic?page=%d&size=%d", randomServerPort, page, pageSize );
         URI topicsUri = new URI(topicsUrl);
 
-        ResponseEntity<TopicResponseDTO> response1 = restTemplate.postForEntity(topicsUri, topicEntity1, TopicResponseDTO.class);
-        ResponseEntity<TopicResponseDTO> response2 = restTemplate.postForEntity(topicsUri, topicEntity2, TopicResponseDTO.class);
-        ResponseEntity<TopicResponseDTO> response3 = restTemplate.postForEntity(topicsUri, topicEntity3, TopicResponseDTO.class);
+        restTemplate.postForEntity(topicsUri, topicEntity1, TopicResponseDTO.class);
+        restTemplate.postForEntity(topicsUri, topicEntity2, TopicResponseDTO.class);
+        restTemplate.postForEntity(topicsUri, topicEntity3, TopicResponseDTO.class);
 
-        //add different amount of posts to each topic
-
-        int topic1Amount = 15;
-        int topic2Amount = 14;
-        int topic3Amount = 13;
-
-        //15 posts por topic#3
-        for (int i = 0; i < topic1Amount; i++) {
-            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response3.getBody().getId()),jwtToken, randomServerPort);
-        }
-
-        //14 posts for topic#1
-        for (int i = topic1Amount; i < topic1Amount + topic2Amount; i++) {
-            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response1.getBody().getId()),jwtToken, randomServerPort);
-        }
-
-        //13 posts for topic#2
-        for (int i = topic1Amount + topic2Amount; i < topic1Amount + topic2Amount + topic3Amount; i++) {
-            addPostToTopic(new PostCreateDTO("P" + i, "description", "testurl", response2.getBody().getId()),jwtToken, randomServerPort);
-        }
 
         HttpEntity<TopicCreateDTO> entity = new HttpEntity<>(headers);
         //WHEN
@@ -161,9 +141,9 @@ public class TopicTests extends TestUtils {
         //THEN
         Assert.assertEquals(200, response.getStatusCodeValue());
 
-        Assert.assertEquals("T3", response.getBody().getTopics().get(0).getTitle()); //topic#3 with 15 posts
-        Assert.assertEquals("T1", response.getBody().getTopics().get(1).getTitle()); //topic#1 with 14 posts
-        Assert.assertEquals("T2", response.getBody().getTopics().get(2).getTitle()); //topic#2 with 13 posts
+        Assert.assertEquals("T3", response.getBody().getTopics().get(0).getTitle());
+        Assert.assertEquals("T2", response.getBody().getTopics().get(1).getTitle());
+        Assert.assertEquals("T1", response.getBody().getTopics().get(2).getTitle());
         Assert.assertEquals(pageSize, response.getBody().getPageSize());
         Assert.assertEquals(page, response.getBody().getPageNumber());
         Assert.assertEquals(Math.ceil((double) topicRepository.findAllByDeletedIsFalse().size() / (double) pageSize), response.getBody().getTotalPages(), 0.0);

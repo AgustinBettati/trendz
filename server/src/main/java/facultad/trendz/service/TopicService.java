@@ -104,9 +104,9 @@ public class TopicService {
                 .collect(Collectors.toList());
     }
 
-    public TopicPageDTO getPagedTopicsByPopularity(int page, int size) {
+    public TopicPageDTO getPagedTopics(int page, int size) {
         List<TopicResponseDTO> sortedTopics = topicRepository.findAllByDeletedIsFalse()
-                .stream().sorted(Comparator.comparingInt((Topic topic) -> topic.getPosts().size()).reversed())
+                .stream().sorted(Comparator.comparing(Topic::getCreationDate).reversed())
                 .map(topic -> new TopicResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(), topic.getCreationDate()))
                 .collect(Collectors.toList());
 
