@@ -119,7 +119,7 @@ class Search extends Component<Props, State> {
                                                             </div>
                                                             <div className={'post-topic'}>{post.topicTitle}</div>
                                                         </div>
-                                                        <div className={'post-card-body'}>{post.description}</div>
+                                                        <div className={'search-post-card-body'}>{post.description}</div>
                                                     </div>
                                                 </div>
                                             ))
