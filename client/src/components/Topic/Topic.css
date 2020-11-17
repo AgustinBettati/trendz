@@ -101,8 +101,13 @@
 }
 
 .post-card-body{
-    height: 100px;
+    height: 73px;
     padding: 5px;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .post-card-footer{
